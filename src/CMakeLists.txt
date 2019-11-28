@@ -7,6 +7,7 @@ add_executable(FinalProject
         gl_wraps/GLObject.h
         gl_wraps/GLBuffer.h
         gl_wraps/GLVertexArray.h
+        gl_wraps/GLTexture.h
         objects/Node.h objects/Node.cpp
         components/Component.h
         components/Transform.cpp components/Transform.h

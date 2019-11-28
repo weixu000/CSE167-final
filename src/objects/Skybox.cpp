@@ -7,9 +7,7 @@ Skybox::Skybox() {
     shader = std::make_shared<Shader>("shaders/skybox.vert", "shaders/skybox.frag");
     cube->useShader(shader);
 
-    glGenTextures(1, &cubeMap);
-
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
+    cubeMap.bind(GL_TEXTURE_CUBE_MAP);
     std::vector<std::string> textures_faces{
             "textures/Skybox_Water222_right.jpg",
             "textures/Skybox_Water222_left.jpg",
@@ -32,24 +30,18 @@ Skybox::Skybox() {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     // Use bilinear interpolation:
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    GLTexture::setFilter(GL_TEXTURE_CUBE_MAP, GL_LINEAR, GL_LINEAR);
 
     // Use clamp to edge to hide skybox edges:
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    GLTexture::setWrap(GL_TEXTURE_CUBE_MAP, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
 
-    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-}
-
-Skybox::~Skybox() {
-    glDeleteTextures(1, &cubeMap);
+    GLTexture::unbind(GL_TEXTURE_CUBE_MAP);
 }
 
 void Skybox::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
     // Use cube map
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
+    cubeMap.bind(GL_TEXTURE_CUBE_MAP);
 
     // Inside the cube
     glCullFace(GL_FRONT);
@@ -59,5 +51,5 @@ void Skybox::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm
     cube->draw(world, projection, view_origin, eye);
     glCullFace(GL_BACK);
 
-    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    GLTexture::unbind(GL_TEXTURE_CUBE_MAP);
 }

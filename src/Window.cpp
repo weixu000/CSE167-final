@@ -102,7 +102,7 @@ void Window::draw() {
 
     // Use cube map
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->cubeMap);
+    skybox->cubeMap.bind(GL_TEXTURE_CUBE_MAP);
 
     // Render the object.
     scene.draw(glm::mat4(1.0f), cameras[0]->projection, cameras[0]->view, cameras[0]->eye);
