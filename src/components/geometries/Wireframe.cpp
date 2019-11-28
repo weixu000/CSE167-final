@@ -1,15 +1,7 @@
 #include "Wireframe.h"
+#include "../../gl_wraps/Shader.h"
 
-std::unique_ptr<Shader> Wireframe::shader;
-
-Wireframe::Wireframe() {
-    if (!shader) {
-        shader = std::make_unique<Shader>("shaders/flat.vert", "shaders/flat.frag");
-    }
-}
-
-Wireframe::Wireframe(const std::vector<glm::vec3> &vertices, const std::vector<GLuint> &indices)
-        : Wireframe() {
+Wireframe::Wireframe(const std::vector<glm::vec3> &vertices, const std::vector<GLuint> &indices) {
     count = indices.size();
 
     const auto inf = std::numeric_limits<float>::infinity();
@@ -39,6 +31,7 @@ Wireframe::Wireframe(const std::vector<glm::vec3> &vertices, const std::vector<G
 }
 
 void Wireframe::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+    auto shader = Shader::flatShader();
     shader->use();
     shader->setUniformMatrix4("projection", projection);
     shader->setUniformMatrix4("view", view);

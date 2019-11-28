@@ -15,9 +15,9 @@ Window::Window() {
 
 void Window::initializeProgram() {
     try {
-        shaders[0] = std::make_shared<Shader>("shaders/normal_coloring.vert",
-                                              "shaders/normal_coloring.frag");
-        shaders[1] = std::make_shared<Shader>("shaders/reflection_map.vert",
+        shaders[0] = std::make_shared<Shader>("shaders/normal.vert",
+                                              "shaders/normal.frag");
+        shaders[1] = std::make_shared<Shader>("shaders/phong.vert",
                                               "shaders/reflection_map.frag");
     } catch (...) {
         std::cerr << "Failed to initialize shader program" << std::endl;

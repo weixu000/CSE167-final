@@ -9,13 +9,13 @@
 
 #endif
 
-#include <stdio.h>
 #include <string>
 #include <vector>
 #include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <unordered_map>
+#include <memory>
 
 #include <glm/glm.hpp>
 #include "GLObject.h"
@@ -40,6 +40,8 @@ public:
     void setUniform1f(const std::string &name, float f);
 
     void setUniform1i(const std::string &name, int i);
+
+    static std::shared_ptr<Shader> flatShader();
 
 private:
     std::unordered_map<std::string, GLint> uniformLocations;

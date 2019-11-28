@@ -14,15 +14,12 @@
 #include <string>
 
 #include "Geometry.h"
-#include "../../gl_wraps/Shader.h"
 #include "../../gl_wraps/GLBuffer.h"
 #include "../../gl_wraps/GLVertexArray.h"
 
 
 class Wireframe : public Geometry {
 public:
-    Wireframe();
-
     explicit Wireframe(const std::vector<glm::vec3> &vertices, const std::vector<GLuint> &indices);
 
     static Wireframe fromAABB(const AABB &bb);
@@ -38,8 +35,6 @@ private:
     GLBuffer vbo, ebo;
 
     AABB bb;
-
-    static std::unique_ptr<Shader> shader; // wireframe use its own shader
 };
 
 

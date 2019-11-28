@@ -1,15 +1,14 @@
 #include "ControlTriple.h"
+#include "../gl_wraps/Shader.h"
 
-std::shared_ptr<Shader> ControlTriple::shader;
 std::shared_ptr<Mesh> ControlTriple::controlIndicator, ControlTriple::approxIndicator;
 
 ControlTriple::ControlTriple(glm::vec3 *left, glm::vec3 *middle, glm::vec3 *right) {
     points = {left, middle, right};
-    if (!shader || !controlIndicator || !approxIndicator) {
-        shader = std::make_shared<Shader>("shaders/flat.vert", "shaders/flat.frag");
+    if (!controlIndicator || !approxIndicator) {
         controlIndicator = approxIndicator = std::make_shared<Mesh>(Mesh::fromObjFile("meshes/sphere.obj"));
-        controlIndicator->useShader(shader);
-        approxIndicator->useShader(shader);
+        controlIndicator->useShader(Shader::flatShader());
+        approxIndicator->useShader(Shader::flatShader());
     }
     set(1, *middle);
 }
@@ -41,6 +40,7 @@ void ControlTriple::set(int i, const glm::vec3 &val) {
 }
 
 void ControlTriple::draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye, GLint stencil) {
+    auto shader = Shader::flatShader();
     shader->use();
     shader->setUniform3f("color", glm::vec3(0.0f, 0.0f, 1.0f));
     shader->setUniformMatrix4("projection", projection);

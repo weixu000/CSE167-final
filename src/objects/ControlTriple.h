@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "../components/geometries/Mesh.h"
-#include "../gl_wraps/Shader.h"
 
 class ControlTriple {
 public:
@@ -20,8 +19,6 @@ public:
 
 private:
     std::array<glm::vec3 *, 3> points;
-
-    static std::shared_ptr<Shader> shader;
 
     static std::shared_ptr<Mesh> controlIndicator, approxIndicator;
 

@@ -29,7 +29,7 @@ GLuint LoadSingleShader(const std::string &shaderFilePath, ShaderType type) {
     int InfoLogLength;
 
     // Compile Shader.
-    std::cerr << "Compiling shader: " << shaderFilePath << std::endl;
+    std::cout << "Compiling shader: " << shaderFilePath << std::endl;
     char const *sourcePointer = shaderCode.c_str();
     glShaderSource(shaderID, 1, &sourcePointer, nullptr);
     glCompileShader(shaderID);
@@ -73,8 +73,6 @@ void Shader::compileProgram(const std::string &vertexFilePath, const std::string
         std::string msg(ProgramErrorMessage.begin(), ProgramErrorMessage.end());
         glDeleteProgram(id);
         throw std::runtime_error(msg);
-    } else {
-        printf("Successfully linked program!\n");
     }
 
     // Detach and delete the shaders as they are no longer needed.
@@ -127,4 +125,12 @@ void Shader::setUniform1i(const std::string &name, const int i) {
     if (uniformLocations.count(name)) {
         glUniform1i(uniformLocations.at(name), i);
     }
+}
+
+std::shared_ptr<Shader> Shader::flatShader() {
+    static std::shared_ptr<Shader> shader;
+    if (shader == nullptr) {
+        shader = std::make_shared<Shader>("shaders/normal.vert", "shaders/flat.frag");
+    }
+    return shader;
 }

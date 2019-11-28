@@ -6,7 +6,7 @@ std::unique_ptr<Shader> BezierCurve::shader;
 
 BezierCurve::BezierCurve() {
     if (!shader) {
-        shader = std::make_unique<Shader>("shaders/flat.vert", "shaders/flat.frag",
+        shader = std::make_unique<Shader>("shaders/normal.vert", "shaders/flat.frag",
                                           "shaders/bezier.geom");
     }
 }
