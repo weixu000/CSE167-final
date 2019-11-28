@@ -36,9 +36,6 @@ Mesh::Mesh(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indic
 }
 
 void Mesh::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
-    if (mat) {
-        mat->setUniform(*shader);
-    }
     assert(shader);
     shader->use();
     shader->setUniformMatrix4("projection", projection);

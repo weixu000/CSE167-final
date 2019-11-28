@@ -16,7 +16,6 @@
 
 #include "Geometry.h"
 #include "../../gl_wraps/Shader.h"
-#include "../../Material.h"
 #include "../../gl_wraps/GLBuffer.h"
 #include "../../gl_wraps/GLVertexArray.h"
 
@@ -51,7 +50,6 @@ private:
     GLsizei count = 0;
     GLVertexArray vao;
     GLBuffer vbo, ebo;
-    std::shared_ptr<Material> mat;
 
     glm::vec3 _minVal, _maxVal, _center;
     float _scale;

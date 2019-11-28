@@ -1,13 +1,12 @@
 add_executable(FinalProject
         main.cpp
         Window.cpp Window.h
+        Time.cpp Time.h
         gl_wraps/Shader.cpp gl_wraps/Shader.h
         gl_wraps/GLContext.h gl_wraps/GLContext.cpp
         gl_wraps/GLObject.h
         gl_wraps/GLBuffer.h
         gl_wraps/GLVertexArray.h
-        Material.cpp Material.h
-        Time.cpp Time.h
         objects/Node.h objects/Node.cpp
         components/Component.h
         components/Transform.cpp components/Transform.h
