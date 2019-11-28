@@ -1,4 +1,4 @@
-#include "../textures/stb_image.h"
+#include "../../deps/stb_image/stb_image.h"
 
 #include "Skybox.h"
 
