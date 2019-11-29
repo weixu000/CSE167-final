@@ -18,7 +18,6 @@ add_executable(FinalProject
         objects/geometries/Wireframe.cpp objects/geometries/Wireframe.h
         objects/Camera.cpp objects/Camera.h
         objects/controls/FreeFlying.cpp objects/controls/FreeFlying.h
-        objects/animators/HumanoidAnimator.cpp objects/animators/HumanoidAnimator.h
         objects/Skybox.cpp objects/Skybox.h
         objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
         objects/controls/ControlTriple.cpp objects/controls/ControlTriple.h
