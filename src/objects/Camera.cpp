@@ -9,10 +9,7 @@ Camera::Camera(const glm::mat4 &p, std::shared_ptr<Transform> t)
 }
 
 void Camera::update() {
-    auto cam = glm::mat4(1.0f);
-    for (Node *p = this; p != nullptr; p = p->parent()) {
-        cam = p->transform->model * cam;
-    }
+    auto cam = worldTransform();
     view = glm::inverse(cam);
     eye = glm::vec3(cam[3]);
     Node::update();

@@ -52,6 +52,14 @@ bool Node::cull(const glm::mat4 &view_proj) {
     return _culled;
 }
 
+glm::mat4 Node::worldTransform() const {
+    auto world = glm::mat4(1.0f);
+    for (const Node *p = this; p != nullptr; p = p->parent()) {
+        world = p->transform->model * world;
+    }
+    return world;
+}
+
 Node *Node::addChild(NodePtr child) {
     assert(!child->_parent);
     child->_parent = this;

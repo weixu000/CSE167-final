@@ -28,6 +28,8 @@ public:
 
     bool culled() const { return _culled; }
 
+    glm::mat4 worldTransform() const;
+
     using NodePtr = std::unique_ptr<Node>;
 
     Node *addChild(NodePtr child);
