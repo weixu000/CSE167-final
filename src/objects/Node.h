@@ -16,9 +16,9 @@ public:
 
     Node &operator=(const Node &);
 
-    Node(Node &&) = default;
+    Node(Node &&) noexcept;
 
-    Node &operator=(Node &&) = default;
+    Node &operator=(Node &&) noexcept;
 
     virtual ~Node() = default;
 
@@ -32,9 +32,18 @@ public:
 
     glm::mat4 worldTransform() const;
 
-    using NodePtr = std::unique_ptr<Node>;
+    template<typename T>
+    T *addChild(std::unique_ptr<T> child) {
+        assert(!child->_parent);
+        child->_parent = this;
+        children.push_back(std::move(child));
+        return static_cast<T *>(children.back().get());
+    }
 
-    Node *addChild(NodePtr child);
+    template<typename T>
+    T *addChild(T &&child) {
+        return addChild(std::make_unique<T>(std::forward<T>(child)));
+    }
 
     Node *parent() const { return _parent; }
 
@@ -44,6 +53,8 @@ protected:
     bool _culled = false;
 
     Node *_parent = nullptr;
+
+    using NodePtr = std::unique_ptr<Node>;
 
     std::list<NodePtr> children;
 

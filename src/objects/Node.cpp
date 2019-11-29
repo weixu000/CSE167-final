@@ -41,20 +41,29 @@ glm::mat4 Node::worldTransform() const {
     return world;
 }
 
-Node *Node::addChild(NodePtr child) {
-    assert(!child->_parent);
-    child->_parent = this;
-    children.push_back(std::move(child));
-    return children.back().get();
-}
-
 Node::Node(const Node &other) : transform(other.transform) {
     for (auto &n:other.children) {
         children.push_back(n->clone());
+        children.back()->_parent = this;
     }
 }
 
 Node &Node::operator=(const Node &other) {
     *this = std::move(Node(other));
+    return *this;
+}
+
+Node::Node(Node &&other) noexcept {
+    *this = std::move(other);
+}
+
+Node &Node::operator=(Node &&other) noexcept {
+    _culled = false;
+    _parent = nullptr;
+    transform = std::move(other.transform);
+    children = std::move(other.children);
+    for (auto &n:children) {
+        n->_parent = this;
+    }
     return *this;
 }

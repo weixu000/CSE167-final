@@ -30,13 +30,12 @@ void Window::initializeObjects() {
     glm::mat4 projection = glm::perspective(glm::radians(60.0f),
                                             float(width) / float(height), 0.1f, 1000.0f);
 
-    auto fly = std::make_unique<FreeFlying>(glm::translate(glm::vec3(0, 0, 20)));
-    cameras[0] = static_cast<Camera *>(fly->addChild(std::make_unique<Camera>(projection)));
-    flyControl = static_cast<FreeFlying *>(scene.addChild(std::move(fly)));
+    flyControl = scene.addChild(FreeFlying(glm::translate(glm::vec3(0, 0, 20))));
+    cameras[0] = flyControl->addChild(Camera(projection));
 
     skybox = std::make_unique<Skybox>();
 
-    bezier = static_cast<BezierCurve *>(scene.addChild(std::make_unique<BezierCurve>()));
+    bezier = scene.addChild(BezierCurve());
     for (int i = 0; i < 3 * 8; ++i) {
         auto theta = 2 * glm::pi<float>() / (3 * 8) * i;
         bezier->controlPoints.emplace_back(5.0f * glm::cos(theta),
@@ -50,22 +49,19 @@ void Window::initializeObjects() {
     }
     bezier->upload();
 
-    auto scaled_sphere = std::make_unique<Node>(glm::scale(glm::vec3(0.2f)));
-    auto sphere = static_cast<Mesh *>(scaled_sphere->addChild(
-            std::make_unique<Mesh>(Mesh::fromObjFile("meshes/sphere.obj"))));
-    sphere->useShader(shaders[0]);
+    auto sphere = Mesh(Mesh::fromObjFile("meshes/sphere.obj"));
+    sphere.transform.model = glm::scale(glm::vec3(0.2f));
+    sphere.useShader(shaders[0]);
 
-    auto coaster = std::make_unique<ConstraintAnimator>(bezier);
-    coaster->addChild(std::move(scaled_sphere));
-    cameras[1] = static_cast<Camera *>(coaster->addChild(
-            std::make_unique<Camera>(projection,
-                                     Camera::orientation(glm::vec3(0.0f, 1.0f, -2.0f),
-                                                         glm::vec3(0.0f, 0.0f, 0.0f),
-                                                         glm::vec3(0.0f, 1.0f, 0.0f)))));
-    animation = static_cast<ConstraintAnimator *>(scene.addChild(std::move(coaster)));
+    auto coaster = ConstraintAnimator(bezier);
+    coaster.addChild(std::move(sphere));
+    cameras[1] = coaster.addChild(Camera(projection,
+                                         Camera::orientation(glm::vec3(0.0f, 1.0f, -2.0f),
+                                                             glm::vec3(0.0f, 0.0f, 0.0f),
+                                                             glm::vec3(0.0f, 1.0f, 0.0f))));
+    animation = scene.addChild(std::move(coaster));
 
-    auto robot = std::make_unique<Robot>(shaders[0]);
-    scene.addChild(std::move(robot));
+    scene.addChild(Robot(shaders[0]));
 }
 
 void Window::resizeCallback(int width, int height) {
