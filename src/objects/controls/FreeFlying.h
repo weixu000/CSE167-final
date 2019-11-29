@@ -25,6 +25,9 @@ public:
     bool local = true;
     bool freeze = false;
 
+protected:
+    NodePtr clone() override { return std::make_unique<FreeFlying>(*this); }
+
 private:
     bool startedRotate = false;
     glm::vec3 initial;

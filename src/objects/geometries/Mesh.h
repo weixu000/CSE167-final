@@ -46,6 +46,9 @@ public:
 
     glm::mat4 normalizeMat() const;
 
+protected:
+    NodePtr clone() override { return std::make_unique<Mesh>(*this); }
+
 private:
     GLsizei count = 0;
     std::shared_ptr<GLVertexArray> vao = std::make_shared<GLVertexArray>();

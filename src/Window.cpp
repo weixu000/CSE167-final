@@ -2,6 +2,7 @@
 
 #include "Window.h"
 #include "Time.h"
+#include "objects/geometries/Robot.h"
 
 Window::Window() {
     setupCallbacks();
@@ -35,7 +36,7 @@ void Window::initializeObjects() {
 
     skybox = std::make_unique<Skybox>();
 
-    bezier = std::make_shared<BezierCurve>();
+    bezier = static_cast<BezierCurve *>(scene.addChild(std::make_unique<BezierCurve>()));
     for (int i = 0; i < 3 * 8; ++i) {
         auto theta = 2 * glm::pi<float>() / (3 * 8) * i;
         bezier->controlPoints.emplace_back(5.0f * glm::cos(theta),
@@ -48,12 +49,11 @@ void Window::initializeObjects() {
                               &bezier->controlPoints[(3 * i + 1) % bezier->controlPoints.size()]);
     }
     bezier->upload();
-    scene.addComponent(bezier);
 
-    auto sphere = std::make_shared<Mesh>(Mesh::fromObjFile("meshes/sphere.obj"));
-    sphere->useShader(shaders[0]);
     auto scaled_sphere = std::make_unique<Node>(glm::scale(glm::vec3(0.2f)));
-    scaled_sphere->addComponent(sphere);
+    auto sphere = static_cast<Mesh *>(scaled_sphere->addChild(
+            std::make_unique<Mesh>(Mesh::fromObjFile("meshes/sphere.obj"))));
+    sphere->useShader(shaders[0]);
 
     auto coaster = std::make_unique<ConstraintAnimator>(bezier);
     coaster->addChild(std::move(scaled_sphere));
@@ -63,6 +63,9 @@ void Window::initializeObjects() {
                                                          glm::vec3(0.0f, 0.0f, 0.0f),
                                                          glm::vec3(0.0f, 1.0f, 0.0f)))));
     animation = static_cast<ConstraintAnimator *>(scene.addChild(std::move(coaster)));
+
+    auto robot = std::make_unique<Robot>(shaders[0]);
+    scene.addChild(std::move(robot));
 }
 
 void Window::resizeCallback(int width, int height) {

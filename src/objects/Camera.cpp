@@ -15,17 +15,6 @@ void Camera::update() {
     Node::update();
 }
 
-std::unique_ptr<Node> Camera::copy() {
-    auto ret = std::make_unique<Camera>(projection);
-    doCopy(ret.get());
-    return ret;
-}
-
-void Camera::doCopy(Camera *dup) {
-    Node::doCopy(dup);
-    dup->projection = projection;
-}
-
 glm::mat4 Camera::orientation(const glm::vec3 &eye, const glm::vec3 &center, const glm::vec3 &up) {
     auto z = glm::normalize(eye - center);
     auto x = glm::normalize(glm::cross(up, z));

@@ -1,7 +1,7 @@
 #ifndef SKYBOX_H
 #define SKYBOX_H
 
-#include "../components/geometries/Mesh.h"
+#include "geometries/Mesh.h"
 #include "../gl_wraps/GLTexture.h"
 
 class Skybox {

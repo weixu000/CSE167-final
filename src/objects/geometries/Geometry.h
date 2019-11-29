@@ -1,9 +1,7 @@
 #ifndef _GEOMETRY_H
 #define _GEOMETRY_H
 
-#include <memory>
-
-#include "../Component.h"
+#include "../Node.h"
 
 class AABB {
 public:
@@ -24,7 +22,7 @@ public:
 };
 
 
-class Geometry : public Component {
+class Geometry : public Node {
 public:
     virtual AABB boundingBox() const = 0;
 

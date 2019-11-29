@@ -4,8 +4,8 @@
 #include "ConstraintAnimator.h"
 #include "../../Time.h"
 
-ConstraintAnimator::ConstraintAnimator(std::shared_ptr<BezierCurve> t)
-        : track(std::move(t)) {
+ConstraintAnimator::ConstraintAnimator(BezierCurve *t)
+        : track(t) {
     set();
 }
 

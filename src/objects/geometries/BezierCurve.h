@@ -23,6 +23,9 @@ public:
 
     glm::vec3 derivative(float t);
 
+protected:
+    NodePtr clone() override { return std::make_unique<BezierCurve>(*this); }
+
 private:
     std::shared_ptr<GLVertexArray> vao = std::make_shared<GLVertexArray>();
     std::shared_ptr<GLBuffer> vbo = std::make_shared<GLBuffer>(), ebo = std::make_shared<GLBuffer>();

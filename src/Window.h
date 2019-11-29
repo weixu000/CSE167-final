@@ -20,7 +20,7 @@
 #include "objects/controls/FreeFlying.h"
 #include "gl_wraps/Shader.h"
 #include "gl_wraps/GLContext.h"
-#include "components/geometries/BezierCurve.h"
+#include "objects/geometries/BezierCurve.h"
 #include "objects/controls/ControlTriple.h"
 #include "objects/animators/ConstraintAnimator.h"
 
@@ -34,7 +34,7 @@ public:
 
     std::array<std::shared_ptr<Shader>, 2> shaders;
 
-    std::shared_ptr<BezierCurve> bezier;
+    BezierCurve *bezier;
 
     std::vector<ControlTriple> controls;
     int selected = 0;

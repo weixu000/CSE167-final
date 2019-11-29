@@ -2,11 +2,11 @@
 #define CONSTRAINTANIMATOR_H
 
 #include "../Node.h"
-#include "../../components/geometries/BezierCurve.h"
+#include "../geometries/BezierCurve.h"
 
 class ConstraintAnimator : public Node {
 public:
-    explicit ConstraintAnimator(std::shared_ptr<BezierCurve> t);
+    explicit ConstraintAnimator(BezierCurve *t);
 
     void update() override;
 
@@ -14,8 +14,11 @@ public:
 
     bool uniformSpeed = false;
 
+protected:
+    NodePtr clone() override { return std::make_unique<ConstraintAnimator>(*this); }
+
 private:
-    std::shared_ptr<BezierCurve> track;
+    BezierCurve *track;
 
     void set();
 

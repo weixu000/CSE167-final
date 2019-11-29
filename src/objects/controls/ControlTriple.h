@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "../../components/geometries/Mesh.h"
+#include "../geometries/Mesh.h"
 
 class ControlTriple {
 public:

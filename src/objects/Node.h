@@ -14,6 +14,10 @@ public:
 
     explicit Node(std::shared_ptr<Transform> t);
 
+    Node(const Node &);
+
+    Node &operator=(const Node &);
+
     Node(Node &&) = default;
 
     Node &operator=(Node &&) = default;
@@ -36,16 +40,7 @@ public:
 
     Node *parent() const { return _parent; }
 
-    using ComponentPtr = std::shared_ptr<Component>;
-
-    void addComponent(ComponentPtr component);
-
     std::shared_ptr<Transform> transform;
-
-    // deep copy children
-    // shallow copy components
-    // initialize _culled, _parent
-    virtual std::unique_ptr<Node> copy();
 
 protected:
     bool _culled = false;
@@ -53,10 +48,10 @@ protected:
     Node *_parent = nullptr;
 
     std::list<NodePtr> children;
-    std::list<ComponentPtr> components;
 
-    // do actual copy with allocation
-    void doCopy(Node *dup);
+    // Enable deep copy of unkown type of node
+    // Every concrete inherited class must implement this
+    virtual NodePtr clone() { return std::make_unique<Node>(*this); }
 };
 
 

@@ -12,15 +12,15 @@ add_executable(FinalProject
         components/Component.h
         objects/Transform.cpp objects/Transform.h
         objects/controls/Trackball.cpp objects/controls/Trackball.h
-        components/geometries/Geometry.h components/geometries/Geometry.cpp
-        components/geometries/Mesh.cpp components/geometries/Mesh.h
-        components/geometries/Robot.cpp components/geometries/Robot.h
-        components/geometries/Wireframe.cpp components/geometries/Wireframe.h
+        objects/geometries/Geometry.h objects/geometries/Geometry.cpp
+        objects/geometries/Mesh.cpp objects/geometries/Mesh.h
+        objects/geometries/Robot.cpp objects/geometries/Robot.h
+        objects/geometries/Wireframe.cpp objects/geometries/Wireframe.h
         objects/Camera.cpp objects/Camera.h
         objects/controls/FreeFlying.cpp objects/controls/FreeFlying.h
         objects/animators/HumanoidAnimator.cpp objects/animators/HumanoidAnimator.h
         objects/Skybox.cpp objects/Skybox.h
-        components/geometries/BezierCurve.cpp components/geometries/BezierCurve.h
+        objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
         objects/controls/ControlTriple.cpp objects/controls/ControlTriple.h
         objects/animators/ConstraintAnimator.cpp objects/animators/ConstraintAnimator.h)
 target_link_libraries(FinalProject GLEW::glew_s GLFW3::GLFW3 glm stb_image)

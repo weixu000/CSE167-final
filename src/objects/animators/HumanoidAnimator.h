@@ -13,6 +13,9 @@ public:
     void update() override;
 
     std::shared_ptr<Transform> headControl, leftArmControl, rightArmControl, leftLegControl, rightLegControl;
+
+protected:
+    NodePtr clone() override { return std::make_unique<HumanoidAnimator>(*this); }
 };
 
 
