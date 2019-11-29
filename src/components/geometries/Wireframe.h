@@ -31,8 +31,8 @@ public:
 
 private:
     GLsizei count = 0;
-    GLVertexArray vao;
-    GLBuffer vbo, ebo;
+    std::shared_ptr<GLVertexArray> vao = std::make_shared<GLVertexArray>();
+    std::shared_ptr<GLBuffer> vbo = std::make_shared<GLBuffer>(), ebo = std::make_shared<GLBuffer>();
 
     AABB bb;
 };

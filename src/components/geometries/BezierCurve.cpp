@@ -31,20 +31,20 @@ void BezierCurve::upload() {
     }
 
     // Bind to the VAO.
-    vao.bind();
+    vao->bind();
 
     // Pass in the data.
-    vbo.upload(sizeof(glm::vec3) * controlPoints.size(), controlPoints.data());
+    vbo->upload(sizeof(glm::vec3) * controlPoints.size(), controlPoints.data());
     // Enable vertex attribute 0.
-    vao.setAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
-                         sizeof(glm::vec3));
-    vbo.unbind();
+    vao->setAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                          sizeof(glm::vec3));
+    vbo->unbind();
 
-    ebo.bind(GL_ELEMENT_ARRAY_BUFFER);
-    ebo.upload(sizeof(GLuint) * indices.size(), indices.data(), GL_ELEMENT_ARRAY_BUFFER);
+    ebo->bind(GL_ELEMENT_ARRAY_BUFFER);
+    ebo->upload(sizeof(GLuint) * indices.size(), indices.data(), GL_ELEMENT_ARRAY_BUFFER);
 
     // Unbind from the VAO.
-    vao.unbind();
+    vao->unbind();
 }
 
 void
@@ -56,11 +56,11 @@ BezierCurve::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm
     shader->setUniform1i("nSamples", 80);
     shader->setUniform3f("color", glm::vec3(1.0f, 1.0f, 1.0f));
     // Bind to the VAO.
-    vao.bind();
+    vao->bind();
     // Draw lines
     glDrawElements(GL_LINES_ADJACENCY, controlPoints.size() / 3 * 4, GL_UNSIGNED_INT, 0);
     // Unbind from the VAO.
-    vao.unbind();
+    vao->unbind();
 }
 
 glm::mat4 BezierCurve::B(-1, 3, -3, 1,

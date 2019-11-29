@@ -13,21 +13,21 @@ Wireframe::Wireframe(const std::vector<glm::vec3> &vertices, const std::vector<G
     bb = {minVal, maxVal};
 
     // Bind to the VAO.
-    vao.bind();
+    vao->bind();
 
     // Pass in the data.
-    vbo.upload(sizeof(glm::vec3) * vertices.size(), vertices.data());
+    vbo->upload(sizeof(glm::vec3) * vertices.size(), vertices.data());
     // Enable vertex attribute 0.
-    vao.setAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
-                         sizeof(glm::vec3));
-    vbo.unbind();
+    vao->setAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                          sizeof(glm::vec3));
+    vbo->unbind();
 
-    ebo.bind(GL_ELEMENT_ARRAY_BUFFER);
+    ebo->bind(GL_ELEMENT_ARRAY_BUFFER);
     // Pass in the data.
-    ebo.upload(sizeof(GLuint) * indices.size(), indices.data(), GL_ELEMENT_ARRAY_BUFFER);
+    ebo->upload(sizeof(GLuint) * indices.size(), indices.data(), GL_ELEMENT_ARRAY_BUFFER);
 
     // Unbind from the VAO.
-    vao.unbind();
+    vao->unbind();
 }
 
 void Wireframe::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
@@ -38,7 +38,7 @@ void Wireframe::draw(const glm::mat4 &world, const glm::mat4 &projection, const 
     shader->setUniformMatrix4("model", world);
     shader->setUniform3f("color", glm::vec3(1.0f, 1.0f, 1.0f));
     // Bind to the VAO.
-    vao.bind();
+    vao->bind();
     // Draw points
     glDisable(GL_CULL_FACE);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -46,7 +46,7 @@ void Wireframe::draw(const glm::mat4 &world, const glm::mat4 &projection, const 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_CULL_FACE);
     // Unbind from the VAO.
-    vao.unbind();
+    vao->unbind();
 }
 
 Wireframe Wireframe::fromAABB(const AABB &bb) {

@@ -13,26 +13,26 @@ Mesh::Mesh(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indic
     computeStatistics(attrs, indices);
 
     // Bind to the VAO.
-    vao.bind();
+    vao->bind();
 
     // Pass in the data.
-    vbo.upload(sizeof(glm::vec3) * attrs.size(), attrs.data());
+    vbo->upload(sizeof(glm::vec3) * attrs.size(), attrs.data());
     // Enable vertex attribute 0.
     // We will be able to access points through it.
-    vao.setAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+    vao->setAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
                          2 * sizeof(glm::vec3));
     // Enable vertex attribute 1.
     // We will be able to access normals through it.
-    vao.setAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
+    vao->setAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
                          2 * sizeof(glm::vec3), sizeof(glm::vec3));
-    vbo.unbind();
+    GLBuffer::unbind();
 
-    ebo.bind(GL_ELEMENT_ARRAY_BUFFER);
+    ebo->bind(GL_ELEMENT_ARRAY_BUFFER);
     // Pass in the data.
-    ebo.upload(sizeof(GLuint) * indices.size(), indices.data(), GL_ELEMENT_ARRAY_BUFFER);
+    ebo->upload(sizeof(GLuint) * indices.size(), indices.data(), GL_ELEMENT_ARRAY_BUFFER);
 
     // Unbind from the VAO.
-    vao.unbind();
+    vao->unbind();
 }
 
 void Mesh::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
@@ -43,11 +43,11 @@ void Mesh::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::
     shader->setUniform3f("viewPos", eye);
     shader->setUniformMatrix4("model", world);
     // Bind to the VAO.
-    vao.bind();
+    vao->bind();
     // Draw points
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
     // Unbind from the VAO.
-    vao.unbind();
+    vao->unbind();
 }
 
 glm::mat4 Mesh::normalizeMat() const {
