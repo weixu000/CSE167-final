@@ -24,6 +24,8 @@ public:
 
 class Geometry : public Node {
 public:
+    using Node::Node;
+
     virtual AABB boundingBox() const = 0;
 
     bool cull(const glm::mat4 &view_proj) override;

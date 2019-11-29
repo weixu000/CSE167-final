@@ -20,11 +20,11 @@ Mesh::Mesh(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indic
     // Enable vertex attribute 0.
     // We will be able to access points through it.
     vao->setAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
-                         2 * sizeof(glm::vec3));
+                          2 * sizeof(glm::vec3));
     // Enable vertex attribute 1.
     // We will be able to access normals through it.
     vao->setAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
-                         2 * sizeof(glm::vec3), sizeof(glm::vec3));
+                          2 * sizeof(glm::vec3), sizeof(glm::vec3));
     GLBuffer::unbind();
 
     ebo->bind(GL_ELEMENT_ARRAY_BUFFER);

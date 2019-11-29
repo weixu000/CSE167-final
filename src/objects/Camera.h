@@ -12,8 +12,6 @@ public:
 
     explicit Camera(const glm::mat4 &p, const glm::mat4 &t = glm::mat4(1.0f));
 
-    explicit Camera(const glm::mat4 &p, std::shared_ptr<Transform> t);
-
     void update() override;
 
     // Camera matrix, inverse of view matrix glm::lookAt

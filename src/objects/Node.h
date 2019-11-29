@@ -12,8 +12,6 @@ class Node {
 public:
     explicit Node(const glm::mat4 &t = glm::mat4(1.0f));
 
-    explicit Node(std::shared_ptr<Transform> t);
-
     Node(const Node &);
 
     Node &operator=(const Node &);
@@ -40,7 +38,7 @@ public:
 
     Node *parent() const { return _parent; }
 
-    std::shared_ptr<Transform> transform;
+    Transform transform;
 
 protected:
     bool _culled = false;

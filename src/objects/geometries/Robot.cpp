@@ -3,24 +3,19 @@
 #include "Robot.h"
 #include "Wireframe.h"
 
-Robot::Robot(std::shared_ptr<Shader> _shader,
-             std::shared_ptr<Transform> headCtl,
-             std::shared_ptr<Transform> leftArmCtl,
-             std::shared_ptr<Transform> rightArmCtl,
-             std::shared_ptr<Transform> leftLegCtl,
-             std::shared_ptr<Transform> rightLegCtl) :
-        shader(std::move(_shader)) {
+Robot::Robot(std::shared_ptr<Shader> _shader)
+        : shader(std::move(_shader)) {
     auto body = std::make_unique<Mesh>(Mesh::fromObjFile("meshes/Robot-parts-2018/body_s.obj"));
     body->useShader(shader);
     root.addChild(std::move(body));
     root.addChild(std::make_unique<Wireframe>(Wireframe::fromAABB(boundingBox())));
 
-    initHead(std::move(headCtl));
-    initArms(std::move(leftArmCtl), std::move(rightArmCtl));
-    initLegs(std::move(leftLegCtl), std::move(rightLegCtl));
+    initHead();
+    initArms();
+    initLegs();
 }
 
-void Robot::initHead(std::shared_ptr<Transform> headCtl) {
+void Robot::initHead() {
     auto antenna = Mesh::fromObjFile("meshes/Robot-parts-2018/antenna_s.obj");
     antenna.useShader(shader);
 
@@ -44,7 +39,7 @@ void Robot::initHead(std::shared_ptr<Transform> headCtl) {
     auto head = Mesh::fromObjFile("meshes/Robot-parts-2018/head_s.obj");
     head.useShader(shader);
 
-    auto control = std::make_unique<Node>(std::move(headCtl));
+    auto control = std::make_unique<Node>();
     control->addChild(std::make_unique<Mesh>(std::move(head)));
     control->addChild(std::move(antenna_l_m));
     control->addChild(std::move(antenna_r_m));
@@ -56,7 +51,7 @@ void Robot::initHead(std::shared_ptr<Transform> headCtl) {
     root.addChild(std::move(head_m));
 }
 
-void Robot::initArms(std::shared_ptr<Transform> leftCtl, std::shared_ptr<Transform> rightCtl) {
+void Robot::initArms() {
     auto limb = Mesh::fromObjFile("meshes/Robot-parts-2018/limb_s.obj");
     limb.useShader(shader);
 
@@ -64,12 +59,12 @@ void Robot::initArms(std::shared_ptr<Transform> leftCtl, std::shared_ptr<Transfo
             glm::translate(glm::vec3(0.0f, -0.8f, 0.0f)) * glm::scale(glm::vec3(1.0f, 2.0f, 1.0f)));
     arm.addChild(std::make_unique<Mesh>(limb));
 
-    auto arm_l = std::make_unique<Node>(std::move(leftCtl));
+    auto arm_l = std::make_unique<Node>();
     arm_l->addChild(std::make_unique<Node>(arm));
     auto arm_l_b = std::make_unique<Node>(glm::translate(glm::vec3(-1.4f, 0.6f, 0.0f)));
     arm_l_b->addChild(std::move(arm_l));
 
-    auto arm_r = std::make_unique<Node>(std::move(rightCtl));
+    auto arm_r = std::make_unique<Node>();
     arm_r->addChild(std::make_unique<Node>(arm));
     auto arm_r_b = std::make_unique<Node>(glm::translate(glm::vec3(1.4f, 0.6f, 0.0f)));
     arm_r_b->addChild(std::move(arm_r));
@@ -78,19 +73,19 @@ void Robot::initArms(std::shared_ptr<Transform> leftCtl, std::shared_ptr<Transfo
     root.addChild(std::move(arm_r_b));
 }
 
-void Robot::initLegs(std::shared_ptr<Transform> leftCtl, std::shared_ptr<Transform> rightCtl) {
+void Robot::initLegs() {
     auto limb = Mesh::fromObjFile("meshes/Robot-parts-2018/limb_s.obj");
     limb.useShader(shader);
 
     auto leg = Node(glm::translate(glm::vec3(0.0f, -0.7f, 0.0f)));
     leg.addChild(std::make_unique<Mesh>(limb));
 
-    auto leg_l = std::make_unique<Node>(std::move(leftCtl));
+    auto leg_l = std::make_unique<Node>();
     leg_l->addChild(std::make_unique<Node>(leg));
     auto leg_l_m = std::make_unique<Node>(glm::translate(glm::vec3(-0.5f, -1.0f, 0.0f)));
     leg_l_m->addChild(std::move(leg_l));
 
-    auto leg_r = std::make_unique<Node>(std::move(rightCtl));
+    auto leg_r = std::make_unique<Node>();
     leg_r->addChild(std::make_unique<Node>(leg));
     auto leg_r_m = std::make_unique<Node>(glm::translate(glm::vec3(0.5f, -1.0f, 0.0f)));
     leg_r_m->addChild(std::move(leg_r));

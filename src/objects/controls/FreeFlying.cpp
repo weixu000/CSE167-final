@@ -23,7 +23,7 @@ void FreeFlying::rotate(const glm::vec3 &dir) {
             return;
         }
         auto rot = glm::rotate(rad, axis);
-        transform->model = transform->model * rot;
+        transform.model = transform.model * rot;
         initial = dir;
     }
 }
@@ -32,28 +32,28 @@ void FreeFlying::update() {
     if (freeze) return;
     const auto sensitivity = 10.0f * Time::delta();
     if (forward) {
-        auto vec = local ? glm::vec3(transform->model[2]) : glm::vec3(0.0f, 0.0f, 1.0f);
-        transform->model = glm::translate(-sensitivity * vec) * transform->model;
+        auto vec = local ? glm::vec3(transform.model[2]) : glm::vec3(0.0f, 0.0f, 1.0f);
+        transform.model = glm::translate(-sensitivity * vec) * transform.model;
     }
     if (backward) {
-        auto vec = local ? glm::vec3(transform->model[2]) : glm::vec3(0.0f, 0.0f, 1.0f);
-        transform->model = glm::translate(sensitivity * vec) * transform->model;
+        auto vec = local ? glm::vec3(transform.model[2]) : glm::vec3(0.0f, 0.0f, 1.0f);
+        transform.model = glm::translate(sensitivity * vec) * transform.model;
     }
     if (left) {
-        auto vec = local ? glm::vec3(transform->model[0]) : glm::vec3(1.0f, 0.0f, 0.0f);
-        transform->model = glm::translate(-sensitivity * vec) * transform->model;
+        auto vec = local ? glm::vec3(transform.model[0]) : glm::vec3(1.0f, 0.0f, 0.0f);
+        transform.model = glm::translate(-sensitivity * vec) * transform.model;
     }
     if (right) {
-        auto vec = local ? glm::vec3(transform->model[0]) : glm::vec3(1.0f, 0.0f, 0.0f);
-        transform->model = glm::translate(sensitivity * vec) * transform->model;
+        auto vec = local ? glm::vec3(transform.model[0]) : glm::vec3(1.0f, 0.0f, 0.0f);
+        transform.model = glm::translate(sensitivity * vec) * transform.model;
     }
     if (up) {
-        auto vec = local ? glm::vec3(transform->model[1]) : glm::vec3(0.0f, 1.0f, 0.0f);
-        transform->model = glm::translate(sensitivity * vec) * transform->model;
+        auto vec = local ? glm::vec3(transform.model[1]) : glm::vec3(0.0f, 1.0f, 0.0f);
+        transform.model = glm::translate(sensitivity * vec) * transform.model;
     }
     if (down) {
-        auto vec = local ? glm::vec3(transform->model[1]) : glm::vec3(0.0f, 1.0f, 0.0f);
-        transform->model = glm::translate(-sensitivity * vec) * transform->model;
+        auto vec = local ? glm::vec3(transform.model[1]) : glm::vec3(0.0f, 1.0f, 0.0f);
+        transform.model = glm::translate(-sensitivity * vec) * transform.model;
     }
 
     Node::update();

@@ -23,8 +23,8 @@ void ConstraintAnimator::update() {
 }
 
 void ConstraintAnimator::set() {
-    auto z = glm::vec3(transform->model[2]);
+    auto z = glm::vec3(transform.model[2]);
     auto z_ = glm::normalize(track->derivative(t));
-    transform->model = glm::translate(track->position(t)) *
-                       glm::mat4(glm::rotation(z, z_)) * glm::mat4(glm::mat3(transform->model));
+    transform.model = glm::translate(track->position(t)) *
+                      glm::mat4(glm::rotation(z, z_)) * glm::mat4(glm::mat3(transform.model));
 }

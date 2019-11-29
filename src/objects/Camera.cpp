@@ -4,10 +4,6 @@ Camera::Camera(const glm::mat4 &p, const glm::mat4 &t)
         : Node(t), projection(p) {
 }
 
-Camera::Camera(const glm::mat4 &p, std::shared_ptr<Transform> t)
-        : Node(std::move(t)), projection(p) {
-}
-
 void Camera::update() {
     auto cam = worldTransform();
     view = glm::inverse(cam);
