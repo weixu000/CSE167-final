@@ -21,4 +21,4 @@ add_executable(FinalProject
         objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
         objects/controls/ControlTriple.cpp objects/controls/ControlTriple.h
         objects/animators/ConstraintAnimator.cpp objects/animators/ConstraintAnimator.h objects/geometries/Terrain.cpp objects/geometries/Terrain.h)
-target_link_libraries(FinalProject GLEW::glew_s GLFW3::GLFW3 glm stb_image)
+target_link_libraries(FinalProject GLEW::glew_s glfw glm stb_image)
