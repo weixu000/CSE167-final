@@ -41,8 +41,8 @@ public:
     }
 
     template<typename T>
-    T *addChild(T &&child) {
-        return addChild(std::make_unique<T>(std::forward<T>(child)));
+    std::remove_reference_t<T> *addChild(T &&child) {
+        return addChild(std::make_unique<std::remove_reference_t<T>>(std::forward<T>(child)));
     }
 
     Node *parent() const { return _parent; }
