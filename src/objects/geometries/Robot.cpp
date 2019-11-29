@@ -7,95 +7,89 @@ Robot::Robot(std::shared_ptr<Shader> _shader)
         : shader(std::move(_shader)) {
     auto body = std::make_unique<Mesh>(Mesh::fromObjFile("meshes/Robot-parts-2018/body_s.obj"));
     body->useShader(shader);
-    root.addChild(std::move(body));
-    root.addChild(std::make_unique<Wireframe>(Wireframe::fromAABB(boundingBox())));
+    addChild(std::move(body));
+    addChild(std::make_unique<Wireframe>(Wireframe::fromAABB(boundingBox())));
 
     initHead();
     initArms();
     initLegs();
 }
 
-void Robot::initHead() {
+Transform *Robot::initHead() {
     auto antenna = Mesh::fromObjFile("meshes/Robot-parts-2018/antenna_s.obj");
+    antenna.transform.model = glm::translate(glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale(glm::vec3(0.3f));
     antenna.useShader(shader);
 
-    auto antenna_m = glm::translate(glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale(glm::vec3(0.3f));
-    auto antenna_l_m = std::make_unique<Node>(
-            glm::rotate(glm::pi<float>() / 4, glm::vec3(0.0f, 0.0f, 1.0f)) * antenna_m);
-    antenna_l_m->addChild(std::make_unique<Mesh>(antenna));
-    auto antenna_r_m = std::make_unique<Node>(
-            glm::rotate(-glm::pi<float>() / 4, glm::vec3(0.0f, 0.0f, 1.0f)) * antenna_m);
-    antenna_r_m->addChild(std::make_unique<Mesh>(antenna));
+    auto antenna_l = Node(glm::rotate(glm::pi<float>() / 4, glm::vec3(0.0f, 0.0f, 1.0f)));
+    antenna_l.addChild(std::make_unique<Mesh>(antenna));
+    auto antenna_r = Node(glm::rotate(-glm::pi<float>() / 4, glm::vec3(0.0f, 0.0f, 1.0f)));
+    antenna_r.addChild(std::make_unique<Mesh>(antenna));
 
     auto eyeball = Mesh::fromObjFile("meshes/Robot-parts-2018/eyeball_s.obj");
+    eyeball.transform.model = glm::eulerAngleX(glm::pi<float>() * 0.4f) * glm::translate(glm::vec3(0.0f, 1.0f, 0.0f));
     eyeball.useShader(shader);
-
-    auto eyeball_m = glm::eulerAngleX(glm::pi<float>() * 0.4f) * glm::translate(glm::vec3(0.0f, 1.0f, 0.0f));
-    auto eyeball_l_m = std::make_unique<Node>(glm::eulerAngleY(glm::pi<float>() * 0.15f) * eyeball_m);
-    eyeball_l_m->addChild(std::make_unique<Mesh>(eyeball));
-    auto eyeball_r_m = std::make_unique<Node>(glm::eulerAngleY(glm::pi<float>() * -0.15f) * eyeball_m);
-    eyeball_r_m->addChild(std::make_unique<Mesh>(eyeball));
+    auto eyeball_l = Node(glm::eulerAngleY(glm::pi<float>() * 0.15f));
+    eyeball_l.addChild(std::make_unique<Mesh>(eyeball));
+    auto eyeball_r = Node(glm::eulerAngleY(glm::pi<float>() * -0.15f));
+    eyeball_r.addChild(std::make_unique<Mesh>(eyeball));
 
     auto head = Mesh::fromObjFile("meshes/Robot-parts-2018/head_s.obj");
     head.useShader(shader);
 
-    auto control = std::make_unique<Node>();
-    control->addChild(std::make_unique<Mesh>(std::move(head)));
-    control->addChild(std::move(antenna_l_m));
-    control->addChild(std::move(antenna_r_m));
-    control->addChild(std::move(eyeball_l_m));
-    control->addChild(std::move(eyeball_r_m));
+    auto control = Node();
+    control.addChild(std::move(head));
+    control.addChild(std::move(antenna_l));
+    control.addChild(std::move(antenna_r));
+    control.addChild(std::move(eyeball_l));
+    control.addChild(std::move(eyeball_r));
 
-    auto head_m = std::make_unique<Node>(glm::translate(glm::vec3(0.0f, 1.2f, 0.0f)));
-    head_m->addChild(std::move(control));
-    root.addChild(std::move(head_m));
+    auto head_m = Node(glm::translate(glm::vec3(0.0f, 1.2f, 0.0f)));
+    auto control_t = head_m.addChild(std::move(control));
+    addChild(std::move(head_m));
+
+    return &control_t->transform;
 }
 
-void Robot::initArms() {
-    auto limb = Mesh::fromObjFile("meshes/Robot-parts-2018/limb_s.obj");
-    limb.useShader(shader);
+std::tuple<Transform *, Transform *> Robot::initArms() {
+    auto arm = Mesh::fromObjFile("meshes/Robot-parts-2018/limb_s.obj");
+    arm.transform.model = glm::translate(glm::vec3(0.0f, -0.8f, 0.0f)) * glm::scale(glm::vec3(1.0f, 2.0f, 1.0f));
+    arm.useShader(shader);
 
-    auto arm = Node(
-            glm::translate(glm::vec3(0.0f, -0.8f, 0.0f)) * glm::scale(glm::vec3(1.0f, 2.0f, 1.0f)));
-    arm.addChild(std::make_unique<Mesh>(limb));
+    auto arm_l = Node();
+    arm_l.addChild(arm);
+    auto arm_l_b = Node(glm::translate(glm::vec3(-1.4f, 0.6f, 0.0f)));
+    auto left_t = arm_l_b.addChild(std::move(arm_l));
 
-    auto arm_l = std::make_unique<Node>();
-    arm_l->addChild(std::make_unique<Node>(arm));
-    auto arm_l_b = std::make_unique<Node>(glm::translate(glm::vec3(-1.4f, 0.6f, 0.0f)));
-    arm_l_b->addChild(std::move(arm_l));
+    auto arm_r = Node();
+    arm_r.addChild(std::move(arm));
+    auto arm_r_b = Node(glm::translate(glm::vec3(1.4f, 0.6f, 0.0f)));
+    auto right_t = arm_r_b.addChild(std::move(arm_r));
 
-    auto arm_r = std::make_unique<Node>();
-    arm_r->addChild(std::make_unique<Node>(arm));
-    auto arm_r_b = std::make_unique<Node>(glm::translate(glm::vec3(1.4f, 0.6f, 0.0f)));
-    arm_r_b->addChild(std::move(arm_r));
+    addChild(std::move(arm_l_b));
+    addChild(std::move(arm_r_b));
 
-    root.addChild(std::move(arm_l_b));
-    root.addChild(std::move(arm_r_b));
+    return std::make_tuple(&left_t->transform, &right_t->transform);
 }
 
-void Robot::initLegs() {
+std::tuple<Transform *, Transform *> Robot::initLegs() {
     auto limb = Mesh::fromObjFile("meshes/Robot-parts-2018/limb_s.obj");
     limb.useShader(shader);
 
     auto leg = Node(glm::translate(glm::vec3(0.0f, -0.7f, 0.0f)));
     leg.addChild(std::make_unique<Mesh>(limb));
 
-    auto leg_l = std::make_unique<Node>();
-    leg_l->addChild(std::make_unique<Node>(leg));
+    auto leg_l = Node();
+    leg_l.addChild(leg);
     auto leg_l_m = std::make_unique<Node>(glm::translate(glm::vec3(-0.5f, -1.0f, 0.0f)));
-    leg_l_m->addChild(std::move(leg_l));
+    auto left_t = leg_l_m->addChild(std::move(leg_l));
 
-    auto leg_r = std::make_unique<Node>();
-    leg_r->addChild(std::make_unique<Node>(leg));
-    auto leg_r_m = std::make_unique<Node>(glm::translate(glm::vec3(0.5f, -1.0f, 0.0f)));
-    leg_r_m->addChild(std::move(leg_r));
+    auto leg_r = Node();
+    leg_r.addChild(std::move(leg));
+    auto leg_r_m = Node(glm::translate(glm::vec3(0.5f, -1.0f, 0.0f)));
+    auto right_t = leg_r_m.addChild(std::move(leg_r));
 
-    root.addChild(std::move(leg_l_m));
-    root.addChild(std::move(leg_r_m));
-}
+    addChild(std::move(leg_l_m));
+    addChild(std::move(leg_r_m));
 
-void Robot::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
-    auto m = world * transform.model;
-    root.draw(m, projection, view, eye);
-    Node::draw(m, projection, view, eye);
+    return std::make_tuple(&left_t->transform, &right_t->transform);
 }
