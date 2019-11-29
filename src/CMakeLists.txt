@@ -9,7 +9,6 @@ add_executable(FinalProject
         gl_wraps/GLVertexArray.h
         gl_wraps/GLTexture.h
         objects/Node.h objects/Node.cpp
-        components/Component.h
         objects/Transform.cpp objects/Transform.h
         objects/controls/Trackball.cpp objects/controls/Trackball.h
         objects/geometries/Geometry.h objects/geometries/Geometry.cpp
