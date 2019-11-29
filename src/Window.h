@@ -17,12 +17,12 @@
 #include "objects/Node.h"
 #include "objects/Camera.h"
 #include "objects/Skybox.h"
-#include "components/FreeFlying.h"
+#include "objects/controls/FreeFlying.h"
 #include "gl_wraps/Shader.h"
 #include "gl_wraps/GLContext.h"
 #include "components/geometries/BezierCurve.h"
-#include "objects/ControlTriple.h"
-#include "components/ConstraintAnimator.h"
+#include "objects/controls/ControlTriple.h"
+#include "objects/animators/ConstraintAnimator.h"
 
 class Window : public GLContext {
 public:
@@ -39,9 +39,9 @@ public:
     std::vector<ControlTriple> controls;
     int selected = 0;
 
-    std::shared_ptr<FreeFlying> flyControl;
+    FreeFlying *flyControl;
 
-    std::shared_ptr<ConstraintAnimator> animation;
+    ConstraintAnimator *animation;
 
     static Window *retrieve(GLFWwindow *w) { return reinterpret_cast<Window *>(glfwGetWindowUserPointer(w)); }
 

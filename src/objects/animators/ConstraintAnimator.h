@@ -1,17 +1,14 @@
 #ifndef CONSTRAINTANIMATOR_H
 #define CONSTRAINTANIMATOR_H
 
-#include "Component.h"
-#include "Transform.h"
-#include "geometries/BezierCurve.h"
+#include "../Node.h"
+#include "../../components/geometries/BezierCurve.h"
 
-class ConstraintAnimator : public Component {
+class ConstraintAnimator : public Node {
 public:
     explicit ConstraintAnimator(std::shared_ptr<BezierCurve> t);
 
     void update() override;
-
-    std::shared_ptr<Transform> control;
 
     bool pause = false;
 

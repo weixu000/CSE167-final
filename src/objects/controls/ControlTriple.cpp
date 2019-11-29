@@ -1,5 +1,4 @@
 #include "ControlTriple.h"
-#include "../gl_wraps/Shader.h"
 
 std::shared_ptr<Mesh> ControlTriple::controlIndicator, ControlTriple::approxIndicator;
 

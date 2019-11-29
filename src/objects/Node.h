@@ -6,7 +6,7 @@
 #include <list>
 
 #include "../components/Component.h"
-#include "../components/Transform.h"
+#include "Transform.h"
 
 class Node {
 public:

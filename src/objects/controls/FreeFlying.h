@@ -1,11 +1,11 @@
 #ifndef FREEFLYING_H
 #define FREEFLYING_H
 
-#include "Transform.h"
+#include "../Node.h"
 
-class FreeFlying : public Transform {
+class FreeFlying : public Node {
 public:
-    using Transform::Transform;
+    using Node::Node;
 
     // normalized direction in camera space
     void startRotate(const glm::vec3 &dir);

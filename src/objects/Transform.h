@@ -2,12 +2,8 @@
 #define PROJECT3_TRANSFORM_H
 
 #include <glm/glm.hpp>
-#include <memory>
-#include <list>
 
-#include "Component.h"
-
-class Transform : public Component {
+class Transform {
 public:
     explicit Transform(const glm::mat4 &m = glm::mat4(1.0f));
 

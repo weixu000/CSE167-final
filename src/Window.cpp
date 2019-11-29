@@ -29,8 +29,9 @@ void Window::initializeObjects() {
     glm::mat4 projection = glm::perspective(glm::radians(60.0f),
                                             float(width) / float(height), 0.1f, 1000.0f);
 
-    flyControl = std::make_shared<FreeFlying>(glm::translate(glm::vec3(0, 0, 20)));
-    cameras[0] = static_cast<Camera *>(scene.addChild(std::make_unique<Camera>(projection, flyControl)));
+    auto fly = std::make_unique<FreeFlying>(glm::translate(glm::vec3(0, 0, 20)));
+    cameras[0] = static_cast<Camera *>(fly->addChild(std::make_unique<Camera>(projection)));
+    flyControl = static_cast<FreeFlying *>(scene.addChild(std::move(fly)));
 
     skybox = std::make_unique<Skybox>();
 
@@ -54,16 +55,14 @@ void Window::initializeObjects() {
     auto scaled_sphere = std::make_unique<Node>(glm::scale(glm::vec3(0.2f)));
     scaled_sphere->addComponent(sphere);
 
-    animation = std::make_shared<ConstraintAnimator>(bezier);
-    auto mover = std::make_unique<Node>(animation->control);
-    mover->addChild(std::move(scaled_sphere));
-    cameras[1] = static_cast<Camera *>(mover->addChild(
+    auto coaster = std::make_unique<ConstraintAnimator>(bezier);
+    coaster->addChild(std::move(scaled_sphere));
+    cameras[1] = static_cast<Camera *>(coaster->addChild(
             std::make_unique<Camera>(projection,
                                      Camera::orientation(glm::vec3(0.0f, 1.0f, -2.0f),
                                                          glm::vec3(0.0f, 0.0f, 0.0f),
                                                          glm::vec3(0.0f, 1.0f, 0.0f)))));
-    scene.addChild(std::move(mover));
-    scene.addComponent(animation);
+    animation = static_cast<ConstraintAnimator *>(scene.addChild(std::move(coaster)));
 }
 
 void Window::resizeCallback(int width, int height) {

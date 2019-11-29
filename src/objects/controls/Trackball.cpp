@@ -18,7 +18,7 @@ void Trackball::move(float x, float y) {
         auto next = glm::rotate(rad, axis);
         auto delta = next * glm::transpose(orientation);
         orientation = next;
-        model = delta * model;
+        transform->model = delta * transform->model;
     }
 }
 
@@ -28,7 +28,7 @@ void Trackball::stop() {
 }
 
 void Trackball::scale(float offset) {
-    model = glm::scale(glm::vec3(glm::max(0.0f, 1 + 0.1f * offset))) * model;
+    transform->model = glm::scale(glm::vec3(glm::max(0.0f, 1 + 0.1f * offset))) * transform->model;
 }
 
 glm::vec3 Trackball::viewportToTrackball(float x, float y) {

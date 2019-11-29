@@ -3,11 +3,11 @@
 
 #include <glm/glm.hpp>
 
-#include "Transform.h"
+#include "../Node.h"
 
-class Trackball : public Transform {
+class Trackball : public Node {
 public:
-    using Transform::Transform;
+    using Node::Node;
 
     // x,y should be normalized
     void start(float x, float y);

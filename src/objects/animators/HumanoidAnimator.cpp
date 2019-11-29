@@ -1,10 +1,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "HumanoidAnimation.h"
-#include "../Time.h"
+#include "HumanoidAnimator.h"
+#include "../../Time.h"
 
-HumanoidAnimation::HumanoidAnimation()
+HumanoidAnimator::HumanoidAnimator()
         : headControl(std::make_shared<Transform>()),
           leftArmControl(std::make_shared<Transform>()),
           rightArmControl(std::make_shared<Transform>()),
@@ -13,7 +13,7 @@ HumanoidAnimation::HumanoidAnimation()
 
 }
 
-void HumanoidAnimation::update() {
+void HumanoidAnimator::update() {
     static auto deg = 0.0f;
     static auto dir = true;
     const auto speed = 3.0f;
@@ -37,4 +37,6 @@ void HumanoidAnimation::update() {
 
     leftLegControl->model = glm::rotate(deg, glm::vec3(1.0f, 0.0f, 0.0f));
     rightLegControl->model = glm::rotate(-deg, glm::vec3(1.0f, 0.0f, 0.0f));
+
+    Node::update();
 }

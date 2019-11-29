@@ -3,7 +3,6 @@
 
 #include "../../objects/Node.h"
 #include "Geometry.h"
-#include "../Transform.h"
 #include "Mesh.h"
 
 

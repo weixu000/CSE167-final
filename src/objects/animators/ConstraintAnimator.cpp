@@ -2,10 +2,10 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "ConstraintAnimator.h"
-#include "../Time.h"
+#include "../../Time.h"
 
 ConstraintAnimator::ConstraintAnimator(std::shared_ptr<BezierCurve> t)
-        : track(std::move(t)), control(std::make_shared<Transform>()) {
+        : track(std::move(t)) {
     set();
 }
 
@@ -18,11 +18,13 @@ void ConstraintAnimator::update() {
         t += velocity * Time::delta() / glm::length(track->derivative(t));
     }
     set();
+
+    Node::update();
 }
 
 void ConstraintAnimator::set() {
-    auto z = glm::vec3(control->model[2]);
+    auto z = glm::vec3(transform->model[2]);
     auto z_ = glm::normalize(track->derivative(t));
-    control->model = glm::translate(track->position(t)) *
-                     glm::mat4(glm::rotation(z, z_)) * glm::mat4(glm::mat3(control->model));
+    transform->model = glm::translate(track->position(t)) *
+                       glm::mat4(glm::rotation(z, z_)) * glm::mat4(glm::mat3(transform->model));
 }

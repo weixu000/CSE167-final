@@ -1,13 +1,14 @@
 #ifndef HUMANOIDANIMATION_H
 #define HUMANOIDANIMATION_H
 
-#include "Component.h"
-#include "Transform.h"
+#include <memory>
+
+#include "../Node.h"
 
 
-class HumanoidAnimation : public Component {
+class HumanoidAnimator : public Node {
 public:
-    HumanoidAnimation();
+    HumanoidAnimator();
 
     void update() override;
 
