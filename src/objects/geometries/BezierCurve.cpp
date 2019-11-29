@@ -49,10 +49,12 @@ void BezierCurve::upload() {
 
 void
 BezierCurve::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+    auto m = world * transform.model;
+
     shader->use();
     shader->setUniformMatrix4("projection", projection);
     shader->setUniformMatrix4("view", view);
-    shader->setUniformMatrix4("model", world);
+    shader->setUniformMatrix4("model", m);
     shader->setUniform1i("nSamples", 80);
     shader->setUniform3f("color", glm::vec3(1.0f, 1.0f, 1.0f));
     // Bind to the VAO.
@@ -61,6 +63,8 @@ BezierCurve::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm
     glDrawElements(GL_LINES_ADJACENCY, controlPoints.size() / 3 * 4, GL_UNSIGNED_INT, 0);
     // Unbind from the VAO.
     vao->unbind();
+
+    Node::draw(m, projection, view, eye);
 }
 
 glm::mat4 BezierCurve::B(-1, 3, -3, 1,

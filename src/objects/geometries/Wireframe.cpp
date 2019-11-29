@@ -31,6 +31,8 @@ Wireframe::Wireframe(const std::vector<glm::vec3> &vertices, const std::vector<G
 }
 
 void Wireframe::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+    auto m = world * transform.model;
+
     auto shader = Shader::flatShader();
     shader->use();
     shader->setUniformMatrix4("projection", projection);
@@ -47,6 +49,8 @@ void Wireframe::draw(const glm::mat4 &world, const glm::mat4 &projection, const 
     glEnable(GL_CULL_FACE);
     // Unbind from the VAO.
     vao->unbind();
+
+    Node::draw(m, projection, view, eye);
 }
 
 Wireframe Wireframe::fromAABB(const AABB &bb) {

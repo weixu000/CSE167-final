@@ -36,18 +36,22 @@ Mesh::Mesh(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indic
 }
 
 void Mesh::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+    auto m = world * transform.model;
+
     assert(shader);
     shader->use();
     shader->setUniformMatrix4("projection", projection);
     shader->setUniformMatrix4("view", view);
     shader->setUniform3f("viewPos", eye);
-    shader->setUniformMatrix4("model", world);
+    shader->setUniformMatrix4("model", m);
     // Bind to the VAO.
     vao->bind();
     // Draw points
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
     // Unbind from the VAO.
     vao->unbind();
+
+    Node::draw(m, projection, view, eye);
 }
 
 glm::mat4 Mesh::normalizeMat() const {
