@@ -6,7 +6,6 @@
 ├─cmake                             # Find*.cmake to find modules
 ├─deps                              # 3rd librarys to build
 │  └─stb_image                      # https://github.com/nothings/stb
-├─docs                              # Project blogs to report progess
 ├─meshes                            # 3D models
 ├─shaders                           # GLSL shaders
 ├─src                               # Sources
