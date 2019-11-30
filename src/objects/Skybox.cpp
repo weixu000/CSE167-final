@@ -7,7 +7,8 @@ Skybox::Skybox() {
     shader = std::make_shared<Shader>("shaders/skybox.vert", "shaders/skybox.frag");
     cube->useShader(shader);
 
-    cubeMap.bind(GL_TEXTURE_CUBE_MAP);
+    cubeMap = std::make_shared<GLTexture>();
+    cubeMap->bind(GL_TEXTURE_CUBE_MAP);
     std::vector<std::string> textures_faces{
             "textures/Skybox_Water222_right.jpg",
             "textures/Skybox_Water222_left.jpg",
@@ -39,9 +40,11 @@ Skybox::Skybox() {
 }
 
 void Skybox::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+    auto m = world * transform.model;
+
     // Use cube map
     glActiveTexture(GL_TEXTURE0);
-    cubeMap.bind(GL_TEXTURE_CUBE_MAP);
+    cubeMap->bind(GL_TEXTURE_CUBE_MAP);
 
     // Inside the cube
     glCullFace(GL_FRONT);
@@ -52,4 +55,6 @@ void Skybox::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm
     glCullFace(GL_BACK);
 
     GLTexture::unbind(GL_TEXTURE_CUBE_MAP);
+
+    Node::draw(m, projection, view, eye);
 }

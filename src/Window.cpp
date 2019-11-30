@@ -33,7 +33,7 @@ void Window::initializeObjects() {
     flyControl = scene.addChild(FreeFlying(glm::translate(glm::vec3(0, 0, 20))));
     camera = flyControl->addChild(Camera(projection));
 
-    skybox = std::make_unique<Skybox>();
+    skybox = scene.addChild(Skybox());
 
     scene.addChild(Terrain(5, {0.0f, 0.0f, 0.0f, 0.0f}));
 }
@@ -66,15 +66,13 @@ void Window::draw() {
     // Clear the color and depth buffers.
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-    skybox->draw(glm::mat4(1.0f), camera->projection, camera->view, camera->eye);
-
 //    for (int i = 0; i < controls.size(); ++i) {
 //        controls[i].draw(cameras[0]->projection, cameras[0]->view, cameras[0]->eye, 3 * i + 1);
 //    }
 
     // Use cube map
     glActiveTexture(GL_TEXTURE0);
-    skybox->cubeMap.bind(GL_TEXTURE_CUBE_MAP);
+    skybox->cubeMap->bind(GL_TEXTURE_CUBE_MAP);
 
     // Render the object.
     scene.draw(glm::mat4(1.0f), camera->projection, camera->view, camera->eye);

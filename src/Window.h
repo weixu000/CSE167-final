@@ -30,7 +30,7 @@ public:
 
     Camera *camera;
 
-    std::unique_ptr<Skybox> skybox;
+    Skybox *skybox;
 
     std::array<std::shared_ptr<Shader>, 2> shaders;
 
