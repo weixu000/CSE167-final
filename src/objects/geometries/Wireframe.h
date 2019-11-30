@@ -20,7 +20,11 @@
 
 class Wireframe : public Geometry {
 public:
+    Wireframe() = default;
+
     explicit Wireframe(const std::vector<glm::vec3> &vertices, const std::vector<GLuint> &indices);
+
+    void upload(const std::vector<glm::vec3> &vertices, const std::vector<GLuint> &indices);
 
     static Wireframe fromAABB(const AABB &bb);
 

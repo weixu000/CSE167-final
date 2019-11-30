@@ -28,20 +28,20 @@ class Window : public GLContext {
 public:
     Node scene;
 
-    std::array<Camera *, 2> cameras;
+    Camera *camera;
 
     std::unique_ptr<Skybox> skybox;
 
     std::array<std::shared_ptr<Shader>, 2> shaders;
 
-    BezierCurve *bezier;
+//    BezierCurve *bezier;
 
-    std::vector<ControlTriple> controls;
-    int selected = 0;
+//    std::vector<ControlTriple> controls;
+//    int selected = 0;
 
     FreeFlying *flyControl;
 
-    ConstraintAnimator *animation;
+//    ConstraintAnimator *animation;
 
     static Window *retrieve(GLFWwindow *w) { return reinterpret_cast<Window *>(glfwGetWindowUserPointer(w)); }
 

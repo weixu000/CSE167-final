@@ -2,6 +2,10 @@
 #include "../../gl_wraps/Shader.h"
 
 Wireframe::Wireframe(const std::vector<glm::vec3> &vertices, const std::vector<GLuint> &indices) {
+    upload(vertices, indices);
+}
+
+void Wireframe::upload(const std::vector<glm::vec3> &vertices, const std::vector<GLuint> &indices) {
     count = indices.size();
 
     const auto inf = std::numeric_limits<float>::infinity();

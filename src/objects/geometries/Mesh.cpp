@@ -10,7 +10,13 @@
 Mesh::Mesh(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indices) {
     count = indices.size();
 
-    computeStatistics(attrs, indices);
+    const auto inf = std::numeric_limits<float>::infinity();
+    glm::vec3 minVal(inf, inf, inf), maxVal(-inf, -inf, -inf);
+    for (auto it = attrs.begin(); it != attrs.end(); it += 2) {
+        minVal = glm::min(minVal, *it);
+        maxVal = glm::max(maxVal, *it);
+    }
+    bb = {minVal, maxVal};
 
     // Bind to the VAO.
     vao->bind();
@@ -52,27 +58,6 @@ void Mesh::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::
     vao->unbind();
 
     Node::draw(m, projection, view, eye);
-}
-
-glm::mat4 Mesh::normalizeMat() const {
-    glm::mat4 model{1.0f};
-    model = glm::scale(model, glm::vec3(11.5 / _scale));
-    model = glm::translate(model, -_center);
-    return model;
-}
-
-void Mesh::computeStatistics(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indices) {
-    _minVal = attrs[0], _maxVal = attrs[0];
-    for (auto it = attrs.begin(); it != attrs.end(); it += 2) {
-        _minVal = glm::min(_minVal, *it);
-        _maxVal = glm::max(_maxVal, *it);
-    }
-    _center = (_maxVal + _minVal) / 2.0f;
-
-    _scale = 0.0f;
-    for (auto it = attrs.begin(); it != attrs.end(); it += 2) {
-        _scale = glm::max(glm::length(*it - _center), _scale);
-    }
 }
 
 Mesh Mesh::fromObjFile(const std::string &objFilename) {

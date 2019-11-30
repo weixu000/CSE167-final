@@ -34,17 +34,7 @@ public:
     void
     draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) override;
 
-    AABB boundingBox() const override { return AABB{_minVal, _maxVal}; }
-
-    const glm::vec3 &minVal() const { return _minVal; }
-
-    const glm::vec3 &maxVal() const { return _maxVal; }
-
-    glm::vec3 center() const { return _center; }
-
-    float scale() const { return _scale; }
-
-    glm::mat4 normalizeMat() const;
+    AABB boundingBox() const override { return bb; }
 
 protected:
     NodePtr clone() override { return std::make_unique<Mesh>(*this); }
@@ -54,12 +44,9 @@ private:
     std::shared_ptr<GLVertexArray> vao = std::make_shared<GLVertexArray>();
     std::shared_ptr<GLBuffer> vbo = std::make_shared<GLBuffer>(), ebo = std::make_shared<GLBuffer>();
 
-    glm::vec3 _minVal, _maxVal, _center;
-    float _scale;
+    AABB bb;
 
     std::shared_ptr<Shader> shader;
-
-    void computeStatistics(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indices);
 };
 
 
