@@ -5,7 +5,6 @@
 #include <memory>
 #include <list>
 
-#include "../components/Component.h"
 #include "Transform.h"
 
 class Node {
