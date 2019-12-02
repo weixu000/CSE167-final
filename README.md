@@ -34,6 +34,7 @@ Run the executable in the repo `.` so that it can find the shaders/, meshes/, te
     - `Transform` member for world-model transformation
     - `draw` draw the tree, `update` update the tree in game loop
     - graph is strict tree structure
+        - `Group` is node that has child nodes
         - `addChild` another `Node` as child nodes
         - `parent` member to find its parent in the tree
         - `std::list<std::unique_ptr<Node>>` to store child nodes, raw pointers as handles to them
