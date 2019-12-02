@@ -36,7 +36,6 @@ public:
 protected:
     NodePtr clone() override { return std::make_unique<Wireframe>(*this); }
 
-private:
     GLsizei count = 0;
     std::shared_ptr<GLVertexArray> vao = std::make_shared<GLVertexArray>();
     std::shared_ptr<GLBuffer> vbo = std::make_shared<GLBuffer>(), ebo = std::make_shared<GLBuffer>();

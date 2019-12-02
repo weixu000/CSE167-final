@@ -2,6 +2,8 @@
 
 #include "Terrain.h"
 
+std::unique_ptr<Shader> Terrain::shader;
+
 Terrain::HeightMap Terrain::diamondSquare(int n, const std::array<float, 4> &corners) {
     const auto nan = std::numeric_limits<float>::quiet_NaN();
     n = (1 << n) + 1;
@@ -62,6 +64,10 @@ Terrain::HeightMap Terrain::diamondSquare(int n, const std::array<float, 4> &cor
 }
 
 Terrain::Terrain(int n, const std::array<float, 4> &corners) {
+    if (!shader) {
+        shader = std::make_unique<Shader>("shaders/terrain.vert", "shaders/terrain.frag");
+    }
+
     auto height = diamondSquare(n, corners);
     auto size = height.size();
 
@@ -86,4 +92,32 @@ Terrain::Terrain(int n, const std::array<float, 4> &corners) {
     }
 
     upload(vertices, indices);
+
+    tex = std::make_shared<Texture2D>();
+    tex->bind();
+    tex->upload("textures/earth.png");
+    tex->setFilter(GL_LINEAR, GL_LINEAR);
+    tex->setWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+    tex->unbind();
+}
+
+void Terrain::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+    auto m = world * transform.model;
+
+    glActiveTexture(GL_TEXTURE0);
+    tex->bind();
+
+    shader->use();
+    shader->setUniformMatrix4("projection", projection);
+    shader->setUniformMatrix4("view", view);
+    shader->setUniformMatrix4("model", world);
+    shader->setUniform1i("colormap", 0);
+    shader->setUniform1f("minHeight", bb.vertices[0].y);
+    shader->setUniform1f("maxHeight", bb.vertices[4].y);
+    // Bind to the VAO.
+    vao->bind();
+    // Draw points
+    glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
+    // Unbind from the VAO.
+    vao->unbind();
 }
