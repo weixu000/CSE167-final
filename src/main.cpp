@@ -1,12 +1,4 @@
-#ifdef __APPLE__
-#define GLFW_INCLUDE_GLCOREARB
-#include <OpenGL/gl3.h>
-#else
-
-#include <GL/glew.h>
-
-#endif
-
+#include "gl_wraps/gl.h"
 #include <GLFW/glfw3.h>
 #include <cstdlib>
 

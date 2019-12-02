@@ -1,13 +1,7 @@
 #ifndef UNIFORM_H
 #define UNIFORM_H
 
-#ifdef __APPLE__
-#include <OpenGL/gl3.h>
-#else
-
-#include <GL/glew.h>
-
-#endif
+#include "gl.h"
 
 #include <string>
 #include <memory>

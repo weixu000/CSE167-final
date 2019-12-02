@@ -22,12 +22,16 @@ Use CMake to configure cross-platform build.
 Run the executable in the repo `.` so that it can find the shaders/, meshes/, textures/.
 
 ## OpenGL Wrappers (src/gl_wraps)
-- [x] `GLObject` handle `glGen*`, `glDelete*`
-- [x] `Shader` compile, bind, use shaders, set uniforms
-- [ ] `GLBuffer` bind, upload buffers
-- [x] `GLVertexArray` bind vertex arrays, set vertex attributes
-- [ ] `GLTexture` bind textures, set filter and wrap options
-- [ ] `GLContext` create window and initialize OpenGL context
+- `gl.h` wrap OpenGL headers
+- `GLObject` handle `glGen*`, `glDelete*`
+- `GLContext` create window and initialize OpenGL context
+- `Shader` compile, bind, use shaders
+    - `Uniform<T>` set uniforms
+- `GLBuffer` bind, upload buffers
+- `GLVertexArray` bind vertex arrays, set vertex attributes
+- `GLTexture` bind textures, set filter and wrap options
+    - `TextureCubemap` Cubemap textures
+    - `Texture2D` 2D textures
 
 ## Scene Graph (src/objects)
 - `Node`: base class for node in the graph

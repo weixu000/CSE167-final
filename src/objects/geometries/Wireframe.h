@@ -1,13 +1,7 @@
 #ifndef WIREFRAME_H
 #define WIREFRAME_H
 
-#ifdef __APPLE__
-#include <OpenGL/gl3.h>
-#else
-
-#include <GL/glew.h>
-
-#endif
+#include "../../gl_wraps/gl.h"
 
 #include <glm/glm.hpp>
 #include <vector>
