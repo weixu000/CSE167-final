@@ -37,7 +37,7 @@ void Skybox::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm
     // Inside the cube
     glCullFace(GL_FRONT);
     shader->use();
-    shader->setUniform1i("cubemap", 0);
+    shader->setUniform("cubemap", 0);
     auto view_origin = glm::mat4(glm::mat3(view)); // remove translation component
     cube->draw(world, projection, view_origin, eye);
     glCullFace(GL_BACK);

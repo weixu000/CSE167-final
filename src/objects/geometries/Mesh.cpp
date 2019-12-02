@@ -46,10 +46,10 @@ void Mesh::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::
 
     assert(shader);
     shader->use();
-    shader->setUniformMatrix4("projection", projection);
-    shader->setUniformMatrix4("view", view);
-    shader->setUniform3f("viewPos", eye);
-    shader->setUniformMatrix4("model", m);
+    shader->setUniform("projection", projection);
+    shader->setUniform("view", view);
+    shader->setUniform("viewPos", eye);
+    shader->setUniform("model", m);
     // Bind to the VAO.
     vao->bind();
     // Draw points

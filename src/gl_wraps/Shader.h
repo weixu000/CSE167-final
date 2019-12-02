@@ -19,6 +19,7 @@
 
 #include <glm/glm.hpp>
 #include "GLObject.h"
+#include "Uniform.h"
 
 inline GLuint createProgram() { return glCreateProgram(); };
 
@@ -33,18 +34,23 @@ public:
 
     void use() { glUseProgram(id); }
 
-    void setUniformMatrix4(const std::string &name, const glm::mat4 &m);
+    void setUniform(const UniformBase &uniform) {
+        auto iter = uniformLocations.find(uniform.name);
+        if (iter != uniformLocations.end()) {
+            uniform.set(iter->second);
+        }
+    }
 
-    void setUniform3f(const std::string &name, const glm::vec3 &v);
-
-    void setUniform1f(const std::string &name, float f);
-
-    void setUniform1i(const std::string &name, int i);
+    template<typename T>
+    void setUniform(const std::string &name, const T &val) {
+        setUniform(Uniform<T>(name, val));
+    }
 
     static std::shared_ptr<Shader> flatShader();
 
 private:
     std::unordered_map<std::string, GLint> uniformLocations;
+
 
     void compileProgram(const std::string &vertexFilePath, const std::string &fragmentFilePath,
                         const std::string &geometryFilePath);

@@ -103,30 +103,6 @@ Shader::Shader(const std::string &vertex_file_path, const std::string &fragment_
     }
 }
 
-void Shader::setUniformMatrix4(const std::string &name, const glm::mat4 &m) {
-    if (uniformLocations.count(name)) {
-        glUniformMatrix4fv(uniformLocations.at(name), 1, GL_FALSE, glm::value_ptr(m));
-    }
-}
-
-void Shader::setUniform3f(const std::string &name, const glm::vec3 &v) {
-    if (uniformLocations.count(name)) {
-        glUniform3fv(uniformLocations.at(name), 1, glm::value_ptr(v));
-    }
-}
-
-void Shader::setUniform1f(const std::string &name, const float f) {
-    if (uniformLocations.count(name)) {
-        glUniform1f(uniformLocations.at(name), f);
-    }
-}
-
-void Shader::setUniform1i(const std::string &name, const int i) {
-    if (uniformLocations.count(name)) {
-        glUniform1i(uniformLocations.at(name), i);
-    }
-}
-
 std::shared_ptr<Shader> Shader::flatShader() {
     static std::shared_ptr<Shader> shader;
     if (shader == nullptr) {

@@ -52,11 +52,11 @@ BezierCurve::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm
     auto m = world * transform.model;
 
     shader->use();
-    shader->setUniformMatrix4("projection", projection);
-    shader->setUniformMatrix4("view", view);
-    shader->setUniformMatrix4("model", m);
-    shader->setUniform1i("nSamples", 80);
-    shader->setUniform3f("color", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader->setUniform("projection", projection);
+    shader->setUniform("view", view);
+    shader->setUniform("model", m);
+    shader->setUniform("nSamples", 80);
+    shader->setUniform("color", glm::vec3(1.0f, 1.0f, 1.0f));
     // Bind to the VAO.
     vao->bind();
     // Draw lines

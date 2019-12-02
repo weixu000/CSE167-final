@@ -108,12 +108,12 @@ void Terrain::draw(const glm::mat4 &world, const glm::mat4 &projection, const gl
     tex->bind();
 
     shader->use();
-    shader->setUniformMatrix4("projection", projection);
-    shader->setUniformMatrix4("view", view);
-    shader->setUniformMatrix4("model", world);
-    shader->setUniform1i("colormap", 0);
-    shader->setUniform1f("minHeight", bb.vertices[0].y);
-    shader->setUniform1f("maxHeight", bb.vertices[4].y);
+    shader->setUniform("projection", projection);
+    shader->setUniform("view", view);
+    shader->setUniform("model", world);
+    shader->setUniform("colormap", 0);
+    shader->setUniform("minHeight", bb.vertices[0].y);
+    shader->setUniform("maxHeight", bb.vertices[4].y);
     // Bind to the VAO.
     vao->bind();
     // Draw points

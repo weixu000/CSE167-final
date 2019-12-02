@@ -41,21 +41,21 @@ void ControlTriple::set(int i, const glm::vec3 &val) {
 void ControlTriple::draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye, GLint stencil) {
     auto shader = Shader::flatShader();
     shader->use();
-    shader->setUniform3f("color", glm::vec3(0.0f, 0.0f, 1.0f));
-    shader->setUniformMatrix4("projection", projection);
-    shader->setUniformMatrix4("view", view);
-    shader->setUniformMatrix4("model", glm::mat4(1.0f));
+    shader->setUniform("color", glm::vec3(0.0f, 0.0f, 1.0f));
+    shader->setUniform("projection", projection);
+    shader->setUniform("view", view);
+    shader->setUniform("model", glm::mat4(1.0f));
     vao.bind();
     glDrawArrays(GL_LINES, 0, 2);
     vao.unbind();
 
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    shader->setUniform3f("color", glm::vec3(1.0f, 0.0f, 0.0f));
+    shader->setUniform("color", glm::vec3(1.0f, 0.0f, 0.0f));
     glStencilFunc(GL_ALWAYS, stencil + 1, 0xFF);
     controlIndicator->draw(glm::translate(*points[1]) * glm::scale(glm::vec3(0.05f)), projection, view, eye);
 
-    shader->setUniform3f("color", glm::vec3(0.0f, 1.0f, 0.0f));
+    shader->setUniform("color", glm::vec3(0.0f, 1.0f, 0.0f));
     glStencilFunc(GL_ALWAYS, stencil, 0xFF);
     approxIndicator->draw(glm::translate(*points[0]) * glm::scale(glm::vec3(0.05f)), projection, view, eye);
     glStencilFunc(GL_ALWAYS, stencil + 2, 0xFF);
