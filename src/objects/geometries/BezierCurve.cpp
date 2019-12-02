@@ -63,8 +63,6 @@ BezierCurve::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm
     glDrawElements(GL_LINES_ADJACENCY, controlPoints.size() / 3 * 4, GL_UNSIGNED_INT, 0);
     // Unbind from the VAO.
     vao->unbind();
-
-    Node::draw(m, projection, view, eye);
 }
 
 glm::mat4 BezierCurve::B(-1, 3, -3, 1,

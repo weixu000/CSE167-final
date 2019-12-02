@@ -55,6 +55,4 @@ void Skybox::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm
     glCullFace(GL_BACK);
 
     GLTexture::unbind(GL_TEXTURE_CUBE_MAP);
-
-    Node::draw(m, projection, view, eye);
 }

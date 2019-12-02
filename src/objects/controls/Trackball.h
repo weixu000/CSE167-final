@@ -3,11 +3,11 @@
 
 #include <glm/glm.hpp>
 
-#include "../Node.h"
+#include "../Group.h"
 
-class Trackball : public Node {
+class Trackball : public Group {
 public:
-    using Node::Node;
+    using Group::Group;
 
     // x,y should be normalized
     void start(float x, float y);

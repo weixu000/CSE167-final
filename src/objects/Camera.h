@@ -12,7 +12,14 @@ public:
 
     explicit Camera(const glm::mat4 &p, const glm::mat4 &t = glm::mat4(1.0f));
 
+    void draw(const glm::mat4 &, const glm::mat4 &, const glm::mat4 &, const glm::vec3 &) override {}
+
     void update() override;
+
+    bool cull(const glm::mat4 &view_proj) override {
+        _culled = true;
+        return _culled;
+    }
 
     // Camera matrix, inverse of view matrix glm::lookAt
     static glm::mat4 orientation(const glm::vec3 &eye, const glm::vec3 &center, const glm::vec3 &up);

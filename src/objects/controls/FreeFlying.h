@@ -1,11 +1,13 @@
 #ifndef FREEFLYING_H
 #define FREEFLYING_H
 
-#include "../Node.h"
+#include "../Group.h"
 
-class FreeFlying : public Node {
+class FreeFlying : public Group {
 public:
-    using Node::Node;
+    using Group::Group;
+
+    void update() override;
 
     // normalized direction in camera space
     void startRotate(const glm::vec3 &dir);
@@ -14,8 +16,6 @@ public:
     void rotate(const glm::vec3 &dir);
 
     void stopRotate();
-
-    void update() override;
 
     static glm::vec3 windowCoordToCamDir(float x, float y,
                                          int width, int height,

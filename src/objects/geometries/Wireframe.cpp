@@ -53,8 +53,6 @@ void Wireframe::draw(const glm::mat4 &world, const glm::mat4 &projection, const 
     glEnable(GL_CULL_FACE);
     // Unbind from the VAO.
     vao->unbind();
-
-    Node::draw(m, projection, view, eye);
 }
 
 Wireframe Wireframe::fromAABB(const AABB &bb) {

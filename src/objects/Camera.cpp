@@ -8,7 +8,6 @@ void Camera::update() {
     auto cam = worldTransform();
     view = glm::inverse(cam);
     eye = glm::vec3(cam[3]);
-    Node::update();
 }
 
 glm::mat4 Camera::orientation(const glm::vec3 &eye, const glm::vec3 &center, const glm::vec3 &up) {

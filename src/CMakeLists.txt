@@ -20,5 +20,5 @@ add_executable(FinalProject
         objects/Skybox.cpp objects/Skybox.h
         objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
         objects/controls/ControlTriple.cpp objects/controls/ControlTriple.h
-        objects/animators/ConstraintAnimator.cpp objects/animators/ConstraintAnimator.h objects/geometries/Terrain.cpp objects/geometries/Terrain.h)
+        objects/animators/ConstraintAnimator.cpp objects/animators/ConstraintAnimator.h objects/geometries/Terrain.cpp objects/geometries/Terrain.h objects/Group.cpp objects/Group.h)
 target_link_libraries(FinalProject GLEW::glew_s glfw glm stb_image)

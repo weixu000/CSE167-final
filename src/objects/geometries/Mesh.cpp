@@ -56,8 +56,6 @@ void Mesh::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
     // Unbind from the VAO.
     vao->unbind();
-
-    Node::draw(m, projection, view, eye);
 }
 
 Mesh Mesh::fromObjFile(const std::string &objFilename) {

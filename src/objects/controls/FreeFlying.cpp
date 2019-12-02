@@ -56,7 +56,7 @@ void FreeFlying::update() {
         transform.model = glm::translate(-sensitivity * vec) * transform.model;
     }
 
-    Node::update();
+    Group::update();
 }
 
 glm::vec3 FreeFlying::windowCoordToCamDir(float x, float y, int width, int height, const glm::mat4 &proj) {

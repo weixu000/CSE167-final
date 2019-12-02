@@ -14,7 +14,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "objects/Node.h"
+#include "objects/Group.h"
 #include "objects/Camera.h"
 #include "objects/Skybox.h"
 #include "objects/controls/FreeFlying.h"
@@ -26,7 +26,7 @@
 
 class Window : public GLContext {
 public:
-    Node scene;
+    Group scene;
 
     Camera *camera;
 
