@@ -8,7 +8,10 @@ add_executable(FinalProject
         gl_wraps/GLBuffer.h
         gl_wraps/GLVertexArray.h
         gl_wraps/GLTexture.h
-        objects/Node.h objects/Node.cpp
+        gl_wraps/TextureCubemap.h
+        gl_wraps/Texture2D.h
+        objects/Node.cpp objects/Node.h
+        objects/Group.cpp objects/Group.h
         objects/Transform.cpp objects/Transform.h
         objects/controls/Trackball.cpp objects/controls/Trackball.h
         objects/geometries/Geometry.h objects/geometries/Geometry.cpp
@@ -20,5 +23,7 @@ add_executable(FinalProject
         objects/Skybox.cpp objects/Skybox.h
         objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
         objects/controls/ControlTriple.cpp objects/controls/ControlTriple.h
-        objects/animators/ConstraintAnimator.cpp objects/animators/ConstraintAnimator.h objects/geometries/Terrain.cpp objects/geometries/Terrain.h objects/Group.cpp objects/Group.h)
+        objects/animators/ConstraintAnimator.cpp objects/animators/ConstraintAnimator.h
+        objects/geometries/Terrain.cpp objects/geometries/Terrain.h
+        )
 target_link_libraries(FinalProject GLEW::glew_s glfw glm stb_image)

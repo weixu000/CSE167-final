@@ -13,21 +13,24 @@ inline void delTex(GLuint id) { glDeleteTextures(1, &id); }
 
 class GLTexture : public GLObject<createTex, delTex> {
 public:
-    GLTexture() = default;
+    explicit GLTexture(GLenum target) : target(target) {}
 
-    void bind(GLenum target) { glBindTexture(target, id); }
+    void bind() { glBindTexture(target, id); }
 
-    static void unbind(GLenum target) { glBindTexture(target, 0); }
+    void unbind() { glBindTexture(target, 0); }
 
-    static void setFilter(GLenum target, GLint min, GLint max) {
+    void setFilter(GLint min, GLint max) {
         glTexParameteri(target, GL_TEXTURE_MIN_FILTER, min);
         glTexParameteri(target, GL_TEXTURE_MAG_FILTER, max);
     }
 
-    static void setWrap(GLenum target, GLint s, GLint t) {
+    void setWrap(GLint s, GLint t) {
         glTexParameteri(target, GL_TEXTURE_WRAP_S, s);
         glTexParameteri(target, GL_TEXTURE_WRAP_T, t);
     }
+
+    const GLenum target;
+
 };
 
 #endif //GLTEXTURE_H
