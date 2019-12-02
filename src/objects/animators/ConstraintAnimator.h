@@ -8,7 +8,7 @@ class ConstraintAnimator : public Node {
 public:
     explicit ConstraintAnimator(BezierCurve *t);
 
-    void draw(const glm::mat4 &, const glm::mat4 &, const glm::mat4 &, const glm::vec3 &) override {}
+    void draw(const glm::mat4 &, const Camera &) override {}
 
     void update() override;
 

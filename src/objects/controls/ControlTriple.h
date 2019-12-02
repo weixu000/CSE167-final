@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "../geometries/Mesh.h"
+#include "../Camera.h"
 
 class ControlTriple {
 public:
@@ -13,7 +14,7 @@ public:
 
     const glm::vec3 &get(int i) { return *points[i]; }
 
-    void draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye, GLint stencil);
+    void draw(const Camera &camera, GLint stencil);
 
     void upload();
 

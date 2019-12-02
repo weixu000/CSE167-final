@@ -1,5 +1,6 @@
 #include "Wireframe.h"
 #include "../../gl_wraps/Shader.h"
+#include "../Camera.h"
 
 Wireframe::Wireframe(const std::vector<glm::vec3> &vertices, const std::vector<GLuint> &indices) {
     upload(vertices, indices);
@@ -34,13 +35,12 @@ void Wireframe::upload(const std::vector<glm::vec3> &vertices, const std::vector
     vao->unbind();
 }
 
-void Wireframe::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+void Wireframe::draw(const glm::mat4 &world, const Camera &camera) {
     auto m = world * transform.model;
 
     auto shader = Shader::flatShader();
     shader->use();
-    shader->setUniform("projection", projection);
-    shader->setUniform("view", view);
+    camera.setUniform(*shader);
     shader->setUniform("model", world);
     shader->setUniform("color", glm::vec3(1.0f, 1.0f, 1.0f));
     // Bind to the VAO.

@@ -1,6 +1,7 @@
 #include "../../deps/stb_image/stb_image.h"
 
 #include "Skybox.h"
+#include "Camera.h"
 
 Skybox::Skybox() {
     cube = std::make_shared<Mesh>(Mesh::cube());
@@ -27,7 +28,7 @@ Skybox::Skybox() {
     cubemap->unbind();
 }
 
-void Skybox::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+void Skybox::draw(const glm::mat4 &world, const Camera &camera) {
     auto m = world * transform.model;
 
     // Use cube map
@@ -38,8 +39,7 @@ void Skybox::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm
     glCullFace(GL_FRONT);
     shader->use();
     shader->setUniform("cubemap", 0);
-    auto view_origin = glm::mat4(glm::mat3(view)); // remove translation component
-    cube->draw(world, projection, view_origin, eye);
+    cube->draw(world, camera);
     glCullFace(GL_BACK);
 
     cubemap->unbind();

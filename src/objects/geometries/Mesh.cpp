@@ -6,6 +6,7 @@
 
 #include "Mesh.h"
 #include "../../gl_wraps/Shader.h"
+#include "../Camera.h"
 
 Mesh::Mesh(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indices) {
     count = indices.size();
@@ -41,14 +42,12 @@ Mesh::Mesh(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indic
     vao->unbind();
 }
 
-void Mesh::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+void Mesh::draw(const glm::mat4 &world, const Camera &camera) {
     auto m = world * transform.model;
 
     assert(shader);
     shader->use();
-    shader->setUniform("projection", projection);
-    shader->setUniform("view", view);
-    shader->setUniform("viewPos", eye);
+    camera.setUniform(*shader);
     shader->setUniform("model", m);
     // Bind to the VAO.
     vao->bind();

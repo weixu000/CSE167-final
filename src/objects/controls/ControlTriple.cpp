@@ -38,12 +38,11 @@ void ControlTriple::set(int i, const glm::vec3 &val) {
     upload();
 }
 
-void ControlTriple::draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye, GLint stencil) {
+void ControlTriple::draw(const Camera &camera, GLint stencil) {
     auto shader = Shader::flatShader();
     shader->use();
+    camera.setUniform(*shader);
     shader->setUniform("color", glm::vec3(0.0f, 0.0f, 1.0f));
-    shader->setUniform("projection", projection);
-    shader->setUniform("view", view);
     shader->setUniform("model", glm::mat4(1.0f));
     vao.bind();
     glDrawArrays(GL_LINES, 0, 2);
@@ -53,13 +52,13 @@ void ControlTriple::draw(const glm::mat4 &projection, const glm::mat4 &view, con
 
     shader->setUniform("color", glm::vec3(1.0f, 0.0f, 0.0f));
     glStencilFunc(GL_ALWAYS, stencil + 1, 0xFF);
-    controlIndicator->draw(glm::translate(*points[1]) * glm::scale(glm::vec3(0.05f)), projection, view, eye);
+    controlIndicator->draw(glm::translate(*points[1]) * glm::scale(glm::vec3(0.05f)), camera);
 
     shader->setUniform("color", glm::vec3(0.0f, 1.0f, 0.0f));
     glStencilFunc(GL_ALWAYS, stencil, 0xFF);
-    approxIndicator->draw(glm::translate(*points[0]) * glm::scale(glm::vec3(0.05f)), projection, view, eye);
+    approxIndicator->draw(glm::translate(*points[0]) * glm::scale(glm::vec3(0.05f)), camera);
     glStencilFunc(GL_ALWAYS, stencil + 2, 0xFF);
-    approxIndicator->draw(glm::translate(*points[2]) * glm::scale(glm::vec3(0.05f)), projection, view, eye);
+    approxIndicator->draw(glm::translate(*points[2]) * glm::scale(glm::vec3(0.05f)), camera);
 
     glStencilOp(GL_KEEP, GL_KEEP, GL_ZERO);
 }
@@ -68,7 +67,7 @@ void ControlTriple::upload() {
     // Bind to the VAO.
     vao.bind();
 
-    std::array < glm::vec3, 2 > segments = {*points[0], *points[2]};
+    std::array<glm::vec3, 2> segments = {*points[0], *points[2]};
 
     // Pass in the data.
     vbo.upload(sizeof(glm::vec3) * segments.size(), segments.data());

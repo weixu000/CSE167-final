@@ -9,8 +9,7 @@ class Terrain : public Wireframe {
 public:
     Terrain(int n, const std::array<float, 4> &corners);
 
-    void
-    draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) override;
+    void draw(const glm::mat4 &world, const Camera &camera) override;
 
 protected:
     NodePtr clone() override { return std::make_unique<Terrain>(*this); }

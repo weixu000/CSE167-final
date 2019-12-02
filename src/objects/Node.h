@@ -7,6 +7,8 @@
 
 #include "Transform.h"
 
+class Camera;
+
 class Node {
 public:
     explicit Node(const glm::mat4 &t = glm::mat4(1.0f));
@@ -21,8 +23,7 @@ public:
 
     Node &operator=(Node &&) noexcept;
 
-    virtual void
-    draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) = 0;
+    virtual void draw(const glm::mat4 &world, const Camera &camera) = 0;
 
     virtual void update() = 0;
 

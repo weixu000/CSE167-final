@@ -25,11 +25,11 @@ Group &Group::operator=(Group &&other) noexcept {
     return *this;
 }
 
-void Group::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+void Group::draw(const glm::mat4 &world, const Camera &camera) {
     auto m = world * transform.model;
     for (auto &n:children) {
         if (!n.culled) {
-            n.ptr->draw(m, projection, view, eye);
+            n.ptr->draw(m, camera);
         }
     }
 }

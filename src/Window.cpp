@@ -71,7 +71,7 @@ void Window::draw() {
 //    }
 
     // Render the object.
-    scene.draw(glm::mat4(1.0f), camera->projection, camera->view, camera->eye);
+    scene.draw(glm::mat4(1.0f), *camera);
 
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 

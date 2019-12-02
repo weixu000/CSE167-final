@@ -1,6 +1,7 @@
 #include <random>
 
 #include "Terrain.h"
+#include "../Camera.h"
 
 std::unique_ptr<Shader> Terrain::shader;
 
@@ -101,15 +102,14 @@ Terrain::Terrain(int n, const std::array<float, 4> &corners) {
     tex->unbind();
 }
 
-void Terrain::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+void Terrain::draw(const glm::mat4 &world, const Camera &camera) {
     auto m = world * transform.model;
 
     glActiveTexture(GL_TEXTURE0);
     tex->bind();
 
     shader->use();
-    shader->setUniform("projection", projection);
-    shader->setUniform("view", view);
+    camera.setUniform(*shader);
     shader->setUniform("model", world);
     shader->setUniform("colormap", 0);
     shader->setUniform("minHeight", bb.vertices[0].y);

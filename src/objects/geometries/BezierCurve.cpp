@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include "BezierCurve.h"
+#include "../Camera.h"
 
 std::unique_ptr<Shader> BezierCurve::shader;
 
@@ -47,13 +48,11 @@ void BezierCurve::upload() {
     vao->unbind();
 }
 
-void
-BezierCurve::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
+void BezierCurve::draw(const glm::mat4 &world, const Camera &camera) {
     auto m = world * transform.model;
 
     shader->use();
-    shader->setUniform("projection", projection);
-    shader->setUniform("view", view);
+    camera.setUniform(*shader);
     shader->setUniform("model", m);
     shader->setUniform("nSamples", 80);
     shader->setUniform("color", glm::vec3(1.0f, 1.0f, 1.0f));

@@ -60,7 +60,4 @@ inline void Uniform<glm::mat4>::set(GLint location) const {
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(val));
 }
 
-using UniformPtr = std::unique_ptr<UniformBase>;
-using UniformPtrList = std::list<UniformPtr>;
-
 #endif //UNIFORM_H

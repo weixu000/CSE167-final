@@ -28,8 +28,7 @@ public:
 
     static Wireframe fromAABB(const AABB &bb);
 
-    void
-    draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) override;
+    void draw(const glm::mat4 &world, const Camera &camera) override;
 
     AABB boundingBox() const override { return bb; }
 

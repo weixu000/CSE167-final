@@ -9,7 +9,8 @@ out vec3 vPos;// position in object space
 
 void main()
 {
-    gl_Position = projection * view * vec4(position, 1.0);
+    mat4 view_origin = mat4(mat3(view));// remove translation component
+    gl_Position = projection * view_origin * vec4(position, 1.0);
     gl_Position = gl_Position.xyww;// infinity depth
     vPos = position;
 }
