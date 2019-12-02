@@ -70,10 +70,6 @@ void Window::draw() {
 //        controls[i].draw(cameras[0]->projection, cameras[0]->view, cameras[0]->eye, 3 * i + 1);
 //    }
 
-    // Use cube map
-    glActiveTexture(GL_TEXTURE0);
-    skybox->cubeMap->bind(GL_TEXTURE_CUBE_MAP);
-
     // Render the object.
     scene.draw(glm::mat4(1.0f), camera->projection, camera->view, camera->eye);
 
@@ -240,6 +236,8 @@ void Window::loop() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     // Set clear color to black.
     glClearColor(0.0, 0.0, 0.0, 0.0);
+    // Make sure no bytes are padded:
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     // Enable stencil test
     glEnable(GL_STENCIL_TEST);
