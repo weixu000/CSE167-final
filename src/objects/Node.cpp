@@ -13,16 +13,12 @@ Node::Node(Node &&other) noexcept {
 }
 
 Node &Node::operator=(const Node &other) {
-    _culled = false;
     _parent = nullptr;
     transform = other.transform;
     return *this;
 }
 
 Node &Node::operator=(Node &&other) noexcept {
-    _culled = other._culled;
-    other._culled = false;
-
     _parent = other._parent;
     other._parent = nullptr;
 

@@ -13,10 +13,7 @@ public:
 
     void update() override {}
 
-    bool cull(const glm::mat4 &view_proj) override {
-        _culled = false;
-        return _culled;
-    }
+    bool cull(const glm::mat4 &view_proj) override { return false; }
 
     std::shared_ptr<GLTexture> cubeMap;
 

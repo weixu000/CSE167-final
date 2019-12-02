@@ -26,8 +26,8 @@ public:
     T *addChild(std::unique_ptr<T> child) {
         assert(!child->_parent);
         child->_parent = this;
-        children.push_back(std::move(child));
-        return static_cast<T *>(children.back().get());
+        children.push_back({std::move(child), false});
+        return static_cast<T *>(children.back().ptr.get());
     }
 
     template<typename T>
@@ -39,7 +39,11 @@ protected:
     NodePtr clone() override { return std::make_unique<Group>(*this); }
 
 private:
-    std::list<NodePtr> children;
+    struct CullingNodePtr {
+        NodePtr ptr;
+        bool culled;
+    };
+    std::list<CullingNodePtr> children;
 };
 
 

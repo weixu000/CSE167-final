@@ -28,8 +28,6 @@ public:
 
     virtual bool cull(const glm::mat4 &view_proj) = 0;
 
-    bool culled() const { return _culled; }
-
     glm::mat4 worldTransform() const;
 
     Node *parent() const { return _parent; }
@@ -37,8 +35,6 @@ public:
     Transform transform;
 
 protected:
-    bool _culled = false; // cached result of culling
-
     using NodePtr = std::unique_ptr<Node>;
 
     // Enable deep copy of unkown type of node

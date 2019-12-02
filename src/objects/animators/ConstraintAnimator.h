@@ -12,10 +12,7 @@ public:
 
     void update() override;
 
-    bool cull(const glm::mat4 &view_proj) override {
-        _culled = true;
-        return _culled;
-    }
+    bool cull(const glm::mat4 &view_proj) override { return true; }
 
     bool pause = false;
 

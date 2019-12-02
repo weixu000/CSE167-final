@@ -16,10 +16,7 @@ public:
 
     void update() override;
 
-    bool cull(const glm::mat4 &view_proj) override {
-        _culled = true;
-        return _culled;
-    }
+    bool cull(const glm::mat4 &view_proj) override { return true; }
 
     // Camera matrix, inverse of view matrix glm::lookAt
     static glm::mat4 orientation(const glm::vec3 &eye, const glm::vec3 &center, const glm::vec3 &up);

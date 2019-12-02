@@ -2,8 +2,8 @@
 
 Group::Group(const Group &other) : Node(other) {
     for (auto &n:other.children) {
-        children.push_back(n->clone());
-        children.back()->_parent = this;
+        children.push_back({n.ptr->clone(), false});
+        children.back().ptr->_parent = this;
     }
 }
 
@@ -19,7 +19,7 @@ Group &Group::operator=(const Group &other) {
 Group &Group::operator=(Group &&other) noexcept {
     children = std::move(other.children);
     for (auto &n:children) {
-        n->_parent = this;
+        n.ptr->_parent = this;
     }
     Node::operator=(std::move(other));
     return *this;
@@ -28,28 +28,27 @@ Group &Group::operator=(Group &&other) noexcept {
 void Group::draw(const glm::mat4 &world, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &eye) {
     auto m = world * transform.model;
     for (auto &n:children) {
-        if (!n->culled()) {
-            n->draw(m, projection, view, eye);
+        if (!n.culled) {
+            n.ptr->draw(m, projection, view, eye);
         }
     }
 }
 
 void Group::update() {
     for (auto &n:children) {
-        n->update();
+        n.ptr->update();
     }
 }
 
 bool Group::cull(const glm::mat4 &view_proj) {
     auto m = view_proj * transform.model;
-    size_t num_culled = 0;
-
+    auto culled = true;
     for (auto &n:children) {
-        if (n->cull(m)) {
-            ++num_culled;
+        n.culled = n.ptr->cull(m);
+        if (!n.culled) {
+            culled = false;
         }
     }
-    _culled = num_culled == children.size();
-    return _culled;
+    return culled;
 }
 
