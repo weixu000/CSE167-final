@@ -21,7 +21,9 @@ add_executable(FinalProject
         objects/geometries/Robot.cpp objects/geometries/Robot.h
         objects/geometries/Wireframe.cpp objects/geometries/Wireframe.h
         objects/Camera.cpp objects/Camera.h
-        objects/controls/FreeFlying.cpp objects/controls/FreeFlying.h
+        objects/controls/FreeMover.cpp objects/controls/FreeMover.h
+        objects/controls/FreeRotator.cpp objects/controls/FreeRotator.h
+        objects/controls/FreeFlying.h
         objects/Skybox.cpp objects/Skybox.h
         objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
         objects/controls/ControlTriple.cpp objects/controls/ControlTriple.h
