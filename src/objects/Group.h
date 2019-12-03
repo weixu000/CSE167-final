@@ -25,8 +25,9 @@ public:
     T *addChild(std::unique_ptr<T> child) {
         assert(!child->_parent);
         child->_parent = this;
+        auto ret = child.get();
         children.push_back({std::move(child), false});
-        return static_cast<T *>(children.back().ptr.get());
+        return ret;
     }
 
     template<typename T>
