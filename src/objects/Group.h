@@ -23,7 +23,13 @@ public:
 
     void onKeyPress(Key key, int mods) override;
 
-    void OnKeyRelease(int key, int mods) override;
+    void onKeyRelease(int key, int mods) override;
+
+    void onMouseMove(float x, float y) override;
+
+    void onMouseButtonPress(MouseButton button, int mods, float x, float y) override;
+
+    void onMouseButtonRelease(MouseButton button, int mods, float x, float y) override;
 
     template<typename T>
     T *addChild(std::unique_ptr<T> child) {

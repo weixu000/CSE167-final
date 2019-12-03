@@ -44,7 +44,7 @@ void FreeMover::onKeyPress(Key key, int mods) {
     Group::onKeyPress(key, mods);
 }
 
-void FreeMover::OnKeyRelease(int key, int mods) {
+void FreeMover::onKeyRelease(int key, int mods) {
     if (key == forwardKey) {
         forward = false;
     } else if (key == leftKey) {
@@ -59,5 +59,5 @@ void FreeMover::OnKeyRelease(int key, int mods) {
         down = false;
     }
 
-    Group::OnKeyRelease(key, mods);
+    Group::onKeyRelease(key, mods);
 }

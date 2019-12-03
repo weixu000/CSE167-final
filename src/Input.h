@@ -5,5 +5,6 @@
 #include <GLFW/glfw3.h>
 
 using Key = int;
+using MouseButton = int;
 
 #endif //INPUT_H

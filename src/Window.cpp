@@ -124,47 +124,27 @@ void Window::keyCallback(int key, int scancode, int action, int mods) {
         }
         scene.onKeyPress(key, mods);
     } else if (action == GLFW_RELEASE) {
-        scene.OnKeyRelease(key, mods);
+        scene.onKeyRelease(key, mods);
     }
 }
 
 void Window::mouseButtonCallback(int button, int action, int mods) {
-    switch (button) {
-        case GLFW_MOUSE_BUTTON_LEFT:
-            if (action == GLFW_PRESS) {
-                double x, y;
-                glfwGetCursorPos(window, &x, &y);
-                flyControl->startRotate(FreeFlying::windowCoordToCamDir(x, y, width, height, camera->projection));
-            } else if (action == GLFW_RELEASE) {
-                flyControl->stopRotate();
-            }
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+    switch (action) {
+        case GLFW_PRESS:
+            scene.onMouseButtonPress(button, mods, x, y);
             break;
-//        case GLFW_MOUSE_BUTTON_RIGHT:
-//            if (action == GLFW_PRESS) {
-//                double x, y;
-//                glfwGetCursorPos(window, &x, &y);
-//                glReadPixels(x, height - 1 - y, 1, 1, GL_STENCIL_INDEX, GL_INT, &selected);
-//            } else if (action == GLFW_RELEASE) {
-//                selected = 0;
-//            }
-//            break;
+        case GLFW_RELEASE:
+            scene.onMouseButtonRelease(button, mods, x, y);
+            break;
         default:
             break;
     }
 }
 
 void Window::cursorPosCallback(double x, double y) {
-    flyControl->rotate(FreeFlying::windowCoordToCamDir(x, y, width, height, camera->projection));
-
-//    if (selected) {
-//        auto viewport = glm::vec4(0.0f, 0.0f, width, height);
-//        auto &c = controls[(selected - 1) / 3];
-//        auto i = (selected - 1) % 3;
-//        auto win_coord = glm::vec3(x, height - 1 - y,
-//                                   glm::project(c.get(i), cameras[0]->view, cameras[0]->projection, viewport).z);
-//        c.set(i, glm::unProject(win_coord, cameras[0]->view, cameras[0]->projection, viewport));
-//        bezier->upload();
-//    }
+    scene.onMouseMove(x, y);
 }
 
 void Window::scrollCallback(double xoffset, double yoffset) {

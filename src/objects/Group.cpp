@@ -58,9 +58,27 @@ void Group::onKeyPress(Key key, int mods) {
     }
 }
 
-void Group::OnKeyRelease(int key, int mods) {
+void Group::onKeyRelease(int key, int mods) {
     for (auto &n:children) {
-        n.ptr->OnKeyRelease(key, mods);
+        n.ptr->onKeyRelease(key, mods);
+    }
+}
+
+void Group::onMouseMove(float x, float y) {
+    for (auto &n:children) {
+        n.ptr->onMouseMove(x, y);
+    }
+}
+
+void Group::onMouseButtonPress(MouseButton button, int mods, float x, float y) {
+    for (auto &n:children) {
+        n.ptr->onMouseButtonPress(button, mods, x, y);
+    }
+}
+
+void Group::onMouseButtonRelease(MouseButton button, int mods, float x, float y) {
+    for (auto &n:children) {
+        n.ptr->onMouseButtonRelease(button, mods, x, y);
     }
 }
 

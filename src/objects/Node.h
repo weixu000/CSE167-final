@@ -38,7 +38,13 @@ public:
 
     virtual void onKeyPress(Key key, int mods) {}
 
-    virtual void OnKeyRelease(int key, int mods) {}
+    virtual void onKeyRelease(int key, int mods) {}
+
+    virtual void onMouseMove(float x, float y) {}
+
+    virtual void onMouseButtonPress(MouseButton button, int mods, float x, float y) {}
+
+    virtual void onMouseButtonRelease(MouseButton button, int mods, float x, float y) {}
 
 protected:
     using NodePtr = std::unique_ptr<Node>;

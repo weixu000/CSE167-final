@@ -11,7 +11,7 @@ public:
 
     void onKeyPress(Key key, int mods) override;
 
-    void OnKeyRelease(int key, int mods) override;
+    void onKeyRelease(int key, int mods) override;
 
     Key forwardKey = GLFW_KEY_W, backwardKey = GLFW_KEY_S,
             leftKey = GLFW_KEY_A, rightKey = GLFW_KEY_D,
