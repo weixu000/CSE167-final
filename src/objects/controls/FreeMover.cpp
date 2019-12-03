@@ -25,3 +25,39 @@ void FreeMover::update() {
 
     Group::update();
 }
+
+void FreeMover::onKeyPress(Key key, int mods) {
+    if (key == forwardKey) {
+        forward = true;
+    } else if (key == leftKey) {
+        left = true;
+    } else if (key == backwardKey) {
+        backward = true;
+    } else if (key == rightKey) {
+        right = true;
+    } else if (key == upKey) {
+        up = true;
+    } else if (key == downKey) {
+        down = true;
+    }
+
+    Group::onKeyPress(key, mods);
+}
+
+void FreeMover::OnKeyRelease(int key, int mods) {
+    if (key == forwardKey) {
+        forward = false;
+    } else if (key == leftKey) {
+        left = false;
+    } else if (key == backwardKey) {
+        backward = false;
+    } else if (key == rightKey) {
+        right = false;
+    } else if (key == upKey) {
+        up = false;
+    } else if (key == downKey) {
+        down = false;
+    }
+
+    Group::OnKeyRelease(key, mods);
+}

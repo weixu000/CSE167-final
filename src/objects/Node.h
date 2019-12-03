@@ -6,6 +6,7 @@
 #include <list>
 
 #include "Transform.h"
+#include "../Input.h"
 
 class Camera;
 
@@ -34,6 +35,10 @@ public:
     Node *parent() const { return _parent; }
 
     Transform transform;
+
+    virtual void onKeyPress(Key key, int mods) {}
+
+    virtual void OnKeyRelease(int key, int mods) {}
 
 protected:
     using NodePtr = std::unique_ptr<Node>;

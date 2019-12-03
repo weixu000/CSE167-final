@@ -116,70 +116,15 @@ void Window::keyCallback(int key, int scancode, int action, int mods) {
                 // Close the window. This causes the program to also terminate.
                 glfwSetWindowShouldClose(window, GL_TRUE);
                 break;
-            case GLFW_KEY_W:
-                flyControl->forward = true;
-                break;
-            case GLFW_KEY_A:
-                flyControl->left = true;
-                break;
-            case GLFW_KEY_S:
-                flyControl->backward = true;
-                break;
-            case GLFW_KEY_D:
-                flyControl->right = true;
-                break;
-            case GLFW_KEY_Q:
-                flyControl->up = true;
-                break;
-            case GLFW_KEY_E:
-                flyControl->down = true;
-                break;
-            case GLFW_KEY_LEFT_SHIFT:
-                flyControl->local = false;
-                break;
             case GLFW_KEY_N:
                 std::swap(*shaders[0], *shaders[1]);
                 break;
-//            case GLFW_KEY_C:
-//                std::swap(cameras[0], cameras[1]);
-//                flyControl->freeze = !flyControl->freeze;
-//                break;
-//            case GLFW_KEY_P:
-//                animation->pause = !animation->pause;
-//                break;
-//            case GLFW_KEY_V:
-//                animation->uniformSpeed = !animation->uniformSpeed;
-//                std::cout << "uniformSpeed: " << std::boolalpha << animation->uniformSpeed << std::endl;
-//                break;
             default:
                 break;
         }
+        scene.onKeyPress(key, mods);
     } else if (action == GLFW_RELEASE) {
-        switch (key) {
-            case GLFW_KEY_W:
-                flyControl->forward = false;
-                break;
-            case GLFW_KEY_A:
-                flyControl->left = false;
-                break;
-            case GLFW_KEY_S:
-                flyControl->backward = false;
-                break;
-            case GLFW_KEY_D:
-                flyControl->right = false;
-                break;
-            case GLFW_KEY_Q:
-                flyControl->up = false;
-                break;
-            case GLFW_KEY_E:
-                flyControl->down = false;
-                break;
-            case GLFW_KEY_LEFT_SHIFT:
-                flyControl->local = true;
-                break;
-            default:
-                break;
-        }
+        scene.OnKeyRelease(key, mods);
     }
 }
 

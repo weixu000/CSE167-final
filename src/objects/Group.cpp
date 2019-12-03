@@ -52,3 +52,15 @@ bool Group::cull(const glm::mat4 &view_proj) {
     return culled;
 }
 
+void Group::onKeyPress(Key key, int mods) {
+    for (auto &n:children) {
+        n.ptr->onKeyPress(key, mods);
+    }
+}
+
+void Group::OnKeyRelease(int key, int mods) {
+    for (auto &n:children) {
+        n.ptr->OnKeyRelease(key, mods);
+    }
+}
+

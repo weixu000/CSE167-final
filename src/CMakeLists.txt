@@ -1,6 +1,7 @@
 add_executable(FinalProject
         main.cpp
         Window.cpp Window.h
+        Input.h
         Time.cpp Time.h
         gl_wraps/gl.h
         gl_wraps/Shader.cpp gl_wraps/Shader.h

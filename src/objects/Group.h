@@ -21,6 +21,10 @@ public:
 
     bool cull(const glm::mat4 &view_proj) override;
 
+    void onKeyPress(Key key, int mods) override;
+
+    void OnKeyRelease(int key, int mods) override;
+
     template<typename T>
     T *addChild(std::unique_ptr<T> child) {
         assert(!child->_parent);
