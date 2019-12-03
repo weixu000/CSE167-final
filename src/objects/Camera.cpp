@@ -1,8 +1,9 @@
 #include "Camera.h"
 #include "../gl_wraps/Shader.h"
 
-Camera::Camera(const glm::mat4 &p, const glm::mat4 &t)
-        : Node(t), projection(p) {
+Camera::Camera(float w, float h, const glm::mat4 &t)
+        : Node(t) {
+    resize(w, h);
 }
 
 void Camera::update() {

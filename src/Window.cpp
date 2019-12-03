@@ -30,8 +30,11 @@ void Window::initializeObjects() {
     glm::mat4 projection = glm::perspective(glm::radians(60.0f),
                                             float(width) / float(height), 0.1f, 1000.0f);
 
-    flyControl = scene.addChild(FreeFlying(glm::translate(glm::vec3(0, 0, 20))));
-    camera = flyControl->addChild(Camera(projection));
+    auto cam = std::make_unique<Camera>(width, height);
+    flyControl = scene.addChild(FreeFlying(cam.get(), glm::translate(glm::vec3(0, 0, 20))));
+    camera = flyControl->addChild(std::move(cam));
+
+    scene.addChild(Skybox());
 
     skybox = scene.addChild(Skybox());
 
@@ -50,9 +53,7 @@ void Window::resizeCallback(int width, int height) {
         glViewport(0, 0, width, height);
 
         // Set the projection matrix.
-        camera->projection =
-                glm::perspective(glm::radians(60.0f),
-                                 float(width) / float(height), 0.1f, 1000.0f);
+        camera->resize(width, height);
     }
 }
 
@@ -66,14 +67,8 @@ void Window::draw() {
     // Clear the color and depth buffers.
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-//    for (int i = 0; i < controls.size(); ++i) {
-//        controls[i].draw(cameras[0]->projection, cameras[0]->view, cameras[0]->eye, 3 * i + 1);
-//    }
-
     // Render the object.
     scene.draw(glm::mat4(1.0f), *camera);
-
-    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
     // Swap buffers.
     glfwSwapBuffers(window);

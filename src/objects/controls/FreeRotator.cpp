@@ -2,6 +2,7 @@
 #include <glm/gtx/transform.hpp>
 
 #include "FreeRotator.h"
+#include "../Camera.h"
 
 void FreeRotator::startRotate(const glm::vec3 &dir) {
     startedRotate = true;
@@ -26,9 +27,28 @@ void FreeRotator::rotate(const glm::vec3 &dir) {
     }
 }
 
-glm::vec3 FreeRotator::windowCoordToCamDir(float x, float y, int width, int height, const glm::mat4 &proj) {
-    auto viewport = glm::vec4(0.0f, 0.0f, width, height);
-    auto win_coord = glm::vec3(x, height - 1 - y, 0);
-    return glm::normalize(glm::unProject(win_coord, glm::mat4(1.0f), proj, viewport));
+glm::vec3 FreeRotator::windowCoordToCamDir(float x, float y) {
+    auto viewport = glm::vec4(0.0f, 0.0f, camera->width, camera->height);
+    auto win_coord = glm::vec3(x, camera->height - 1 - y, 0);
+    return glm::normalize(glm::unProject(win_coord, glm::mat4(1.0f), camera->projection, viewport));
+}
+
+void FreeRotator::onMouseMove(float x, float y) {
+    rotate(windowCoordToCamDir(x, y));
+}
+
+void FreeRotator::onMouseButtonPress(MouseButton button, int mods, float x, float y) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT) {
+        startRotate(windowCoordToCamDir(x, y));
+    }
+    Group::onMouseButtonPress(button, mods, 0, 0);
+}
+
+void FreeRotator::onMouseButtonRelease(MouseButton button, int mods, float x, float y) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT) {
+        stopRotate();
+    }
+
+    Group::onMouseButtonRelease(button, mods, 0, 0);
 }
 
