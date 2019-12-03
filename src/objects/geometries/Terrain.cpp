@@ -1,11 +1,12 @@
 #include <random>
+#include <ctime>
 
 #include "Terrain.h"
 #include "../Camera.h"
 
 std::unique_ptr<Shader> Terrain::shader;
 
-Terrain::HeightMap Terrain::diamondSquare(int n, const std::array<float, 4> &corners) {
+Terrain::HeightMap Terrain::diamondSquare(int n, const std::array<float, 4> &corners, float height_range) {
     const auto nan = std::numeric_limits<float>::quiet_NaN();
     n = (1 << n) + 1;
     HeightMap height(n, std::vector<float>(n, nan));
@@ -14,11 +15,10 @@ Terrain::HeightMap Terrain::diamondSquare(int n, const std::array<float, 4> &cor
     height[n - 1][n - 1] = corners[2];
     height[n - 1][0] = corners[3];
 
-    std::random_device rd;
-    std::default_random_engine rand_eng(rd());
+    std::default_random_engine rand_eng(static_cast<long unsigned int>(time(0)));
 
     for (auto step_size = n - 1; step_size > 1; step_size /= 2) {
-        std::uniform_real_distribution<float> dist(-10.0f * step_size / n, 10.0f * step_size / n);
+        std::uniform_real_distribution<float> dist(-height_range * step_size / n, height_range * step_size / n);
 
         // Diamond step
         for (int x1 = 0, x2 = step_size; x2 < n; x1 += step_size, x2 += step_size) {
@@ -64,12 +64,12 @@ Terrain::HeightMap Terrain::diamondSquare(int n, const std::array<float, 4> &cor
     return height;
 }
 
-Terrain::Terrain(int n, const std::array<float, 4> &corners) {
+Terrain::Terrain(int n, const std::array<float, 4> &corners, float height_range) {
     if (!shader) {
         shader = std::make_unique<Shader>("shaders/terrain.vert", "shaders/terrain.frag");
     }
 
-    auto height = diamondSquare(n, corners);
+    auto height = diamondSquare(n, corners, height_range);
     auto size = height.size();
 
     std::vector<glm::vec3> vertices;

@@ -7,7 +7,7 @@
 
 class Terrain : public Wireframe {
 public:
-    Terrain(int n, const std::array<float, 4> &corners);
+    Terrain(int n, const std::array<float, 4> &corners, float height_range);
 
     void draw(const glm::mat4 &world, const Camera &camera) override;
 
@@ -17,7 +17,7 @@ protected:
 private:
     using HeightMap = std::vector<std::vector<float>>;
 
-    static HeightMap diamondSquare(int n, const std::array<float, 4> &corners);
+    static HeightMap diamondSquare(int n, const std::array<float, 4> &corners, float height_range);
 
     std::shared_ptr<Texture2D> tex;
 

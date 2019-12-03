@@ -35,7 +35,7 @@ void Window::initializeObjects() {
 
     skybox = scene.addChild(Skybox());
 
-    scene.addChild(Terrain(5, {0.0f, 0.0f, 0.0f, 0.0f}));
+    scene.addChild(Terrain(5, {0.0f, 0.0f, 0.0f, 0.0f}, 10.0f));
 }
 
 void Window::resizeCallback(int width, int height) {
