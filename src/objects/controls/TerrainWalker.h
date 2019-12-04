@@ -4,9 +4,11 @@
 #include "../Group.h"
 #include "../geometries/Terrain.h"
 
+class Camera;
+
 class TerrainWalker : public Group {
 public:
-    explicit TerrainWalker(Terrain *t);
+    explicit TerrainWalker(Terrain *t, Camera *cam, float tall);
 
     void update() override;
 
@@ -14,8 +16,15 @@ public:
 
     void onKeyRelease(int key, int mods) override;
 
+    void onMouseMove(float x, float y) override;
+
     Key forwardKey = GLFW_KEY_W, backwardKey = GLFW_KEY_S,
             leftKey = GLFW_KEY_A, rightKey = GLFW_KEY_D;
+
+    // transform.model stores translation on the terrain
+    // foot has Y rotation
+    // head has X,Y rotation and Z translation
+    Group *foot, *head;
 
 protected:
     NodePtr clone() override { return std::make_unique<TerrainWalker>(*this); }

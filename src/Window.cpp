@@ -37,21 +37,19 @@ void Window::initializeObjects() {
     scene.addChild(Skybox());
 
     auto terrain = scene.addChild(Terrain(5, {0.0f, 0.0f, 0.0f, 0.0f}, 10.0f));
-    walker = scene.addChild(TerrainWalker(terrain));
+    cam = std::make_unique<Camera>(width, height);
+    walker = scene.addChild(TerrainWalker(terrain, cam.get(), 2.0f));
+    cameras[1] = walker->head->addChild(std::move(cam));
+
+    auto mesh = Mesh::cube();
+    mesh.useShader(shaders[0]);
+    mesh.transform.model = glm::scale(glm::vec3(0.5f, 0.5f, 0.5f));
+    walker->foot->addChild(mesh);
 
     walker->forwardKey = GLFW_KEY_Y;
     walker->backwardKey = GLFW_KEY_H;
     walker->leftKey = GLFW_KEY_G;
     walker->rightKey = GLFW_KEY_J;
-
-    auto mesh = Mesh::fromObjFile("meshes/sphere.obj");
-    mesh.useShader(std::make_shared<Shader>("shaders/phong.vert", "shaders/cartoon.frag"));
-    mesh.transform.model = glm::scale(glm::vec3(0.1f, 0.1f, 0.1f));
-    walker->addChild(mesh);
-
-    cam = std::make_unique<Camera>(width, height);
-    auto rotator = walker->addChild(FreeRotator(cam.get(), glm::translate(glm::vec3(0, 2.0f, 0))));
-    cameras[1] = rotator->addChild(std::move(cam));
 }
 
 void Window::resizeCallback(int width, int height) {

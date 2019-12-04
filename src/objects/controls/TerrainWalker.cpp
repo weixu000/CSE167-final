@@ -1,20 +1,27 @@
+#include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/transform.hpp>
 
 #include "TerrainWalker.h"
+#include "../Camera.h"
 #include "../../Time.h"
+#include "FreeRotator.h"
 
-TerrainWalker::TerrainWalker(Terrain *t)
+TerrainWalker::TerrainWalker(Terrain *t, Camera *cam, float tall)
         : terrain(t) {
+    foot = addChild(Group());
+    head = addChild(FreeRotator(cam, glm::translate(glm::vec3(0.0f, tall, 0.0f))));
     set();
 }
 
 void TerrainWalker::update() {
-    auto sensitivity = speed * Time::delta();
+    auto rotation = glm::mat3(head->transform.model);
+    auto foward_vec = -rotation[2];
+    auto left_vec = -rotation[0];
+    auto movement = forward * foward_vec + left * left_vec;
 
+    auto sensitivity = speed * Time::delta();
     auto du = glm::normalize(terrain->derivativeU(u, v));
     auto dv = glm::normalize(terrain->derivativeV(u, v));
-    auto movement = forward * -glm::vec3(transform.model[2]) + left * -glm::vec3(transform.model[0]);
-
     u += glm::dot(sensitivity * movement, du);
     v += glm::dot(sensitivity * movement, dv);
 
@@ -48,4 +55,13 @@ void TerrainWalker::onKeyRelease(int key, int mods) {
         left = 0.0f;
     }
     Group::onKeyRelease(key, mods);
+}
+
+void TerrainWalker::onMouseMove(float x, float y) {
+    Group::onMouseMove(x, y);
+
+    // use FreeRotator to update foot
+    float euler_x, euler_y, euler_z;
+    glm::extractEulerAngleYXZ(head->transform.model, euler_y, euler_x, euler_z);
+    foot->transform.model = glm::eulerAngleY(euler_y);
 }
