@@ -27,13 +27,13 @@ void FreeRotator::onMouseButtonPress(MouseButton button, int mods, float x, floa
         startedRotate = true;
         previous = glm::vec2(x, y);
     }
-    Group::onMouseButtonPress(button, mods, 0, 0);
+    Group::onMouseButtonPress(button, mods, x, y);
 }
 
 void FreeRotator::onMouseButtonRelease(MouseButton button, int mods, float x, float y) {
     if (button == GLFW_MOUSE_BUTTON_LEFT) {
         startedRotate = false;
     }
-    Group::onMouseButtonRelease(button, mods, 0, 0);
+    Group::onMouseButtonRelease(button, mods, x, y);
 }
 

@@ -7,15 +7,14 @@
 
 class Trackball : public Group {
 public:
-    using Group::Group;
+    explicit Trackball(Camera *cam, const glm::mat4 &t = glm::mat4(1.0f))
+            : Group(t), camera(cam) {}
 
-    // x,y should be normalized
-    void start(float x, float y);
+    void onMouseMove(float x, float y) override;
 
-    // x,y should be normalized
-    void move(float x, float y);
+    void onMouseButtonPress(MouseButton button, int mods, float x, float y) override;
 
-    void stop();
+    void onMouseButtonRelease(MouseButton button, int mods, float x, float y) override;
 
     void scale(float offset);
 
@@ -28,6 +27,16 @@ private:
     bool started = false;
     glm::mat4 orientation{1.0f};
     glm::vec3 initial;
+
+    // x,y should be normalized
+    void start(float x, float y);
+
+    // x,y should be normalized
+    void move(float x, float y);
+
+    void stop();
+
+    Camera *camera;
 };
 
 

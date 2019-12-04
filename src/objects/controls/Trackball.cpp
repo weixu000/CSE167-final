@@ -1,6 +1,7 @@
 #include <glm/gtx/transform.hpp>
 
 #include "Trackball.h"
+#include "../Camera.h"
 
 void Trackball::start(float x, float y) {
     initial = viewportToTrackball(x, y);
@@ -42,4 +43,23 @@ glm::vec3 Trackball::viewportToTrackball(float x, float y) {
     } else {
         return glm::normalize(ret);
     }
+}
+
+void Trackball::onMouseMove(float x, float y) {
+    move(x / camera->width, y / camera->height);
+    Group::onMouseMove(x, y);
+}
+
+void Trackball::onMouseButtonPress(MouseButton button, int mods, float x, float y) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT) {
+        start(x / camera->width, y / camera->height);
+    }
+    Group::onMouseButtonPress(button, mods, x, y);
+}
+
+void Trackball::onMouseButtonRelease(MouseButton button, int mods, float x, float y) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT) {
+        stop();
+    }
+    Group::onMouseButtonRelease(button, mods, x, y);
 }
