@@ -2,8 +2,7 @@
 #define TERRAIN_H
 
 #include "Wireframe.h"
-#include "../../gl_wraps/Shader.h"
-#include "../../gl_wraps/Texture2D.h"
+#include "../../materials/ColormapMaterial.h"
 
 class Terrain : public Wireframe {
 public:
@@ -27,9 +26,7 @@ protected:
 private:
     static HeightMap diamondSquare(int n, const std::array<float, 4> &corners, float height_range);
 
-    std::shared_ptr<Texture2D> tex;
-
-    static std::unique_ptr<Shader> shader;
+    static inline std::unique_ptr<ColormapMaterial> material;
 
     std::tuple<float, float, glm::vec3, glm::vec3, glm::vec3, glm::vec3> patch(float u, float v);
 };

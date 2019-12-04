@@ -28,5 +28,12 @@ add_executable(FinalProject
         objects/controls/TerrainWalker.cpp objects/controls/TerrainWalker.h
         objects/Skybox.cpp objects/Skybox.h
         objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
-        objects/geometries/Terrain.cpp objects/geometries/Terrain.h)
+        objects/geometries/Terrain.cpp objects/geometries/Terrain.h
+        materials/Material.h
+        materials/FlatMaterial.h
+        materials/PhongMaterial.h
+        materials/CartoonMaterial.h
+        materials/ReflectionMapMaterial.h
+        materials/SkyboxMaterial.h
+        materials/ColormapMaterial.h)
 target_link_libraries(FinalProject GLEW::glew_s glfw glm stb_image)

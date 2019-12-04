@@ -36,23 +36,19 @@ void Wireframe::upload(const std::vector<glm::vec3> &vertices, const std::vector
 }
 
 void Wireframe::draw(const glm::mat4 &world, const Camera &camera) {
-    auto m = world * transform.model;
+    assert(material);
+    auto &shader = material->setUp();
+    camera.setUniform(shader);
+    shader.setUniform("model", world * transform.model);
 
-    auto shader = Shader::flatShader();
-    shader->use();
-    camera.setUniform(*shader);
-    shader->setUniform("model", world);
-    shader->setUniform("color", glm::vec3(1.0f, 1.0f, 1.0f));
     // Bind to the VAO.
     vao->bind();
     // Draw points
-    glDisable(GL_CULL_FACE);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glEnable(GL_CULL_FACE);
     // Unbind from the VAO.
     vao->unbind();
+
+    material->tearDown();
 }
 
 Wireframe Wireframe::fromAABB(const AABB &bb) {

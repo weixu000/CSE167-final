@@ -4,8 +4,6 @@
 #include "Terrain.h"
 #include "../Camera.h"
 
-std::unique_ptr<Shader> Terrain::shader;
-
 Terrain::HeightMap Terrain::diamondSquare(int n, const std::array<float, 4> &corners, float height_range) {
     const auto nan = std::numeric_limits<float>::quiet_NaN();
     n = (1 << n) + 1;
@@ -65,8 +63,14 @@ Terrain::HeightMap Terrain::diamondSquare(int n, const std::array<float, 4> &cor
 }
 
 Terrain::Terrain(int n, const std::array<float, 4> &corners, float height_range) {
-    if (!shader) {
-        shader = std::make_unique<Shader>("shaders/terrain.vert", "shaders/terrain.frag");
+    if (!material) {
+        auto tex = std::make_shared<Texture2D>();
+        tex->bind();
+        tex->upload("textures/earth.png");
+        tex->setFilter(GL_LINEAR, GL_LINEAR);
+        tex->setWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+        tex->unbind();
+        material = std::make_unique<ColormapMaterial>(std::move(tex));
     }
 
     heights = diamondSquare(n, corners, height_range);
@@ -93,33 +97,23 @@ Terrain::Terrain(int n, const std::array<float, 4> &corners, float height_range)
     }
 
     upload(vertices, indices);
-
-    tex = std::make_shared<Texture2D>();
-    tex->bind();
-    tex->upload("textures/earth.png");
-    tex->setFilter(GL_LINEAR, GL_LINEAR);
-    tex->setWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
-    tex->unbind();
 }
 
 void Terrain::draw(const glm::mat4 &world, const Camera &camera) {
-    auto m = world * transform.model;
+    auto &shader = material->setUp();
+    camera.setUniform(shader);
+    shader.setUniform("model", world * transform.model);
+    shader.setUniform("minHeight", bb.vertices[0].y);
+    shader.setUniform("maxHeight", bb.vertices[4].y);
 
-    glActiveTexture(GL_TEXTURE0);
-    tex->bind();
-
-    shader->use();
-    camera.setUniform(*shader);
-    shader->setUniform("model", world);
-    shader->setUniform("colormap", 0);
-    shader->setUniform("minHeight", bb.vertices[0].y);
-    shader->setUniform("maxHeight", bb.vertices[4].y);
     // Bind to the VAO.
     vao->bind();
     // Draw points
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
     // Unbind from the VAO.
     vao->unbind();
+
+    material->tearDown();
 }
 
 

@@ -21,10 +21,7 @@ public:
 
     std::array<Camera *, 2> cameras;
 
-    std::array<std::shared_ptr<Shader>, 2> shaders;
-
     TerrainWalker *walker;
-
     FreeFlying *flyControl;
 
     static Window *retrieve(GLFWwindow *w) { return reinterpret_cast<Window *>(glfwGetWindowUserPointer(w)); }
@@ -34,8 +31,6 @@ public:
     void loop();
 
     void setupCallbacks();
-
-    void initializeProgram();
 
     void initializeObjects();
 

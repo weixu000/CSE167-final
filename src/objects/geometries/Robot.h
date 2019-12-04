@@ -2,8 +2,8 @@
 #define ROBOT_H
 
 #include "../Group.h"
-#include "../../gl_wraps/Shader.h"
+#include "../../materials/Material.h"
 
-Group robot(std::shared_ptr<Shader> shader);
+Group robot(std::shared_ptr<Material> material);
 
 #endif //ROBOT_H

@@ -4,10 +4,10 @@
 #include "Mesh.h"
 
 namespace {
-    Transform *initHead(Group &root, std::shared_ptr<Shader> shader) {
+    Transform *initHead(Group &root, std::shared_ptr<Material> material) {
         auto antenna = Mesh::fromObjFile("meshes/Robot-parts-2018/antenna_s.obj");
         antenna.transform.model = glm::translate(glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale(glm::vec3(0.3f));
-        antenna.useShader(shader);
+        antenna.material = material;
 
         auto antenna_l = Group(glm::rotate(glm::pi<float>() / 4, glm::vec3(0.0f, 0.0f, 1.0f)));
         antenna_l.addChild(std::make_unique<Mesh>(antenna));
@@ -17,14 +17,14 @@ namespace {
         auto eyeball = Mesh::fromObjFile("meshes/Robot-parts-2018/eyeball_s.obj");
         eyeball.transform.model =
                 glm::eulerAngleX(glm::pi<float>() * 0.4f) * glm::translate(glm::vec3(0.0f, 1.0f, 0.0f));
-        eyeball.useShader(shader);
+        eyeball.material = material;
         auto eyeball_l = Group(glm::eulerAngleY(glm::pi<float>() * 0.15f));
         eyeball_l.addChild(std::make_unique<Mesh>(eyeball));
         auto eyeball_r = Group(glm::eulerAngleY(glm::pi<float>() * -0.15f));
         eyeball_r.addChild(std::make_unique<Mesh>(eyeball));
 
         auto head = Mesh::fromObjFile("meshes/Robot-parts-2018/head_s.obj");
-        head.useShader(shader);
+        head.material = material;
 
         auto control = Group();
         control.addChild(std::move(head));
@@ -40,10 +40,10 @@ namespace {
         return &control_t->transform;
     }
 
-    std::tuple<Transform *, Transform *> initArms(Group &root, std::shared_ptr<Shader> shader) {
+    std::tuple<Transform *, Transform *> initArms(Group &root, std::shared_ptr<Material> material) {
         auto arm = Mesh::fromObjFile("meshes/Robot-parts-2018/limb_s.obj");
         arm.transform.model = glm::translate(glm::vec3(0.0f, -0.8f, 0.0f)) * glm::scale(glm::vec3(1.0f, 2.0f, 1.0f));
-        arm.useShader(shader);
+        arm.material = material;
 
         auto arm_l = Group();
         arm_l.addChild(arm);
@@ -61,9 +61,9 @@ namespace {
         return std::make_tuple(&left_t->transform, &right_t->transform);
     }
 
-    std::tuple<Transform *, Transform *> initLegs(Group &root, std::shared_ptr<Shader> shader) {
+    std::tuple<Transform *, Transform *> initLegs(Group &root, std::shared_ptr<Material> material) {
         auto limb = Mesh::fromObjFile("meshes/Robot-parts-2018/limb_s.obj");
-        limb.useShader(shader);
+        limb.material = material;
 
         auto leg = Group(glm::translate(glm::vec3(0.0f, -0.7f, 0.0f)));
         leg.addChild(std::make_unique<Mesh>(limb));
@@ -85,16 +85,16 @@ namespace {
     }
 }
 
-Group robot(std::shared_ptr<Shader> shader) {
+Group robot(std::shared_ptr<Material> material) {
     Group root;
 
     auto body = std::make_unique<Mesh>(Mesh::fromObjFile("meshes/Robot-parts-2018/body_s.obj"));
-    body->useShader(shader);
+    body->material = material;
     root.addChild(std::move(body));
 
-    initHead(root, shader);
-    initArms(root, shader);
-    initLegs(root, shader);
+    initHead(root, material);
+    initArms(root, material);
+    initLegs(root, material);
 
     return root;
 }

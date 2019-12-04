@@ -43,18 +43,19 @@ Mesh::Mesh(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indic
 }
 
 void Mesh::draw(const glm::mat4 &world, const Camera &camera) {
-    auto m = world * transform.model;
+    assert(material);
+    auto &shader = material->setUp();
+    camera.setUniform(shader);
+    shader.setUniform("model", world * transform.model);
 
-    assert(shader);
-    shader->use();
-    camera.setUniform(*shader);
-    shader->setUniform("model", m);
     // Bind to the VAO.
     vao->bind();
     // Draw points
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
     // Unbind from the VAO.
     vao->unbind();
+
+    material->tearDown();
 }
 
 Mesh Mesh::fromObjFile(const std::string &objFilename) {

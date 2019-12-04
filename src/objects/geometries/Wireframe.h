@@ -10,6 +10,7 @@
 #include "Geometry.h"
 #include "../../gl_wraps/GLBuffer.h"
 #include "../../gl_wraps/GLVertexArray.h"
+#include "../../materials/Material.h"
 
 
 class Wireframe : public Geometry {
@@ -25,6 +26,8 @@ public:
     void draw(const glm::mat4 &world, const Camera &camera) override;
 
     AABB boundingBox() const override { return bb; }
+
+    std::shared_ptr<Material> material;
 
 protected:
     NodePtr clone() override { return std::make_unique<Wireframe>(*this); }

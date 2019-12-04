@@ -2,7 +2,8 @@
 #define SKYBOX_H
 
 #include "geometries/Mesh.h"
-#include "../gl_wraps/TextureCubemap.h"
+
+class TextureCubemap;
 
 class Skybox : public Node {
 public:
@@ -14,15 +15,13 @@ public:
 
     bool cull(const glm::mat4 &view_proj) override { return false; }
 
+    static inline std::shared_ptr<TextureCubemap> cubemap;
+
 protected:
     NodePtr clone() override { return std::make_unique<Skybox>(*this); }
 
 private:
-    std::shared_ptr<Mesh> cube;
-
-    std::shared_ptr<Shader> shader;
-
-    std::shared_ptr<TextureCubemap> cubemap;
+    static inline std::shared_ptr<Mesh> cube;
 };
 
 

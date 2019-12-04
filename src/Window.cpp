@@ -3,27 +3,15 @@
 #include "Window.h"
 #include "Time.h"
 #include "objects/geometries/Terrain.h"
+#include "materials/NormalMaterial.h"
 
 Window::Window() {
     setupCallbacks();
-    initializeProgram();
     initializeObjects();
 
     // Initial size will not fire callback
     // force to fire
     resizeCallback(width, height);
-}
-
-void Window::initializeProgram() {
-    try {
-        shaders[0] = std::make_shared<Shader>("shaders/normal.vert",
-                                              "shaders/normal.frag");
-        shaders[1] = std::make_shared<Shader>("shaders/phong.vert",
-                                              "shaders/reflection_map.frag");
-    } catch (...) {
-        std::cerr << "Failed to initialize shader program" << std::endl;
-        exit(EXIT_FAILURE);
-    }
 }
 
 void Window::initializeObjects() {
@@ -42,7 +30,7 @@ void Window::initializeObjects() {
     cameras[1] = walker->head->addChild(std::move(cam));
 
     auto mesh = Mesh::cube();
-    mesh.useShader(shaders[0]);
+    mesh.material = NormalMaterial::singleton();
     mesh.transform.model = glm::scale(glm::vec3(0.5f, 0.5f, 0.5f));
     walker->foot->addChild(mesh);
 }
@@ -118,9 +106,6 @@ void Window::keyCallback(int key, int scancode, int action, int mods) {
             case GLFW_KEY_ESCAPE:
                 // Close the window. This causes the program to also terminate.
                 glfwSetWindowShouldClose(window, GL_TRUE);
-                break;
-            case GLFW_KEY_N:
-                std::swap(*shaders[0], *shaders[1]);
                 break;
             case GLFW_KEY_C:
                 std::swap(*cameras[0], *cameras[1]);
