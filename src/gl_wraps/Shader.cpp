@@ -110,3 +110,11 @@ std::shared_ptr<Shader> Shader::flatShader() {
     }
     return shader;
 }
+
+std::shared_ptr<Shader> Shader::normalShader() {
+    static std::shared_ptr<Shader> shader;
+    if (shader == nullptr) {
+        shader = std::make_shared<Shader>("shaders/normal.vert", "shaders/normal.frag");
+    }
+    return shader;
+}
