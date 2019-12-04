@@ -45,11 +45,6 @@ void Window::initializeObjects() {
     mesh.useShader(shaders[0]);
     mesh.transform.model = glm::scale(glm::vec3(0.5f, 0.5f, 0.5f));
     walker->foot->addChild(mesh);
-
-    walker->forwardKey = GLFW_KEY_Y;
-    walker->backwardKey = GLFW_KEY_H;
-    walker->leftKey = GLFW_KEY_G;
-    walker->rightKey = GLFW_KEY_J;
 }
 
 void Window::resizeCallback(int width, int height) {
