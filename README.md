@@ -10,6 +10,7 @@
 ├─shaders                           # GLSL shaders
 ├─src                               # Sources
 │  ├─gl_wraps                       # C++ wrapper for OpenGL
+│  ├─materials                      # Materials
 │  └─objects                        # Scene graph
 │      ├─animators                  # Animating nodes
 │      ├─controls                   # User control
@@ -57,3 +58,6 @@ Run the executable in the repo `.` so that it can find the shaders/, meshes/, te
 - `loop`, `draw`, `update` handle game loop
 - `initialize*` initialize shader and scene graph
 - `*Callback` handle events
+
+## Materials (src/materials)
+- `Material` combines shaders, uniforms, encapsulates rendering techniques
