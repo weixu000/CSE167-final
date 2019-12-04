@@ -10,16 +10,6 @@ public:
     explicit FreeRotator(Camera *cam, const glm::mat4 &t = glm::mat4(1.0f))
             : Group(t), camera(cam) {}
 
-    // normalized direction in camera space
-    void startRotate(const glm::vec3 &dir);
-
-    // normalized direction in camera space
-    void rotate(const glm::vec3 &dir);
-
-    void stopRotate();
-
-    glm::vec3 windowCoordToCamDir(float x, float y);
-
     void onMouseMove(float x, float y) override;
 
     void onMouseButtonPress(MouseButton button, int mods, float x, float y) override;
@@ -31,9 +21,12 @@ protected:
 
 private:
     bool startedRotate = false;
-    glm::vec3 initial;
+    glm::vec2 previous;
+    float eulerX = 0.0f, eulerY = 0.0f;
 
     Camera *camera;
+
+    void rotate(const glm::vec2 &current);
 };
 
 
