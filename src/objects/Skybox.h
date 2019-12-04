@@ -9,7 +9,10 @@ class Skybox : public Node {
 public:
     Skybox();
 
-    void draw(const glm::mat4 &world, const Camera &camera) override;
+    void draw(const glm::mat4 &world, const Camera &camera) override {
+        // Inside the cube
+        cube->draw(world, camera);
+    }
 
     void update() override {}
 

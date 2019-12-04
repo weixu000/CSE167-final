@@ -28,8 +28,3 @@ Skybox::Skybox() {
         cube->material = material;
     }
 }
-
-void Skybox::draw(const glm::mat4 &world, const Camera &camera) {
-    // Inside the cube
-    cube->draw(world, camera);
-}
