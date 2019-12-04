@@ -9,7 +9,7 @@
 
 #include "objects/Group.h"
 #include "objects/Camera.h"
-#include "objects/Skybox.h"
+#include "objects/geometries/Skybox.h"
 #include "objects/controls/FreeFlying.h"
 #include "gl_wraps/Shader.h"
 #include "gl_wraps/GLContext.h"

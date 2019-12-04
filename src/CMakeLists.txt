@@ -16,19 +16,19 @@ add_executable(FinalProject
         objects/Node.cpp objects/Node.h
         objects/Group.cpp objects/Group.h
         objects/Transform.cpp objects/Transform.h
+        objects/Camera.cpp objects/Camera.h
         objects/controls/Trackball.cpp objects/controls/Trackball.h
         objects/geometries/Geometry.h objects/geometries/Geometry.cpp
         objects/geometries/Mesh.cpp objects/geometries/Mesh.h
         objects/geometries/Robot.cpp objects/geometries/Robot.h
         objects/geometries/Wireframe.cpp objects/geometries/Wireframe.h
-        objects/Camera.cpp objects/Camera.h
+        objects/geometries/Skybox.cpp objects/geometries/Skybox.h
+        objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
+        objects/geometries/Terrain.cpp objects/geometries/Terrain.h
         objects/controls/FreeMover.cpp objects/controls/FreeMover.h
         objects/controls/FreeRotator.cpp objects/controls/FreeRotator.h
         objects/controls/FreeFlying.h
         objects/controls/TerrainWalker.cpp objects/controls/TerrainWalker.h
-        objects/Skybox.cpp objects/Skybox.h
-        objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
-        objects/geometries/Terrain.cpp objects/geometries/Terrain.h
         materials/Material.h
         materials/FlatMaterial.h
         materials/PhongMaterial.h

@@ -1,11 +1,12 @@
-#include "../../deps/stb_image/stb_image.h"
+#include "stb_image.h"
 
 #include "Skybox.h"
-#include "Camera.h"
-#include "../materials/SkyboxMaterial.h"
+#include "../Camera.h"
+#include "../../materials/SkyboxMaterial.h"
 
-Skybox::Skybox() {
-    if (!cube) {
+Skybox::Skybox()
+        : Mesh(Mesh::cube()) { // Skybox is just a cube
+    if (!cubemap) {
         cubemap = std::make_shared<TextureCubemap>();
         cubemap->bind();
         cubemap->upload({
@@ -22,9 +23,7 @@ Skybox::Skybox() {
         // Use clamp to edge to hide skybox edges:
         cubemap->setWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
         cubemap->unbind();
-
-        auto material = std::make_shared<SkyboxMaterial>(cubemap);
-        cube = std::make_shared<Mesh>(Mesh::cube());
-        cube->material = material;
     }
+
+    material = std::make_shared<SkyboxMaterial>(cubemap);
 }
