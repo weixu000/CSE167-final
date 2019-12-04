@@ -13,28 +13,19 @@
 #include "objects/controls/FreeFlying.h"
 #include "gl_wraps/Shader.h"
 #include "gl_wraps/GLContext.h"
-#include "objects/geometries/BezierCurve.h"
-#include "objects/controls/ControlTriple.h"
-#include "objects/animators/ConstraintAnimator.h"
+#include "objects/controls/TerrainWalker.h"
 
 class Window : public GLContext {
 public:
     Group scene;
 
-    Camera *camera;
-
-    Skybox *skybox;
+    std::array<Camera *, 2> cameras;
 
     std::array<std::shared_ptr<Shader>, 2> shaders;
 
-//    BezierCurve *bezier;
-
-//    std::vector<ControlTriple> controls;
-//    int selected = 0;
+    TerrainWalker *walker;
 
     FreeFlying *flyControl;
-
-//    ConstraintAnimator *animation;
 
     static Window *retrieve(GLFWwindow *w) { return reinterpret_cast<Window *>(glfwGetWindowUserPointer(w)); }
 

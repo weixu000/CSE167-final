@@ -32,13 +32,26 @@ void Window::initializeObjects() {
 
     auto cam = std::make_unique<Camera>(width, height);
     flyControl = scene.addChild(FreeFlying(cam.get(), glm::translate(glm::vec3(0, 0, 20))));
-    camera = flyControl->addChild(std::move(cam));
+    cameras[0] = flyControl->addChild(std::move(cam));
 
     scene.addChild(Skybox());
 
-    skybox = scene.addChild(Skybox());
+    auto terrain = scene.addChild(Terrain(5, {0.0f, 0.0f, 0.0f, 0.0f}, 10.0f));
+    walker = scene.addChild(TerrainWalker(terrain));
 
-    scene.addChild(Terrain(5, {0.0f, 0.0f, 0.0f, 0.0f}, 10.0f));
+    walker->forwardKey = GLFW_KEY_Y;
+    walker->backwardKey = GLFW_KEY_H;
+    walker->leftKey = GLFW_KEY_G;
+    walker->rightKey = GLFW_KEY_J;
+
+    auto mesh = Mesh::fromObjFile("meshes/sphere.obj");
+    mesh.useShader(std::make_shared<Shader>("shaders/phong.vert", "shaders/cartoon.frag"));
+    mesh.transform.model = glm::scale(glm::vec3(0.1f, 0.1f, 0.1f));
+    walker->addChild(mesh);
+
+    cam = std::make_unique<Camera>(width, height);
+    auto rotator = walker->addChild(FreeRotator(cam.get(), glm::translate(glm::vec3(0, 2.0f, 0))));
+    cameras[1] = rotator->addChild(std::move(cam));
 }
 
 void Window::resizeCallback(int width, int height) {
@@ -53,7 +66,9 @@ void Window::resizeCallback(int width, int height) {
         glViewport(0, 0, width, height);
 
         // Set the projection matrix.
-        camera->resize(width, height);
+        for (auto &cam:cameras) {
+            cam->resize(width, height);
+        }
     }
 }
 
@@ -62,13 +77,13 @@ void Window::update() {
 }
 
 void Window::draw() {
-    scene.cull(camera->projection * camera->view);
+    scene.cull(cameras[0]->projection * cameras[0]->view);
 
     // Clear the color and depth buffers.
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     // Render the object.
-    scene.draw(glm::mat4(1.0f), *camera);
+    scene.draw(glm::mat4(1.0f), *cameras[0]);
 
     // Swap buffers.
     glfwSwapBuffers(window);
@@ -113,6 +128,9 @@ void Window::keyCallback(int key, int scancode, int action, int mods) {
                 break;
             case GLFW_KEY_N:
                 std::swap(*shaders[0], *shaders[1]);
+                break;
+            case GLFW_KEY_C:
+                std::swap(*cameras[0], *cameras[1]);
                 break;
             default:
                 break;

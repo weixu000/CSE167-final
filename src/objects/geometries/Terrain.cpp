@@ -69,13 +69,13 @@ Terrain::Terrain(int n, const std::array<float, 4> &corners, float height_range)
         shader = std::make_unique<Shader>("shaders/terrain.vert", "shaders/terrain.frag");
     }
 
-    auto height = diamondSquare(n, corners, height_range);
-    auto size = height.size();
+    heights = diamondSquare(n, corners, height_range);
+    auto size = heights.size();
 
     std::vector<glm::vec3> vertices;
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
-            vertices.emplace_back(i, height[i][j], j);
+            vertices.emplace_back(i, heights[i][j], j);
         }
     }
 
@@ -120,4 +120,50 @@ void Terrain::draw(const glm::mat4 &world, const Camera &camera) {
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
     // Unbind from the VAO.
     vao->unbind();
+}
+
+
+// v
+// ^
+// 3  2
+// 0  1 > u
+std::tuple<float, float, glm::vec3, glm::vec3, glm::vec3, glm::vec3> Terrain::patch(float u, float v) {
+    auto i = int(std::floor(u));
+    u -= i;
+
+    auto j = int(std::floor(v));
+    v -= j;
+
+    return std::make_tuple(
+            u, v,
+            glm::vec3(i, heights[i][j], j), glm::vec3(i + 1, heights[i + 1][j], j),
+            glm::vec3(i + 1, heights[i + 1][j + 1], j + 1), glm::vec3(i, heights[i][j + 1], j + 1));
+}
+
+glm::vec3 Terrain::position(float u_, float v_) {
+    auto[u, v, p0, p1, p2, p3] = patch(u_, v_);
+
+    if (u + v <= 1) {
+        return p0 + u * (p1 - p0) + v * (p3 - p0);
+    } else {
+        return p2 + (1 - u) * (p3 - p2) + (1 - v) * (p1 - p2);
+    }
+}
+
+glm::vec3 Terrain::derivativeU(float u_, float v_) {
+    auto[u, v, p0, p1, p2, p3] = patch(u_, v_);
+    if (u + v <= 1) {
+        return p1 - p0;
+    } else {
+        return p2 - p3;
+    }
+}
+
+glm::vec3 Terrain::derivativeV(float u_, float v_) {
+    auto[u, v, p0, p1, p2, p3] = patch(u_, v_);
+    if (u + v <= 1) {
+        return p3 - p0;
+    } else {
+        return p2 - p1;
+    }
 }
