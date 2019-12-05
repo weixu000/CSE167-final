@@ -15,10 +15,12 @@ AABB::AABB(const glm::vec3 &minVal, const glm::vec3 &maxVal) {
 }
 
 bool Geometry::cull(const glm::mat4 &view_proj) {
+    auto m = view_proj * transform.model;
+
     auto bb = boundingBox();
     std::array<glm::vec4, 8> vertices;
     for (size_t i = 0; i < 8; ++i) {
-        vertices[i] = view_proj * glm::vec4(bb.vertices[i], 1.0f);
+        vertices[i] = m * glm::vec4(bb.vertices[i], 1.0f);
     }
     for (size_t i = 0; i < 3; ++i) {
         size_t j;
