@@ -24,6 +24,7 @@ add_executable(FinalProject
         objects/geometries/Skybox.cpp objects/geometries/Skybox.h
         objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
         objects/geometries/Terrain.cpp objects/geometries/Terrain.h
+        objects/geometries/LSystem.cpp objects/geometries/LSystem.h
         objects/controls/FreeMover.cpp objects/controls/FreeMover.h
         objects/controls/FreeRotator.cpp objects/controls/FreeRotator.h
         objects/controls/FreeFlying.h
