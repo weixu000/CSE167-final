@@ -2,9 +2,10 @@
 #define TERRAINWALKER_H
 
 #include "../Group.h"
-#include "../geometries/Terrain.h"
 
 class Camera;
+
+class Terrain;
 
 class TerrainWalker : public Group {
 public:

@@ -5,9 +5,10 @@
 #include "../Camera.h"
 #include "../../Time.h"
 #include "FreeRotator.h"
+#include "../geometries/Terrain.h"
 
 TerrainWalker::TerrainWalker(Terrain *t, Camera *cam, const glm::vec3 &body)
-        : terrain(t), body(body) {
+        : terrain(t), body(body), u(terrain->size() / 2), v(terrain->size() / 2) {
     foot = addChild(Group());
     head = addChild(FreeRotator(cam, glm::translate(body)));
     set();
