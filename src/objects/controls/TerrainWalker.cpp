@@ -51,7 +51,7 @@ void TerrainWalker::onKeyPress(Key key, int mods) {
 void TerrainWalker::onKeyRelease(int key, int mods) {
     if (key == forwardKey || key == backwardKey) {
         forward = 0.0f;
-    } else if (key == leftKey || key == backwardKey) {
+    } else if (key == leftKey || key == rightKey) {
         left = 0.0f;
     }
     Group::onKeyRelease(key, mods);
