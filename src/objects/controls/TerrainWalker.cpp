@@ -31,8 +31,8 @@ void TerrainWalker::update() {
 }
 
 void TerrainWalker::set() {
-    u = std::max(0.0f, std::min(u, float(terrain->size())));
-    v = std::max(0.0f, std::min(v, float(terrain->size())));
+    u = glm::clamp(u, 0.2f, float(terrain->size()) - 1.2f);
+    v = glm::clamp(v, 0.2f, float(terrain->size()) - 1.2f);
     transform.model = glm::translate(terrain->position(u, v));
 }
 
