@@ -13,14 +13,16 @@ public:
 
     glm::vec3 derivativeV(float u, float v);
 
-    using HeightMap = std::vector<std::vector<float>>;
-
-    HeightMap heights;
+    size_t size() const { return heights.size(); }
 
 protected:
     NodePtr clone() override { return std::make_unique<Terrain>(*this); }
 
 private:
+    using HeightMap = std::vector<std::vector<float>>;
+
+    HeightMap heights;
+
     static HeightMap diamondSquare(int n, const std::array<float, 4> &corners, float height_range);
 
     std::tuple<float, float, glm::vec3, glm::vec3, glm::vec3, glm::vec3> patch(float u, float v);
