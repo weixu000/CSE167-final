@@ -21,7 +21,6 @@ add_executable(FinalProject
         objects/geometries/Geometry.h objects/geometries/Geometry.cpp
         objects/geometries/Mesh.cpp objects/geometries/Mesh.h
         objects/geometries/Robot.cpp objects/geometries/Robot.h
-        objects/geometries/Wireframe.cpp objects/geometries/Wireframe.h
         objects/geometries/Skybox.cpp objects/geometries/Skybox.h
         objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
         objects/geometries/Terrain.cpp objects/geometries/Terrain.h

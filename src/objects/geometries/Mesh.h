@@ -22,6 +22,10 @@ public:
 
     static Mesh fromObjFile(const std::string &objFilename);
 
+    static Mesh faceNormalMesh(const std::vector<glm::vec3> &vertices, const std::vector<GLuint> &indices);
+
+    static Mesh fromAABB(const AABB &bb);
+
     static Mesh cube();
 
     void draw(const glm::mat4 &world, const Camera &camera) override;
@@ -33,7 +37,6 @@ public:
 protected:
     NodePtr clone() override { return std::make_unique<Mesh>(*this); }
 
-private:
     GLsizei count = 0;
     std::shared_ptr<GLVertexArray> vao = std::make_shared<GLVertexArray>();
     std::shared_ptr<GLBuffer> vbo = std::make_shared<GLBuffer>(), ebo = std::make_shared<GLBuffer>();

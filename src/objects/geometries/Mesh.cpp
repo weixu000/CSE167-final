@@ -111,59 +111,37 @@ Mesh Mesh::fromObjFile(const std::string &objFilename) {
     return Mesh(attrs, indices);
 }
 
-
-Mesh Mesh::cube() {
-    std::array<GLfloat, 6 * 6 * 6> data = {
-            -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f,
-            1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f,
-            1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f,
-            1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f,
-            -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f,
-
-            -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-            -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-            -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-
-            -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
-            -1.0f, 1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
-            -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
-            -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
-            -1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
-            -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
-
-            1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-            1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-            1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-            1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-
-            -1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f,
-            1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f,
-            1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f,
-            1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f,
-            -1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f,
-            -1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f,
-
-            -1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-            1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-            1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-            1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-            -1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-            -1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-    };
-
+Mesh Mesh::faceNormalMesh(const std::vector<glm::vec3> &vertices, const std::vector<GLuint> &indices) {
     std::vector<glm::vec3> attrs;
-    for (size_t i = 0; i < data.size(); i += 3) {
-        attrs.emplace_back(data[i], data[i + 1], data[i + 2]);
+    for (size_t i = 0; i < indices.size(); i += 3) {
+        std::array<glm::vec3, 3> p = {vertices[indices[i]], vertices[indices[i + 1]], vertices[indices[i + 2]]};
+        auto normal = glm::cross(p[1] - p[0], p[2] - p[0]);
+        for (auto &v:p) {
+            attrs.push_back(v);
+            attrs.push_back(normal);
+        }
     }
 
-    std::vector<GLuint> indices(6 * 6);
-    std::iota(indices.begin(), indices.end(), 0);
+    std::vector<GLuint> new_indices(attrs.size() / 2);
+    std::iota(new_indices.begin(), new_indices.end(), 0);
 
-    return Mesh(attrs, indices);
+    return Mesh(attrs, new_indices);
+}
+
+Mesh Mesh::fromAABB(const AABB &bb) {
+    std::vector<glm::vec3> vertices(bb.vertices.begin(), bb.vertices.end());
+    std::vector<GLuint> indices{
+            0, 2, 1, 0, 3, 2,
+            0, 1, 4, 1, 5, 4,
+            0, 7, 3, 0, 4, 7,
+            0, 2, 1, 0, 3, 2,
+            1, 2, 5, 2, 6, 5,
+            2, 3, 6, 3, 7, 6,
+            4, 5, 6, 4, 6, 7
+    };
+    return faceNormalMesh(vertices, indices);
+}
+
+Mesh Mesh::cube() {
+    return fromAABB(AABB(glm::vec3(-1.0f), glm::vec3(1.0f)));
 }

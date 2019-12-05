@@ -1,14 +1,11 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
-#include "Wireframe.h"
-#include "../../materials/ColormapMaterial.h"
+#include "Mesh.h"
 
-class Terrain : public Wireframe {
+class Terrain : public Mesh {
 public:
     Terrain(int n, const std::array<float, 4> &corners, float height_range);
-
-    void draw(const glm::mat4 &world, const Camera &camera) override;
 
     glm::vec3 position(float u, float v);
 
@@ -25,8 +22,6 @@ protected:
 
 private:
     static HeightMap diamondSquare(int n, const std::array<float, 4> &corners, float height_range);
-
-    static inline std::unique_ptr<ColormapMaterial> material;
 
     std::tuple<float, float, glm::vec3, glm::vec3, glm::vec3, glm::vec3> patch(float u, float v);
 };

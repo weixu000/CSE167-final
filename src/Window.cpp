@@ -4,6 +4,7 @@
 #include "Time.h"
 #include "objects/geometries/Terrain.h"
 #include "materials/NormalMaterial.h"
+#include "materials/ColormapMaterial.h"
 
 Window::Window() {
     setupCallbacks();
@@ -25,6 +26,18 @@ void Window::initializeObjects() {
     scene.addChild(Skybox());
 
     auto terrain = scene.addChild(Terrain(5, {0.0f, 0.0f, 0.0f, 0.0f}, 10.0f));
+    auto tex = std::make_shared<Texture2D>();
+    tex->bind();
+    tex->upload("textures/earth.png");
+    tex->setFilter(GL_LINEAR, GL_LINEAR);
+    tex->setWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+    tex->unbind();
+    auto material = std::make_unique<ColormapMaterial>();
+    material->tex = std::move(tex);
+    material->maxHeight = terrain->boundingBox().max().y;
+    material->minHeight = terrain->boundingBox().min().y;
+    terrain->material = std::move(material);
+
     cam = std::make_unique<Camera>(width, height);
     walker = scene.addChild(TerrainWalker(terrain, cam.get(), 2.0f));
     cameras[1] = walker->head->addChild(std::move(cam));

@@ -9,14 +9,18 @@ public:
 
     AABB(const glm::vec3 &minVal, const glm::vec3 &maxVal);
 
-    /*
+    glm::vec3 min() const { return vertices[0]; }
+
+    glm::vec3 max() const { return vertices[6]; }
+
+    /*    y
      *    4----7
      *   /|   /|
      *  5-+--6 |
-     *  | 0--+-3
+     *  | 0--+-3 x
      *  |/   |/
      *  1----2
-     *
+     * z
      */
     std::array<glm::vec3, 8> vertices{};
 };
