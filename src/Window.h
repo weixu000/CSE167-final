@@ -10,10 +10,7 @@
 #include "objects/Group.h"
 #include "objects/Camera.h"
 #include "objects/geometries/Skybox.h"
-#include "objects/controls/FreeFlying.h"
-#include "gl_wraps/Shader.h"
 #include "gl_wraps/GLContext.h"
-#include "objects/controls/TerrainWalker.h"
 
 class Window : public GLContext {
 public:
@@ -21,8 +18,7 @@ public:
 
     std::array<Camera *, 2> cameras;
 
-    TerrainWalker *walker;
-    FreeFlying *flyControl;
+    std::array<Group *, 2> cameraControls;
 
     static Window *retrieve(GLFWwindow *w) { return reinterpret_cast<Window *>(glfwGetWindowUserPointer(w)); }
 

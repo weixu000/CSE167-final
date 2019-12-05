@@ -36,7 +36,9 @@ void Group::draw(const glm::mat4 &world, const Camera &camera) {
 
 void Group::update() {
     for (auto &n:children) {
-        n.ptr->update();
+        if (!n.ptr->freeze) {
+            n.ptr->update();
+        }
     }
 }
 
@@ -54,31 +56,41 @@ bool Group::cull(const glm::mat4 &view_proj) {
 
 void Group::onKeyPress(Key key, int mods) {
     for (auto &n:children) {
-        n.ptr->onKeyPress(key, mods);
+        if (!n.ptr->freeze) {
+            n.ptr->onKeyPress(key, mods);
+        }
     }
 }
 
 void Group::onKeyRelease(int key, int mods) {
     for (auto &n:children) {
-        n.ptr->onKeyRelease(key, mods);
+        if (!n.ptr->freeze) {
+            n.ptr->onKeyRelease(key, mods);
+        }
     }
 }
 
 void Group::onMouseMove(float x, float y) {
     for (auto &n:children) {
-        n.ptr->onMouseMove(x, y);
+        if (!n.ptr->freeze) {
+            n.ptr->onMouseMove(x, y);
+        }
     }
 }
 
 void Group::onMouseButtonPress(MouseButton button, int mods, float x, float y) {
     for (auto &n:children) {
-        n.ptr->onMouseButtonPress(button, mods, x, y);
+        if (!n.ptr->freeze) {
+            n.ptr->onMouseButtonPress(button, mods, x, y);
+        }
     }
 }
 
 void Group::onMouseButtonRelease(MouseButton button, int mods, float x, float y) {
     for (auto &n:children) {
-        n.ptr->onMouseButtonRelease(button, mods, x, y);
+        if (!n.ptr->freeze) {
+            n.ptr->onMouseButtonRelease(button, mods, x, y);
+        }
     }
 }
 

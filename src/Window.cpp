@@ -2,7 +2,9 @@
 
 #include "Window.h"
 #include "Time.h"
+#include "objects/controls/FreeFlying.h"
 #include "objects/geometries/Terrain.h"
+#include "objects/controls/TerrainWalker.h"
 #include "materials/NormalMaterial.h"
 #include "materials/HeightMapMaterial.h"
 
@@ -19,12 +21,7 @@ void Window::initializeObjects() {
     glm::mat4 projection = glm::perspective(glm::radians(60.0f),
                                             float(width) / float(height), 0.1f, 1000.0f);
 
-    auto cam = std::make_unique<Camera>(width, height);
-    flyControl = scene.addChild(FreeFlying(cam.get(), glm::translate(glm::vec3(0, 0, 20))));
-    cameras[0] = flyControl->addChild(std::move(cam));
-
     scene.addChild(Skybox());
-
     auto terrain = scene.addChild(Terrain(5, {0.0f, 0.0f, 0.0f, 0.0f}, 10.0f));
     auto tex = std::make_shared<Texture2D>();
     tex->bind();
@@ -38,14 +35,20 @@ void Window::initializeObjects() {
     material->minHeight = terrain->boundingBox().min().y;
     terrain->material = std::move(material);
 
-    cam = std::make_unique<Camera>(width, height);
-    walker = scene.addChild(TerrainWalker(terrain, cam.get(), 2.0f));
-    cameras[1] = walker->head->addChild(std::move(cam));
+    auto cam = std::make_unique<Camera>(width, height);
+    auto flyControl = scene.addChild(FreeFlying(cam.get(), glm::translate(glm::vec3(0, 0, 20))));
+    cameras[0] = flyControl->addChild(std::move(cam));
+    cameraControls[0] = flyControl;
 
+    cam = std::make_unique<Camera>(width, height);
+    auto walker = scene.addChild(TerrainWalker(terrain, cam.get(), 2.0f));
     auto mesh = Mesh::cube();
     mesh.material = NormalMaterial::singleton();
     mesh.transform.model = glm::scale(glm::vec3(0.5f, 0.5f, 0.5f));
     walker->foot->addChild(mesh);
+    cameras[1] = walker->head->addChild(std::move(cam));
+    cameraControls[1] = walker;
+    cameraControls[1]->freeze = true;
 }
 
 void Window::resizeCallback(int width, int height) {
@@ -121,7 +124,10 @@ void Window::keyCallback(int key, int scancode, int action, int mods) {
                 glfwSetWindowShouldClose(window, GL_TRUE);
                 break;
             case GLFW_KEY_C:
-                std::swap(*cameras[0], *cameras[1]);
+                std::swap(cameras[0], cameras[1]);
+                std::swap(cameraControls[0], cameraControls[1]);
+                cameraControls[0]->freeze = false;
+                cameraControls[1]->freeze = true;
                 break;
             default:
                 break;

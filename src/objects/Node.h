@@ -36,6 +36,8 @@ public:
 
     Transform transform;
 
+    bool freeze = false;
+
     virtual void onKeyPress(Key key, int mods) {}
 
     virtual void onKeyRelease(int key, int mods) {}
