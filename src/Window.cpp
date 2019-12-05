@@ -1,4 +1,7 @@
 #include <iostream>
+#include <random>
+#include <ctime>
+#include <glm/gtx/euler_angles.hpp>
 
 #include "Window.h"
 #include "Time.h"
@@ -7,6 +10,7 @@
 #include "objects/controls/TerrainWalker.h"
 #include "materials/NormalMaterial.h"
 #include "materials/HeightMapMaterial.h"
+#include "objects/geometries/LSystem.h"
 
 Window::Window() {
     setupCallbacks();
@@ -35,16 +39,26 @@ void Window::initializeObjects() {
     material->minHeight = terrain->boundingBox().min().y;
     terrain->material = std::move(material);
 
+    std::default_random_engine gen(static_cast<long unsigned int>(time(0)));
+    std::uniform_int_distribution<int> dist(1, terrain->size() - 2);
+
+    for (int i = 0; i < 10; ++i) {
+        auto tree = LSystem(1.25f, 15.0f, "FFFFFFFF[[A]FA]A", 6);
+        tree.transform.model = glm::translate(terrain->position(dist(gen), dist(gen))) * glm::scale(glm::vec3(0.2f));
+        scene.addChild(std::move(tree));
+    }
+
     auto cam = std::make_unique<Camera>(width, height);
-    auto flyControl = scene.addChild(FreeFlying(cam.get(), glm::translate(glm::vec3(0, 0, 20))));
+    auto flyControl = scene.addChild(FreeFlying(cam.get(),
+                                                glm::translate(glm::vec3(0, 10, 20))));
     cameras[0] = flyControl->addChild(std::move(cam));
     cameraControls[0] = flyControl;
 
     cam = std::make_unique<Camera>(width, height);
-    auto walker = scene.addChild(TerrainWalker(terrain, cam.get(), 2.0f));
+    auto walker = scene.addChild(TerrainWalker(terrain, cam.get(), glm::vec3(0.0f, 1.0f, 2.0f)));
     auto mesh = Mesh::cube();
     mesh.material = NormalMaterial::singleton();
-    mesh.transform.model = glm::scale(glm::vec3(0.5f, 0.5f, 0.5f));
+    mesh.transform.model = glm::translate(glm::vec3(0.0f, 0.2f, 0.0f)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f));
     walker->foot->addChild(mesh);
     cameras[1] = walker->head->addChild(std::move(cam));
     cameraControls[1] = walker;
