@@ -6,10 +6,10 @@
 #include "../../Time.h"
 #include "FreeRotator.h"
 
-TerrainWalker::TerrainWalker(Terrain *t, Camera *cam, float tall)
-        : terrain(t) {
+TerrainWalker::TerrainWalker(Terrain *t, Camera *cam, const glm::vec3 &body)
+        : terrain(t), body(body) {
     foot = addChild(Group());
-    head = addChild(FreeRotator(cam, glm::translate(glm::vec3(0.0f, tall, 0.0f))));
+    head = addChild(FreeRotator(cam, glm::translate(body)));
     set();
 }
 
@@ -64,4 +64,5 @@ void TerrainWalker::onMouseMove(float x, float y) {
     float euler_x, euler_y, euler_z;
     glm::extractEulerAngleYXZ(head->transform.model, euler_y, euler_x, euler_z);
     foot->transform.model = glm::eulerAngleY(euler_y);
+    head->transform.model[3] = glm::eulerAngleY(euler_y) * glm::vec4(body, 1.0f);
 }

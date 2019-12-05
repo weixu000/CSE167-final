@@ -8,7 +8,7 @@ class Camera;
 
 class TerrainWalker : public Group {
 public:
-    explicit TerrainWalker(Terrain *t, Camera *cam, float tall);
+    explicit TerrainWalker(Terrain *t, Camera *cam, const glm::vec3 &body);
 
     void update() override;
 
@@ -39,6 +39,8 @@ private:
     float u = 0.0f, v = 0.0f;
 
     float forward = 0.0f, left = 0.0f;
+
+    glm::vec3 body;
 };
 
 
