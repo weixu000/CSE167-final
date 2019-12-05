@@ -4,7 +4,7 @@
 #include "Time.h"
 #include "objects/geometries/Terrain.h"
 #include "materials/NormalMaterial.h"
-#include "materials/ColormapMaterial.h"
+#include "materials/HeightMapMaterial.h"
 
 Window::Window() {
     setupCallbacks();
@@ -32,7 +32,7 @@ void Window::initializeObjects() {
     tex->setFilter(GL_LINEAR, GL_LINEAR);
     tex->setWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
     tex->unbind();
-    auto material = std::make_unique<ColormapMaterial>();
+    auto material = std::make_unique<HeightMapMaterial>();
     material->tex = std::move(tex);
     material->maxHeight = terrain->boundingBox().max().y;
     material->minHeight = terrain->boundingBox().min().y;

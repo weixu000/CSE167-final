@@ -5,11 +5,11 @@
 #include "../gl_wraps/Shader.h"
 #include "../gl_wraps/Texture2D.h"
 
-class ColormapMaterial : public Material {
+class HeightMapMaterial : public Material {
 public:
-    ColormapMaterial() {
+    HeightMapMaterial() {
         if (!shader) {
-            shader = std::make_unique<Shader>("shaders/terrain.vert", "shaders/terrain.frag");
+            shader = std::make_unique<Shader>("shaders/heightmap.vert", "shaders/heightmap.frag");
         }
     }
 
