@@ -21,7 +21,7 @@ protected:
 private:
     using HeightMap = std::vector<std::vector<float>>;
 
-    HeightMap heights;
+    std::vector<std::vector<glm::vec3>> heights;
 
     static HeightMap diamondSquare(int n, const std::array<float, 4> &corners, float height_range);
 

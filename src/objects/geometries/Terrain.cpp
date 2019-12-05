@@ -63,13 +63,15 @@ Terrain::HeightMap Terrain::diamondSquare(int n, const std::array<float, 4> &cor
 }
 
 Terrain::Terrain(int n, const std::array<float, 4> &corners, float height_range) {
-    heights = diamondSquare(n, corners, height_range);
-    auto size = heights.size();
+    auto heightMap = diamondSquare(n, corners, height_range);
+    int size = heightMap.size();
 
     std::vector<glm::vec3> vertices;
+    heights = std::vector<std::vector<glm::vec3>>(size, std::vector<glm::vec3>(size));
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
-            vertices.emplace_back(i, heights[i][j], j);
+            heights[i][j] = glm::vec3(i - size / 2, heightMap[i][j], j - size / 2);
+            vertices.push_back(heights[i][j]);
         }
     }
 
@@ -100,10 +102,8 @@ std::tuple<float, float, glm::vec3, glm::vec3, glm::vec3, glm::vec3> Terrain::pa
     auto j = int(std::floor(v));
     v -= j;
 
-    return std::make_tuple(
-            u, v,
-            glm::vec3(i, heights[i][j], j), glm::vec3(i + 1, heights[i + 1][j], j),
-            glm::vec3(i + 1, heights[i + 1][j + 1], j + 1), glm::vec3(i, heights[i][j + 1], j + 1));
+    return std::make_tuple(u, v,
+                           heights[i][j], heights[i + 1][j], heights[i + 1][j + 1], heights[i][j + 1]);
 }
 
 glm::vec3 Terrain::position(float u_, float v_) {
