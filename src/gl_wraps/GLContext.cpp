@@ -22,7 +22,7 @@ GLContext::GLContext() {
 #ifndef __APPLE__
     // On Windows and Linux, we need GLEW to provide modern OpenGL functionality.
     // Initialize GLEW.
-    if (glewInit()) {
+    if (!gladLoadGL()) {
         std::cerr << "Failed to initialize GLEW" << std::endl;
         exit(EXIT_FAILURE);
     }

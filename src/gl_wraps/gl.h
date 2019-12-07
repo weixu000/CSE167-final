@@ -5,6 +5,6 @@
 
 #else
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 #endif

@@ -36,4 +36,4 @@ add_executable(FinalProject
         materials/ReflectionMapMaterial.h
         materials/SkyboxMaterial.h
         materials/HeightMapMaterial.h)
-target_link_libraries(FinalProject GLEW::glew_s glfw glm stb_image)
+target_link_libraries(FinalProject glad glfw glm stb_image)
