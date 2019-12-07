@@ -1,6 +1,8 @@
 #ifndef BEZIERCURVE_H
 #define BEZIERCURVE_H
 
+#include <vector>
+
 #include "Geometry.h"
 #include "../../gl_wraps/Shader.h"
 #include "../../gl_wraps/GLBuffer.h"

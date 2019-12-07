@@ -1,5 +1,3 @@
-#include <glm/gtc/type_ptr.hpp>
-
 #include "Shader.h"
 
 enum ShaderType {
@@ -10,78 +8,83 @@ enum ShaderType {
 
 GLuint LoadSingleShader(const std::string &shaderFilePath, ShaderType type) {
     // Create a shader id.
-    GLuint shaderID = 0;
-    shaderID = glCreateShader(type);
+    GLuint id = 0;
+    id = glCreateShader(type);
 
     // Try to read shader codes from the shader file.
-    std::string shaderCode;
-    std::ifstream shaderStream(shaderFilePath, std::ios::in);
-    if (shaderStream.is_open()) {
+    std::string code;
+    std::ifstream stream(shaderFilePath, std::ios::in);
+    if (stream.is_open()) {
         std::string Line;
-        while (getline(shaderStream, Line))
-            shaderCode += "\n" + Line;
-        shaderStream.close();
+        while (getline(stream, Line))
+            code += "\n" + Line;
+        stream.close();
     } else {
-        throw std::runtime_error("Impossible to open " + shaderFilePath);
+        throw std::runtime_error("Cannot open " + shaderFilePath);
     }
-
-    GLint Result = GL_FALSE;
-    int InfoLogLength;
 
     // Compile Shader.
     std::cout << "Compiling shader: " << shaderFilePath << std::endl;
-    char const *sourcePointer = shaderCode.c_str();
-    glShaderSource(shaderID, 1, &sourcePointer, nullptr);
-    glCompileShader(shaderID);
+    char const *source = code.c_str();
+    glShaderSource(id, 1, &source, nullptr);
+    glCompileShader(id);
 
     // Check Shader.
-    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &Result);
-    glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if (InfoLogLength > 0) {
-        std::vector<char> shaderErrorMessage(InfoLogLength + 1);
-        glGetShaderInfoLog(shaderID, InfoLogLength, nullptr, shaderErrorMessage.data());
-        std::string msg(shaderErrorMessage.begin(), shaderErrorMessage.end());
-        throw std::runtime_error(msg);
+    GLint result = GL_FALSE;
+    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+    int log_length;
+    glGetShaderiv(id, GL_INFO_LOG_LENGTH, &log_length);
+    if (log_length > 0) {
+        std::string msg(log_length, '\0');
+        glGetShaderInfoLog(id, log_length, nullptr, msg.data());
+        std::cerr << msg << std::endl;
     }
 
-    return shaderID;
+    if (result != GL_TRUE) {
+        throw std::runtime_error("Shader compilation error: " + shaderFilePath);
+    }
+
+    return id;
 }
 
 void Shader::compileProgram(const std::string &vertexFilePath, const std::string &fragmentFilePath,
                             const std::string &geometryFilePath) {
     // Create the vertex shader and fragment shader.
-    auto vertexShaderID = LoadSingleShader(vertexFilePath, vertex);
-    auto fragmentShaderID = LoadSingleShader(fragmentFilePath, fragment);
-    auto geometryShaderID = geometryFilePath.empty() ? 0 : LoadSingleShader(geometryFilePath, geometry);
-
-    GLint Result = GL_FALSE;
-    int InfoLogLength;
+    auto vertex_id = LoadSingleShader(vertexFilePath, vertex);
+    auto fragment_id = LoadSingleShader(fragmentFilePath, fragment);
+    auto geometry_id = geometryFilePath.empty() ? 0 : LoadSingleShader(geometryFilePath, geometry);
 
     // Link the program.
-    printf("Linking program\n");
-    glAttachShader(id, vertexShaderID);
-    glAttachShader(id, fragmentShaderID);
-    if (geometryShaderID) glAttachShader(id, geometryShaderID);
+    std::cout << "Linking program" << std::endl;
+    glAttachShader(id, vertex_id);
+    glAttachShader(id, fragment_id);
+    if (geometry_id) glAttachShader(id, geometry_id);
     glLinkProgram(id);
 
     // Check the program.
-    glGetProgramiv(id, GL_LINK_STATUS, &Result);
-    glGetProgramiv(id, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if (InfoLogLength > 0) {
-        std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
-        glGetProgramInfoLog(id, InfoLogLength, nullptr, ProgramErrorMessage.data());
-        std::string msg(ProgramErrorMessage.begin(), ProgramErrorMessage.end());
+    GLint result = GL_FALSE;
+    glGetProgramiv(id, GL_LINK_STATUS, &result);
+    int log_length;
+    glGetProgramiv(id, GL_INFO_LOG_LENGTH, &log_length);
+    if (log_length > 0) {
+        std::string msg(log_length, '\0');
+        glGetProgramInfoLog(id, log_length, nullptr, msg.data());
         glDeleteProgram(id);
-        throw std::runtime_error(msg);
+        std::cerr << msg << std::endl;
+    }
+
+    if (result != GL_TRUE) {
+        throw std::runtime_error(
+                "Program link error: " + vertexFilePath + ", " + fragmentFilePath + ", " + geometryFilePath);
     }
 
     // Detach and delete the shaders as they are no longer needed.
-    glDetachShader(id, vertexShaderID);
-    glDetachShader(id, fragmentShaderID);
-    if (geometryShaderID) glDetachShader(id, geometryShaderID);
-    glDeleteShader(vertexShaderID);
-    glDeleteShader(fragmentShaderID);
-    if (geometryShaderID) glDeleteShader(geometryShaderID);
+    glDetachShader(id, vertex_id);
+    glDetachShader(id, fragment_id);
+    if (geometry_id) glDetachShader(id, geometry_id);
+    glDeleteShader(vertex_id);
+    glDeleteShader(fragment_id);
+    if (geometry_id) glDeleteShader(geometry_id);
 }
 
 Shader::Shader(const std::string &vertex_file_path, const std::string &fragment_file_path,
