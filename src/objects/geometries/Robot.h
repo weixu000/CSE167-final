@@ -2,7 +2,8 @@
 #define ROBOT_H
 
 #include "../Group.h"
-#include "../../materials/Material.h"
+
+class Material;
 
 Group robot(std::shared_ptr<Material> material);
 

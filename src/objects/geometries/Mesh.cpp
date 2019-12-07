@@ -3,10 +3,14 @@
 #include <map>
 #include <tuple>
 #include <numeric>
+#include <glm/gtx/transform.hpp>
 
 #include "Mesh.h"
-#include "../../gl_wraps/Shader.h"
 #include "../Camera.h"
+#include "../../materials/Material.h"
+#include "../../gl_wraps/Shader.h"
+#include "../../gl_wraps/GLBuffer.h"
+#include "../../gl_wraps/GLVertexArray.h"
 
 Mesh::Mesh(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indices) {
     count = indices.size();
@@ -19,11 +23,15 @@ Mesh::Mesh(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indic
     }
     bb = {minVal, maxVal};
 
+    vao = std::make_shared<GLVertexArray>();
+
     // Bind to the VAO.
     vao->bind();
 
+    GLBuffer vbo, ebo;
+
     // Pass in the data.
-    vbo->upload(sizeof(glm::vec3) * attrs.size(), attrs.data());
+    vbo.upload(sizeof(glm::vec3) * attrs.size(), attrs.data());
     // Enable vertex attribute 0.
     // We will be able to access points through it.
     vao->setAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
@@ -34,9 +42,9 @@ Mesh::Mesh(const std::vector<glm::vec3> &attrs, const std::vector<GLuint> &indic
                           2 * sizeof(glm::vec3), sizeof(glm::vec3));
     GLBuffer::unbind();
 
-    ebo->bind(GL_ELEMENT_ARRAY_BUFFER);
+    ebo.bind(GL_ELEMENT_ARRAY_BUFFER);
     // Pass in the data.
-    ebo->upload(sizeof(GLuint) * indices.size(), indices.data(), GL_ELEMENT_ARRAY_BUFFER);
+    ebo.upload(sizeof(GLuint) * indices.size(), indices.data(), GL_ELEMENT_ARRAY_BUFFER);
 
     // Unbind from the VAO.
     vao->unbind();

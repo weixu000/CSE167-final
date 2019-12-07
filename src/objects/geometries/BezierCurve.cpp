@@ -2,10 +2,14 @@
 
 #include "BezierCurve.h"
 #include "../Camera.h"
+#include "../../gl_wraps/Shader.h"
+#include "../../gl_wraps/GLBuffer.h"
+#include "../../gl_wraps/GLVertexArray.h"
 
 std::unique_ptr<Shader> BezierCurve::shader;
 
 BezierCurve::BezierCurve() {
+    vao = std::make_shared<GLVertexArray>();
     if (!shader) {
         shader = std::make_unique<Shader>("shaders/normal.vert", "shaders/flat.frag",
                                           "shaders/bezier.geom");
@@ -31,18 +35,21 @@ void BezierCurve::upload() {
         indices[4 * i + 3] = (3 * i + 3) % controlPoints.size();
     }
 
+    vao;
+    GLBuffer vbo, ebo;
+
     // Bind to the VAO.
     vao->bind();
 
     // Pass in the data.
-    vbo->upload(sizeof(glm::vec3) * controlPoints.size(), controlPoints.data());
+    vbo.upload(sizeof(glm::vec3) * controlPoints.size(), controlPoints.data());
     // Enable vertex attribute 0.
     vao->setAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
                           sizeof(glm::vec3));
-    vbo->unbind();
+    vbo.unbind();
 
-    ebo->bind(GL_ELEMENT_ARRAY_BUFFER);
-    ebo->upload(sizeof(GLuint) * indices.size(), indices.data(), GL_ELEMENT_ARRAY_BUFFER);
+    ebo.bind(GL_ELEMENT_ARRAY_BUFFER);
+    ebo.upload(sizeof(GLuint) * indices.size(), indices.data(), GL_ELEMENT_ARRAY_BUFFER);
 
     // Unbind from the VAO.
     vao->unbind();

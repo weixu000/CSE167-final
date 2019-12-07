@@ -1,16 +1,12 @@
 #ifndef _WINDOW_H_
 #define _WINDOW_H_
 
-#include "gl_wraps/gl.h"
-
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
 
 #include "objects/Group.h"
-#include "objects/Camera.h"
-#include "objects/geometries/Skybox.h"
 #include "gl_wraps/GLContext.h"
+
+class Camera;
 
 class Window : public GLContext {
 public:

@@ -6,7 +6,6 @@
 //  Copyright © 2019 Wei Zeng. All rights reserved.
 //
 
-#include <glm/gtx/transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <string>
 #include <cmath>
@@ -16,6 +15,7 @@
 #include "../Camera.h"
 #include "../../materials/FlatMaterial.h"
 #include "../../gl_wraps/GLBuffer.h"
+#include "../../gl_wraps/GLVertexArray.h"
 
 std::unique_ptr<FlatMaterial> material;
 
@@ -26,12 +26,13 @@ LSystem::LSystem(float step_size, float angle_increment, std::string rules, int 
     this->angle_increment = angle_increment;
     this->rules = rules;
 
-    genRule(rules, iteration);
-    readRules();
-
+    vao = std::make_shared<GLVertexArray>();
     if (!material) {
         material = std::make_unique<FlatMaterial>(glm::vec3(0.0f, 1.0f, 0.0f));
     }
+
+    genRule(rules, iteration);
+    readRules();
 }
 
 void LSystem::push() {

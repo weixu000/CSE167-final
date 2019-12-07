@@ -4,15 +4,14 @@
 #include "../../gl_wraps/gl.h"
 
 #include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
 #include <vector>
 #include <string>
 
 #include "Geometry.h"
-#include "../../gl_wraps/Shader.h"
-#include "../../gl_wraps/GLBuffer.h"
-#include "../../gl_wraps/GLVertexArray.h"
-#include "../../materials/Material.h"
+
+class Material;
+
+class GLVertexArray;
 
 class Mesh : public Geometry {
 public:
@@ -38,8 +37,7 @@ protected:
     NodePtr clone() override { return std::make_unique<Mesh>(*this); }
 
     GLsizei count = 0;
-    std::shared_ptr<GLVertexArray> vao = std::make_shared<GLVertexArray>();
-    std::shared_ptr<GLBuffer> vbo = std::make_shared<GLBuffer>(), ebo = std::make_shared<GLBuffer>();
+    std::shared_ptr<GLVertexArray> vao;
 
     AABB bb;
 };

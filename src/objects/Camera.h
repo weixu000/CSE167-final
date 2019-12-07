@@ -1,8 +1,6 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <glm/gtx/transform.hpp>
-
 #include "Node.h"
 
 class Shader;
@@ -25,16 +23,7 @@ public:
 
     void setUniform(Shader &shader) const;
 
-    void resize(float w, float h) {
-        width = w;
-        height = h;
-        projection = glm::perspective(glm::radians(fovy),
-                                      width / height,
-                                      zNear, zFar);
-    }
-
-    // Camera matrix, inverse of view matrix glm::lookAt
-    static glm::mat4 orientation(const glm::vec3 &eye, const glm::vec3 &center, const glm::vec3 &up);
+    void resize(float w, float h);
 
 protected:
     NodePtr clone() override { return std::make_unique<Camera>(*this); }

@@ -1,6 +1,6 @@
+#include <iostream>
 #include "gl_wraps/gl.h"
 #include <GLFW/glfw3.h>
-#include <cstdlib>
 
 #include "Window.h"
 

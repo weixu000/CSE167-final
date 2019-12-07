@@ -1,6 +1,8 @@
 #ifndef GROUP_H
 #define GROUP_H
 
+#include <list>
+
 #include "Node.h"
 
 class Group : public Node {

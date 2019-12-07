@@ -1,10 +1,13 @@
-#include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include <random>
 #include <ctime>
-#include <glm/gtx/euler_angles.hpp>
+#include "gl_wraps/gl.h"
 
 #include "Window.h"
 #include "Time.h"
+#include "objects/Camera.h"
+#include "objects/geometries/Skybox.h"
 #include "objects/controls/FreeFlying.h"
 #include "objects/geometries/Terrain.h"
 #include "objects/controls/TerrainWalker.h"

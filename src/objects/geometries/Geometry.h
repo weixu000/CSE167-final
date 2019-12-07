@@ -1,6 +1,8 @@
 #ifndef _GEOMETRY_H
 #define _GEOMETRY_H
 
+#include <array>
+
 #include "../Node.h"
 
 class AABB {

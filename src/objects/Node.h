@@ -3,7 +3,6 @@
 
 #include <glm/glm.hpp>
 #include <memory>
-#include <list>
 
 #include "Transform.h"
 #include "../Input.h"

@@ -7,8 +7,6 @@
 // Make sure OpenGL context is ready before anything else, since it is base class
 class GLContext {
 public:
-    GLFWwindow *window;
-
     int width = 640, height = 480;
 
     GLContext();
@@ -34,6 +32,9 @@ public:
     virtual void cursorPosCallback(double x, double y) {}
 
     virtual void scrollCallback(double xoffset, double yoffset) {}
+
+protected:
+    GLFWwindow *window;
 
 private:
     void setupCallbacks();

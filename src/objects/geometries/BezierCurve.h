@@ -4,9 +4,10 @@
 #include <vector>
 
 #include "Geometry.h"
-#include "../../gl_wraps/Shader.h"
-#include "../../gl_wraps/GLBuffer.h"
-#include "../../gl_wraps/GLVertexArray.h"
+
+class Shader;
+
+class GLVertexArray;
 
 class BezierCurve : public Geometry {
 public:
@@ -28,8 +29,7 @@ protected:
     NodePtr clone() override { return std::make_unique<BezierCurve>(*this); }
 
 private:
-    std::shared_ptr<GLVertexArray> vao = std::make_shared<GLVertexArray>();
-    std::shared_ptr<GLBuffer> vbo = std::make_shared<GLBuffer>(), ebo = std::make_shared<GLBuffer>();
+    std::shared_ptr<GLVertexArray> vao;
 
     AABB bb;
 

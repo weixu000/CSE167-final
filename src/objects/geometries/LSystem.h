@@ -15,7 +15,8 @@
 #include <stack>
 
 #include "Geometry.h"
-#include "../../gl_wraps/GLVertexArray.h"
+
+class GLVertexArray;
 
 class LSystem : public Geometry {
 private:
@@ -31,7 +32,7 @@ private:
     std::vector<glm::vec3> data;
     std::string rules, generatedString;
 
-    std::shared_ptr<GLVertexArray> vao = std::make_shared<GLVertexArray>();
+    std::shared_ptr<GLVertexArray> vao;
 
     void genRule(std::string sentence, int depth);
 
