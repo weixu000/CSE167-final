@@ -3,7 +3,6 @@
 ## Project Structure
 ```
 .
-├─cmake                             # Find*.cmake to find modules
 ├─deps                              # 3rd librarys to build
 │  └─stb_image                      # https://github.com/nothings/stb
 ├─meshes                            # 3D models
@@ -53,6 +52,7 @@ Run the executable in the repo `.` so that it can find the shaders/, meshes/, te
     - `FreeFlying`: freely movable by W,A,S,D and mouse
 - `geometries/`: various geometries like bezier curve, mesh, wireframe, robot
     - `Terrain` implements procedurally generated terrain with Diamond Square Algorithm
+    - `PerlinNoiseTerrain` implements procedurally generated terrain with 2D Perlin Noise
 
 ## Window (src/Window.h)
 - `loop`, `draw`, `update` handle game loop
