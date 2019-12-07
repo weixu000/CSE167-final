@@ -1,5 +1,6 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/norm.hpp>
 
 #include "SurfaceWalker.h"
 #include "../Camera.h"
@@ -21,10 +22,10 @@ void SurfaceWalker::update() {
     auto movement = forward * foward_vec + left * left_vec;
 
     auto sensitivity = speed * Time::delta();
-    auto du = glm::normalize(terrain->derivativeU(u, v));
-    auto dv = glm::normalize(terrain->derivativeV(u, v));
-    u += glm::dot(sensitivity * movement, du);
-    v += glm::dot(sensitivity * movement, dv);
+    auto du = terrain->derivativeU(u, v);
+    auto dv = terrain->derivativeV(u, v);
+    u += sensitivity * glm::dot(movement, du) / glm::length2(du);
+    v += sensitivity * glm::dot(movement, dv) / glm::length2(dv);
 
     set();
     Group::update();
