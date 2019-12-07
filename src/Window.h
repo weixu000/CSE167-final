@@ -14,35 +14,30 @@
 
 class Window : public GLContext {
 public:
-    Group scene;
-
-    std::array<Camera *, 2> cameras;
-
-    std::array<Group *, 2> cameraControls;
-
-    static Window *retrieve(GLFWwindow *w) { return reinterpret_cast<Window *>(glfwGetWindowUserPointer(w)); }
-
     Window();
 
     void loop();
 
-    void setupCallbacks();
-
     void initializeObjects();
-
-    void resizeCallback(int width, int height);
 
     void update();
 
     void draw();
 
-    void keyCallback(int key, int scancode, int action, int mods);
+    void resizeCallback(int width, int height) override;
 
-    void mouseButtonCallback(int button, int action, int mods);
+    void keyCallback(int key, int scancode, int action, int mods) override;
 
-    void cursorPosCallback(double x, double y);
+    void mouseButtonCallback(int button, int action, int mods) override;
 
-    void scrollCallback(double xoffset, double yoffset);
+    void cursorPosCallback(double x, double y) override;
+
+private:
+    Group scene;
+
+    std::array<Camera *, 2> cameras;
+
+    std::array<Group *, 2> cameraControls;
 };
 
 #endif

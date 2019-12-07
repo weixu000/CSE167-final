@@ -13,7 +13,6 @@
 #include "objects/geometries/LSystem.h"
 
 Window::Window() {
-    setupCallbacks();
     initializeObjects();
 
     // Initial size will not fire callback
@@ -81,6 +80,7 @@ void Window::resizeCallback(int width, int height) {
             cam->resize(width, height);
         }
     }
+    GLContext::resizeCallback(width, height);
 }
 
 void Window::update() {
@@ -98,35 +98,6 @@ void Window::draw() {
 
     // Swap buffers.
     glfwSwapBuffers(window);
-}
-
-void Window::setupCallbacks() {
-    // Set the key callback.
-    glfwSetKeyCallback(window,
-                       [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-                           retrieve(window)->keyCallback(key, scancode, action, mods);
-                       });
-    // Set the window resize callback.
-    glfwSetWindowSizeCallback(window,
-                              [](GLFWwindow *window, int width, int height) {
-                                  retrieve(window)->resizeCallback(width, height);
-                              });
-    // Set the mouse button callback.
-    glfwSetMouseButtonCallback(window,
-                               [](GLFWwindow *window, int button, int action, int mods) {
-                                   retrieve(window)->mouseButtonCallback(button, action, mods);
-                               });
-    // Set the cursor position callback.
-    glfwSetCursorPosCallback(window,
-                             [](GLFWwindow *window, double x, double y) {
-                                 retrieve(window)->cursorPosCallback(x, y);
-                             });
-
-    // Set the scroll callback.
-    glfwSetScrollCallback(window,
-                          [](GLFWwindow *window, double xoffset, double yoffset) {
-                              retrieve(window)->scrollCallback(xoffset, yoffset);
-                          });
 }
 
 void Window::keyCallback(int key, int scancode, int action, int mods) {
@@ -169,9 +140,6 @@ void Window::mouseButtonCallback(int button, int action, int mods) {
 
 void Window::cursorPosCallback(double x, double y) {
     scene.onMouseMove(x, y);
-}
-
-void Window::scrollCallback(double xoffset, double yoffset) {
 }
 
 void Window::loop() {
