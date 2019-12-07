@@ -5,11 +5,11 @@
 
 class Camera;
 
-class Terrain;
+class PerlinNoiseTerrain;
 
 class TerrainWalker : public Group {
 public:
-    explicit TerrainWalker(Terrain *t, Camera *cam, const glm::vec3 &body);
+    explicit TerrainWalker(PerlinNoiseTerrain *t, Camera *cam, const glm::vec3 &body);
 
     void update() override;
 
@@ -31,7 +31,7 @@ protected:
     NodePtr clone() override { return std::make_unique<TerrainWalker>(*this); }
 
 private:
-    Terrain *terrain;
+    PerlinNoiseTerrain *terrain;
 
     void set();
 
