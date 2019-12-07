@@ -10,9 +10,11 @@
 #include "objects/geometries/Skybox.h"
 #include "objects/controls/FreeFlying.h"
 #include "objects/geometries/Terrain.h"
-#include "objects/controls/TerrainWalker.h"
+#include "objects/geometries/PerlinNoiseTerrain.h"
+#include "objects/controls/SurfaceWalker.h"
 #include "materials/NormalMaterial.h"
 #include "materials/HeightMapMaterial.h"
+#include "materials/WireframeMaterial.h"
 #include "objects/geometries/LSystem.h"
 
 Window::Window() {
@@ -28,7 +30,10 @@ void Window::initializeObjects() {
                                             float(width) / float(height), 0.1f, 1000.0f);
 
     scene.addChild(Skybox());
-    auto terrain = scene.addChild(Terrain(8, {0.0f, 0.0f, 0.0f, 0.0f}, 50.0f));
+//    auto terrain = scene.addChild(Terrain(8, {0.0f, 0.0f, 0.0f, 0.0f}, 50.0f));
+//    terrain->transform.model = glm::scale(glm::vec3(10, 10, 10));
+    auto terrain = scene.addChild(PerlinNoiseTerrain(5, 200));
+    terrain->transform.model = glm::scale(glm::vec3(50, 50, 50));
     auto tex = std::make_shared<Texture2D>();
     tex->bind();
     tex->upload("textures/earth.png");
@@ -58,7 +63,7 @@ void Window::initializeObjects() {
     cameraControls[0] = flyControl;
 
     cam = std::make_unique<Camera>(width, height);
-    auto walker = scene.addChild(TerrainWalker(terrain, cam.get(), glm::vec3(0.0f, 2.0f, 0.0f)));
+    auto walker = scene.addChild(SurfaceWalker(terrain, cam.get(), glm::vec3(0.0f, 2.0f, 0.0f)));
     auto mesh = Mesh::cube();
     mesh.material = NormalMaterial::singleton();
     mesh.transform.model = glm::translate(glm::vec3(0.0f, 0.2f, 0.0f)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f));

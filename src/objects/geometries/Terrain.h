@@ -2,18 +2,19 @@
 #define TERRAIN_H
 
 #include "Mesh.h"
+#include "ParametricSurface.h"
 
-class Terrain : public Mesh {
+class Terrain : public Mesh, public ParametricSurface {
 public:
     Terrain(int n, const std::array<float, 4> &corners, float height_range);
 
-    glm::vec3 position(float u, float v);
+    glm::vec3 position(float u, float v) override;
 
-    glm::vec3 derivativeU(float u, float v);
+    glm::vec3 derivativeU(float u, float v) override;
 
-    glm::vec3 derivativeV(float u, float v);
+    glm::vec3 derivativeV(float u, float v) override;
 
-    int size() const { return heights.size(); }
+    int size() const override { return heights.size(); }
 
 protected:
     NodePtr clone() override { return std::make_unique<Terrain>(*this); }

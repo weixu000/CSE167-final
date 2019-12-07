@@ -25,10 +25,12 @@ add_executable(FinalProject
         objects/geometries/BezierCurve.cpp objects/geometries/BezierCurve.h
         objects/geometries/Terrain.cpp objects/geometries/Terrain.h
         objects/geometries/LSystem.cpp objects/geometries/LSystem.h
+        objects/geometries/PerlinNoiseTerrain.cpp objects/geometries/PerlinNoiseTerrain.h
+        objects/geometries/ParametricSurface.h
         objects/controls/FreeMover.cpp objects/controls/FreeMover.h
         objects/controls/FreeRotator.cpp objects/controls/FreeRotator.h
         objects/controls/FreeFlying.h
-        objects/controls/TerrainWalker.cpp objects/controls/TerrainWalker.h
+        objects/controls/SurfaceWalker.cpp objects/controls/SurfaceWalker.h
         materials/Material.h
         materials/FlatMaterial.h
         materials/PhongMaterial.h

@@ -1,20 +1,20 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "TerrainWalker.h"
+#include "SurfaceWalker.h"
 #include "../Camera.h"
 #include "../../Time.h"
 #include "FreeRotator.h"
 #include "../geometries/PerlinNoiseTerrain.h"
 
-TerrainWalker::TerrainWalker(PerlinNoiseTerrain *t, Camera *cam, const glm::vec3 &body)
+SurfaceWalker::SurfaceWalker(ParametricSurface *t, Camera *cam, const glm::vec3 &body)
         : terrain(t), body(body), u(terrain->size() / 2), v(terrain->size() / 2) {
     foot = addChild(Group());
     head = addChild(FreeRotator(cam, glm::translate(body)));
     set();
 }
 
-void TerrainWalker::update() {
+void SurfaceWalker::update() {
     auto rotation = glm::mat3(head->transform.model);
     auto foward_vec = -rotation[2];
     auto left_vec = -rotation[0];
@@ -30,13 +30,13 @@ void TerrainWalker::update() {
     Group::update();
 }
 
-void TerrainWalker::set() {
+void SurfaceWalker::set() {
     u = glm::clamp(u, 0.2f, float(terrain->size()) - 1.2f);
     v = glm::clamp(v, 0.2f, float(terrain->size()) - 1.2f);
     transform.model = glm::translate(terrain->position(u, v));
 }
 
-void TerrainWalker::onKeyPress(Key key, int mods) {
+void SurfaceWalker::onKeyPress(Key key, int mods) {
     if (key == forwardKey) {
         forward = 1.0f;
     } else if (key == leftKey) {
@@ -49,7 +49,7 @@ void TerrainWalker::onKeyPress(Key key, int mods) {
     Group::onKeyPress(key, mods);
 }
 
-void TerrainWalker::onKeyRelease(int key, int mods) {
+void SurfaceWalker::onKeyRelease(int key, int mods) {
     if (key == forwardKey || key == backwardKey) {
         forward = 0.0f;
     } else if (key == leftKey || key == rightKey) {
@@ -58,7 +58,7 @@ void TerrainWalker::onKeyRelease(int key, int mods) {
     Group::onKeyRelease(key, mods);
 }
 
-void TerrainWalker::onMouseMove(float x, float y) {
+void SurfaceWalker::onMouseMove(float x, float y) {
     Group::onMouseMove(x, y);
 
     // use FreeRotator to update foot

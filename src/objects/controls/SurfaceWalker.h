@@ -5,11 +5,11 @@
 
 class Camera;
 
-class PerlinNoiseTerrain;
+class ParametricSurface;
 
-class TerrainWalker : public Group {
+class SurfaceWalker : public Group {
 public:
-    explicit TerrainWalker(PerlinNoiseTerrain *t, Camera *cam, const glm::vec3 &body);
+    explicit SurfaceWalker(ParametricSurface *t, Camera *cam, const glm::vec3 &body);
 
     void update() override;
 
@@ -28,10 +28,10 @@ public:
     Group *foot, *head;
 
 protected:
-    NodePtr clone() override { return std::make_unique<TerrainWalker>(*this); }
+    NodePtr clone() override { return std::make_unique<SurfaceWalker>(*this); }
 
 private:
-    PerlinNoiseTerrain *terrain;
+    ParametricSurface *terrain;
 
     void set();
 
