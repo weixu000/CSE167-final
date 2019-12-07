@@ -109,28 +109,33 @@ std::tuple<float, float, glm::vec3, glm::vec3, glm::vec3, glm::vec3> Terrain::pa
 
 glm::vec3 Terrain::position(float u_, float v_) {
     auto[u, v, p0, p1, p2, p3] = patch(u_, v_);
-
+    glm::vec3 local;
     if (u + v <= 1) {
-        return p0 + u * (p1 - p0) + v * (p3 - p0);
+        local = p0 + u * (p1 - p0) + v * (p3 - p0);
     } else {
-        return p2 + (1 - u) * (p3 - p2) + (1 - v) * (p1 - p2);
+        local = p2 + (1 - u) * (p3 - p2) + (1 - v) * (p1 - p2);
     }
+    return transform.model * glm::vec4(local, 1.0f);
 }
 
 glm::vec3 Terrain::derivativeU(float u_, float v_) {
     auto[u, v, p0, p1, p2, p3] = patch(u_, v_);
+    glm::vec3 local;
     if (u + v <= 1) {
-        return p1 - p0;
+        local = p1 - p0;
     } else {
-        return p2 - p3;
+        local = p2 - p3;
     }
+    return glm::mat3(transform.model) * local;
 }
 
 glm::vec3 Terrain::derivativeV(float u_, float v_) {
     auto[u, v, p0, p1, p2, p3] = patch(u_, v_);
+    glm::vec3 local;
     if (u + v <= 1) {
-        return p3 - p0;
+        local = p3 - p0;
     } else {
-        return p2 - p1;
+        local = p2 - p1;
     }
+    return glm::mat3(transform.model) * local;
 }

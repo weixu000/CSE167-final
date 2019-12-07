@@ -13,7 +13,7 @@ public:
 
     glm::vec3 derivativeV(float u, float v);
 
-    size_t size() const { return heights.size(); }
+    int size() const { return heights.size(); }
 
 protected:
     NodePtr clone() override { return std::make_unique<Terrain>(*this); }
