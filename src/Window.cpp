@@ -1,7 +1,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <random>
-#include <ctime>
+#include <chrono>
 #include "gl_wraps/gl.h"
 
 #include "Window.h"
@@ -28,7 +28,7 @@ void Window::initializeObjects() {
                                             float(width) / float(height), 0.1f, 1000.0f);
 
     scene.addChild(Skybox());
-    auto terrain = scene.addChild(Terrain(5, {0.0f, 0.0f, 0.0f, 0.0f}, 10.0f));
+    auto terrain = scene.addChild(Terrain(8, {0.0f, 0.0f, 0.0f, 0.0f}, 50.0f));
     auto tex = std::make_shared<Texture2D>();
     tex->bind();
     tex->upload("textures/earth.png");
@@ -41,7 +41,8 @@ void Window::initializeObjects() {
     material->minHeight = terrain->boundingBox().min().y;
     terrain->material = std::move(material);
 
-    std::default_random_engine gen(static_cast<long unsigned int>(time(0)));
+    auto now = std::chrono::system_clock::now();
+    std::default_random_engine gen(now.time_since_epoch().count());
     std::uniform_int_distribution<int> dist(1, terrain->size() - 2);
 
     for (int i = 0; i < 10; ++i) {
@@ -57,7 +58,7 @@ void Window::initializeObjects() {
     cameraControls[0] = flyControl;
 
     cam = std::make_unique<Camera>(width, height);
-    auto walker = scene.addChild(TerrainWalker(terrain, cam.get(), glm::vec3(0.0f, 1.0f, 2.0f)));
+    auto walker = scene.addChild(TerrainWalker(terrain, cam.get(), glm::vec3(0.0f, 2.0f, 0.0f)));
     auto mesh = Mesh::cube();
     mesh.material = NormalMaterial::singleton();
     mesh.transform.model = glm::translate(glm::vec3(0.0f, 0.2f, 0.0f)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f));

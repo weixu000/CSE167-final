@@ -8,7 +8,8 @@
 
 #include <glm/gtx/rotate_vector.hpp>
 #include <string>
-#include <cmath>
+#include <random>
+#include <chrono>
 
 #include "LSystem.h"
 #include "../../gl_wraps/Shader.h"
@@ -18,6 +19,8 @@
 #include "../../gl_wraps/GLVertexArray.h"
 
 std::unique_ptr<FlatMaterial> material;
+std::default_random_engine rand_eng;
+std::uniform_int_distribution dist(0, 3);
 
 LSystem::LSystem(float step_size, float angle_increment, std::string rules, int iteration) {
     this->position = glm::vec3(0, 0, 0);
@@ -30,6 +33,9 @@ LSystem::LSystem(float step_size, float angle_increment, std::string rules, int 
     if (!material) {
         material = std::make_unique<FlatMaterial>(glm::vec3(0.0f, 1.0f, 0.0f));
     }
+
+    auto now = std::chrono::system_clock::now();
+    rand_eng.seed(now.time_since_epoch().count());
 
     genRule(rules, iteration);
     readRules();
@@ -152,7 +158,6 @@ void LSystem::readRules() {
 }
 
 void LSystem::genRule(std::string sentence, int depth) {
-
     if (depth == 0) {
 //        std::cerr << "generated string: " << sentence << std::endl;
         generatedString = sentence;
@@ -163,10 +168,7 @@ void LSystem::genRule(std::string sentence, int depth) {
 
     for (int i = 0; i < sentence.length(); i++) {
         if (sentence[i] == 'A') {
-
-            srand(i);
-            int choice = rand() % 4;
-
+            int choice = dist(rand_eng);
             if (choice == 0)
                 nextSentence += "F[[+ZFA]-ZFA][[+XFA]-XFA]";
             else if (choice == 1)

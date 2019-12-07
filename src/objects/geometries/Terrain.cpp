@@ -1,5 +1,5 @@
 #include <random>
-#include <ctime>
+#include <chrono>
 
 #include "Terrain.h"
 #include "../Camera.h"
@@ -13,7 +13,8 @@ Terrain::HeightMap Terrain::diamondSquare(int n, const std::array<float, 4> &cor
     height[n - 1][n - 1] = corners[2];
     height[n - 1][0] = corners[3];
 
-    std::default_random_engine rand_eng(static_cast<long unsigned int>(time(0)));
+    auto now = std::chrono::system_clock::now();
+    std::default_random_engine rand_eng(now.time_since_epoch().count());
 
     for (auto step_size = n - 1; step_size > 1; step_size /= 2) {
         std::uniform_real_distribution<float> dist(-height_range * step_size / n, height_range * step_size / n);
