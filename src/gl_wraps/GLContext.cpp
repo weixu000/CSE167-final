@@ -19,14 +19,10 @@ GLContext::GLContext() {
 
     // Make the context of the window.
     glfwMakeContextCurrent(window);
-#ifndef __APPLE__
-    // On Windows and Linux, we need GLEW to provide modern OpenGL functionality.
-    // Initialize GLEW.
     if (!gladLoadGL()) {
         std::cerr << "Failed to initialize GLEW" << std::endl;
         exit(EXIT_FAILURE);
     }
-#endif
     // Get info of GPU and supported OpenGL version.
     std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
     std::cout << "OpenGL version supported: " << glGetString(GL_VERSION)

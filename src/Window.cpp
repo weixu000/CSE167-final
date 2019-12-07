@@ -65,10 +65,6 @@ void Window::initializeObjects() {
 }
 
 void Window::resizeCallback(int width, int height) {
-#ifdef __APPLE__
-    // In case your Mac has a retina display.
-    glfwGetFramebufferSize(window, &width, &height);
-#endif
     if (width && height) {
         this->width = width;
         this->height = height;
