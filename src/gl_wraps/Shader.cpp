@@ -105,19 +105,3 @@ Shader::Shader(const std::string &vertex_file_path, const std::string &fragment_
         uniformLocations[name] = glGetUniformLocation(id, name.c_str());
     }
 }
-
-std::shared_ptr<Shader> Shader::flatShader() {
-    static std::shared_ptr<Shader> shader;
-    if (shader == nullptr) {
-        shader = std::make_shared<Shader>("shaders/normal.vert", "shaders/flat.frag");
-    }
-    return shader;
-}
-
-std::shared_ptr<Shader> Shader::normalShader() {
-    static std::shared_ptr<Shader> shader;
-    if (shader == nullptr) {
-        shader = std::make_shared<Shader>("shaders/normal.vert", "shaders/normal.frag");
-    }
-    return shader;
-}

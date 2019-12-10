@@ -36,10 +36,6 @@ public:
         setUniform(Uniform<T>(name, val));
     }
 
-    static std::shared_ptr<Shader> flatShader();
-
-    static std::shared_ptr<Shader> normalShader();
-
 private:
     std::unordered_map<std::string, GLint> uniformLocations;
 

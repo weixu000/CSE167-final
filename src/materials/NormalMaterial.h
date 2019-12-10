@@ -6,8 +6,14 @@
 
 class NormalMaterial : public Material {
 public:
+    NormalMaterial() {
+        if (!shader) {
+            shader = std::make_unique<Shader>("shaders/normal.vert", "shaders/normal.frag");
+        }
+    }
+
+
     Shader &setUp() const override {
-        auto shader = Shader::normalShader();
         shader->use();
         return *shader;
     }
@@ -21,9 +27,9 @@ public:
         }
         return material;
     }
-};
 
-#include "Material.h"
-#include "../gl_wraps/Shader.h"
+private:
+    static inline std::unique_ptr<Shader> shader;
+};
 
 #endif //FINALPROJECT_NORMALMATERIAL_H
