@@ -17,6 +17,7 @@
 #include "Geometry.h"
 
 class GLVertexArray;
+class Material;
 
 class LSystem : public Geometry {
 private:
@@ -61,6 +62,8 @@ public:
     void draw(const glm::mat4 &world, const Camera &camera) override;
 
     virtual AABB boundingBox() const { return bb; }
+
+    std::shared_ptr<Material> material;
 };
 
 #endif /* Lsystem_hpp */

@@ -14,11 +14,10 @@
 #include "LSystem.h"
 #include "../../gl_wraps/Shader.h"
 #include "../Camera.h"
-#include "../../materials/FlatMaterial.h"
+#include "../../materials/Material.h"
 #include "../../gl_wraps/GLBuffer.h"
 #include "../../gl_wraps/GLVertexArray.h"
 
-std::unique_ptr<FlatMaterial> material;
 std::default_random_engine rand_eng;
 std::uniform_int_distribution dist(0, 3);
 
@@ -30,9 +29,6 @@ LSystem::LSystem(float step_size, float angle_increment, std::string rules, int 
     this->rules = rules;
 
     vao = std::make_shared<GLVertexArray>();
-    if (!material) {
-        material = std::make_unique<FlatMaterial>(glm::vec3(0.0f, 1.0f, 0.0f));
-    }
 
     auto now = std::chrono::system_clock::now();
     rand_eng.seed(now.time_since_epoch().count());
