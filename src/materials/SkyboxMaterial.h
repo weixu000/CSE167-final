@@ -11,20 +11,22 @@ public:
             : cubemap(std::move(cubemap)) {
         if (!shader) {
             shader = std::make_unique<Shader>("shaders/skybox.vert", "shaders/skybox.frag");
+            foggyShader = std::make_unique<Shader>("shaders/skybox.vert", "shaders/skybox_fog.frag");
         }
     }
 
     Shader &setUp() const override {
-        shader->use();
+        Shader *s = foggy ? foggyShader.get() : shader.get();
+        s->use();
 
         // Use cube map
         glActiveTexture(GL_TEXTURE0);
         cubemap->bind();
-        shader->setUniform("cubemap", 0);
+        s->setUniform("cubemap", 0);
 
         glCullFace(GL_FRONT);
 
-        return *shader;
+        return *s;
     }
 
     void tearDown() const override {
@@ -34,8 +36,10 @@ public:
 
     std::shared_ptr<TextureCubemap> cubemap;
 
+    bool foggy = false;
+
 private:
-    static inline std::unique_ptr<Shader> shader;
+    static inline std::unique_ptr<Shader> shader, foggyShader;
 };
 
 

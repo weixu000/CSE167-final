@@ -2,7 +2,7 @@
 
 #include "Skybox.h"
 #include "../Camera.h"
-#include "../../materials/SkyboxMaterial.h"
+#include "../../gl_wraps/TextureCubemap.h"
 
 Skybox::Skybox()
         : Mesh(Mesh::cube()) { // Skybox is just a cube
@@ -24,6 +24,4 @@ Skybox::Skybox()
         cubemap->setWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
         cubemap->unbind();
     }
-
-    material = std::make_shared<SkyboxMaterial>(cubemap);
 }

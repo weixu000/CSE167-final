@@ -10,20 +10,22 @@ public:
     HeightMapMaterial() {
         if (!shader) {
             shader = std::make_unique<Shader>("shaders/heightmap.vert", "shaders/heightmap.frag");
+            foggyShader = std::make_unique<Shader>("shaders/heightmap_fog.vert", "shaders/heightmap_fog.frag");
         }
     }
 
     Shader &setUp() const override {
-        shader->use();
+        Shader *s = foggy ? foggyShader.get() : shader.get();
+        s->use();
 
         // Use cube map
         glActiveTexture(GL_TEXTURE0);
         tex->bind();
-        shader->setUniform("cubemap", 0);
-        shader->setUniform("minHeight", minHeight);
-        shader->setUniform("maxHeight", maxHeight);
+        s->setUniform("cubemap", 0);
+        s->setUniform("minHeight", minHeight);
+        s->setUniform("maxHeight", maxHeight);
 
-        return *shader;
+        return *s;
     }
 
     void tearDown() const override {
@@ -34,8 +36,12 @@ public:
 
     float minHeight, maxHeight;
 
+    bool foggy = false;
+
+
 private:
-    static inline std::unique_ptr<Shader> shader;
+
+    static inline std::unique_ptr<Shader> shader, foggyShader;
 };
 
 

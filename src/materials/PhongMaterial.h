@@ -9,16 +9,18 @@ public:
     PhongMaterial() {
         if (!shader) {
             shader = std::make_unique<Shader>("shaders/phong.vert", "shaders/phong.frag");
+            foggyShader = std::make_unique<Shader>("shaders/phong.vert", "shaders/phong_fog.frag");
         }
     }
 
     Shader &setUp() const override {
-        shader->use();
-        shader->setUniform("ks", ks);
-        shader->setUniform("kd", kd);
-        shader->setUniform("ka", ka);
-        shader->setUniform("alpha", alpha);
-        return *shader;
+        Shader *s = foggy ? foggyShader.get() : shader.get();
+        s->use();
+        s->setUniform("ks", ks);
+        s->setUniform("kd", kd);
+        s->setUniform("ka", ka);
+        s->setUniform("alpha", alpha);
+        return *s;
     }
 
 
@@ -27,8 +29,10 @@ public:
     glm::vec3 ks, kd, ka;
     float alpha;
 
+    bool foggy = false;
+
 private:
-    static inline std::unique_ptr<Shader> shader;
+    static inline std::unique_ptr<Shader> shader, foggyShader;
 };
 
 
