@@ -8,6 +8,16 @@
 
 class Camera;
 
+class HeightMapMaterial;
+
+class FlatMaterial;
+
+class SkyboxMaterial;
+
+class PerlinNoiseTerrain;
+
+class LSystem;
+
 class Window : public GLContext {
 public:
     Window();
@@ -34,6 +44,16 @@ private:
     std::array<Camera *, 2> cameras;
 
     std::array<Group *, 2> cameraControls;
+
+    std::shared_ptr<HeightMapMaterial> terrainMaterial;
+
+    std::shared_ptr<FlatMaterial> treeMaterial;
+
+    std::shared_ptr<SkyboxMaterial> skyboxMaterial;
+
+    PerlinNoiseTerrain *terrain;
+
+    std::array<LSystem *, 20> trees;
 };
 
 #endif

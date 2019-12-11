@@ -9,13 +9,13 @@
 #include "objects/Camera.h"
 #include "objects/geometries/Skybox.h"
 #include "objects/controls/FreeFlying.h"
-#include "objects/geometries/Terrain.h"
 #include "objects/geometries/PerlinNoiseTerrain.h"
 #include "objects/controls/SurfaceWalker.h"
 #include "materials/NormalMaterial.h"
 #include "materials/HeightMapMaterial.h"
-#include "materials/WireframeMaterial.h"
 #include "objects/geometries/LSystem.h"
+#include "materials/FlatMaterial.h"
+#include "materials/SkyboxMaterial.h"
 
 Window::Window() {
     initializeObjects();
@@ -29,10 +29,12 @@ void Window::initializeObjects() {
     glm::mat4 projection = glm::perspective(glm::radians(60.0f),
                                             float(width) / float(height), 0.1f, 1000.0f);
 
-    scene.addChild(Skybox());
-//    auto terrain = scene.addChild(Terrain(8, {0.0f, 0.0f, 0.0f, 0.0f}, 50.0f));
-//    terrain->transform.model = glm::scale(glm::vec3(10, 10, 10));
-    auto terrain = scene.addChild(PerlinNoiseTerrain(5, 200));
+    auto skybox = Skybox();
+    skyboxMaterial = std::make_shared<SkyboxMaterial>(skybox.cubemap);
+    skybox.material = skyboxMaterial;
+    scene.addChild(std::move(skybox));
+
+    terrain = scene.addChild(PerlinNoiseTerrain(4, 200));
     terrain->transform.model = glm::scale(glm::vec3(50, 50, 50));
     auto tex = std::make_shared<Texture2D>();
     tex->bind();
@@ -40,20 +42,22 @@ void Window::initializeObjects() {
     tex->setFilter(GL_LINEAR, GL_LINEAR);
     tex->setWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
     tex->unbind();
-    auto material = std::make_unique<HeightMapMaterial>();
-    material->tex = std::move(tex);
-    material->maxHeight = terrain->boundingBox().max().y;
-    material->minHeight = terrain->boundingBox().min().y;
-    terrain->material = std::move(material);
+    terrainMaterial = std::make_shared<HeightMapMaterial>();
+    terrainMaterial->tex = std::move(tex);
+    terrainMaterial->maxHeight = terrain->boundingBox().max().y;
+    terrainMaterial->minHeight = terrain->boundingBox().min().y;
+    terrain->material = terrainMaterial;
 
     auto now = std::chrono::system_clock::now();
     std::default_random_engine gen(now.time_since_epoch().count());
-    std::uniform_int_distribution<int> dist(1, terrain->size() - 2);
+    std::uniform_real_distribution<float> dist(0.1f, terrain->size() - 1.1f);
 
-    for (int i = 0; i < 10; ++i) {
-        auto tree = LSystem(1.25f, 15.0f, "FFFFFFFF[[A]FA]A", 6);
+    treeMaterial = std::make_shared<FlatMaterial>(glm::vec3(0.0f, 1.0f, 0.0f));
+    for (int i = 0; i < 20; ++i) {
+        auto tree = LSystem(1.25f, 20.0f, "FFFFFFFFFFFFFFFF[[A]FA]A", 6);
         tree.transform.model = glm::translate(terrain->position(dist(gen), dist(gen))) * glm::scale(glm::vec3(0.2f));
-        scene.addChild(std::move(tree));
+        tree.material = treeMaterial;
+        trees[i] = scene.addChild(std::move(tree));
     }
 
     auto cam = std::make_unique<Camera>(width, height);
@@ -118,6 +122,28 @@ void Window::keyCallback(int key, int scancode, int action, int mods) {
                 std::swap(cameraControls[0], cameraControls[1]);
                 cameraControls[0]->freeze = false;
                 cameraControls[1]->freeze = true;
+                break;
+            case GLFW_KEY_F:
+                terrainMaterial->foggy = !terrainMaterial->foggy;
+                treeMaterial->foggy = !treeMaterial->foggy;
+                skyboxMaterial->foggy = !skyboxMaterial->foggy;
+                break;
+            case GLFW_KEY_T: {
+                *terrain = std::move(PerlinNoiseTerrain(4, 200));
+                terrain->transform.model = glm::scale(glm::vec3(50, 50, 50));
+                terrain->material = terrainMaterial;
+
+                auto now = std::chrono::system_clock::now();
+                std::default_random_engine gen(now.time_since_epoch().count());
+                std::uniform_real_distribution<float> dist(0.1f, terrain->size() - 1.1f);
+
+                for (int i = 0; i < 20; ++i) {
+                    *trees[i] = LSystem(1.25f, 20.0f, "FFFFFFFFFFFFFFFF[[A]FA]A", 6);
+                    trees[i]->transform.model =
+                            glm::translate(terrain->position(dist(gen), dist(gen))) * glm::scale(glm::vec3(0.2f));
+                    trees[i]->material = treeMaterial;
+                }
+            }
                 break;
             default:
                 break;
