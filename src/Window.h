@@ -18,6 +18,8 @@ class PerlinNoiseTerrain;
 
 class LSystem;
 
+class CartoonMaterial;
+
 class Window : public GLContext {
 public:
     Window();
@@ -51,6 +53,7 @@ private:
 
     std::shared_ptr<SkyboxMaterial> skyboxMaterial;
 
+    std::shared_ptr<CartoonMaterial> cartoon;
     PerlinNoiseTerrain *terrain;
 
     std::array<LSystem *, 20> trees;

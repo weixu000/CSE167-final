@@ -18,10 +18,9 @@ public:
         Shader *s = foggy ? foggyShader.get() : shader.get();
         s->use();
 
-        // Use cube map
         glActiveTexture(GL_TEXTURE0);
         tex->bind();
-        s->setUniform("cubemap", 0);
+        s->setUniform("colormap", 0);
         s->setUniform("minHeight", minHeight);
         s->setUniform("maxHeight", maxHeight);
 

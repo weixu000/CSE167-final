@@ -2,45 +2,33 @@
 
 // input from phong.vert
 in vec3 vNormal;
-in vec3 vPos;
+in float vHeight;
 
-uniform vec3 eye;
+uniform sampler2D colormap;
+uniform float minHeight, maxHeight;
 
-//uniform vec3 lightPos;
-//uniform vec3 lightColor;
-//uniform float light_linear;
-
-//uniform vec3 objectColor;
-
-vec3 lightPos =vec3(100, 100, 100);
-vec3 lightColor=vec3(1.0, 1.0, 1.0);
-//float light_linear;
-
-vec3 objectColor = vec3(1.0, 0.0, 0.0);
+vec3 lightDir = normalize(vec3(-1.0, -1.0, -1.0));
 
 out vec4 fragColor;
 
 void main()
 {
-    // Toon Shading parameters
-    vec3 L = normalize(lightPos - vPos);
+    vec3 L = lightDir;
     vec3 N = normalize(vNormal);
 
-    float intensity = dot(N, L);
+    vec3 objectColor = texture(colormap, vec2((vHeight-minHeight)/(maxHeight-minHeight)+0.3f, 0.5)).rgb;
+    float intensity = dot(N, -L) + 0.1;
     vec3 result = intensity * objectColor;
     if (intensity > 0.95){
     }
     else if (intensity > 0.5){
-        result = vec3(0.7, 0.7, 0.7) * result;
+        result =0.8 * result;
     }
     else if (intensity > 0.2){
-        result = vec3(0.5, 0.5, 0.5) * result;
+        result = 0.7 * result;
     }
-    //    else if (intensity > 0.08){
-    //        result = vec3(0.35, 0.35, 0.35) * result;
-    //    }
-    else if (intensity > 0.05){
-        result = vec3(0.1, 0.1, 0.1) * result;
+    else if (intensity > 0.01){
+        result = 0.2 * result;
     }
     else {
         result = vec3(0, 0, 0);

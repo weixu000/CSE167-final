@@ -16,6 +16,7 @@
 #include "objects/geometries/LSystem.h"
 #include "materials/FlatMaterial.h"
 #include "materials/SkyboxMaterial.h"
+#include "materials/CartoonMaterial.h"
 
 Window::Window() {
     initializeObjects();
@@ -43,10 +44,16 @@ void Window::initializeObjects() {
     tex->setWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
     tex->unbind();
     terrainMaterial = std::make_shared<HeightMapMaterial>();
-    terrainMaterial->tex = std::move(tex);
+    terrainMaterial->tex = tex;
     terrainMaterial->maxHeight = terrain->boundingBox().max().y;
     terrainMaterial->minHeight = terrain->boundingBox().min().y;
-    terrain->material = terrainMaterial;
+//    terrain->material = terrainMaterial;
+
+    cartoon = std::make_shared<CartoonMaterial>();
+    cartoon->tex = tex;
+    cartoon->maxHeight = terrain->boundingBox().max().y;
+    cartoon->minHeight = terrain->boundingBox().min().y;
+    terrain->material = cartoon;
 
     auto now = std::chrono::system_clock::now();
     std::default_random_engine gen(now.time_since_epoch().count());
