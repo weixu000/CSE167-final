@@ -20,6 +20,8 @@ class LSystem;
 
 class CartoonMaterial;
 
+class SurfaceWalker;
+
 class Window : public GLContext {
 public:
     Window();
@@ -46,6 +48,8 @@ private:
     std::array<Camera *, 2> cameras;
 
     std::array<Group *, 2> cameraControls;
+
+    SurfaceWalker *walker;
 
     std::shared_ptr<HeightMapMaterial> terrainMaterial;
 

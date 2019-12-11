@@ -7,7 +7,7 @@ GLContext::GLContext() {
     glfwWindowHint(GLFW_SAMPLES, 4);
 
     // Create the GLFW window.
-    window = glfwCreateWindow(width, height, "GLFW Starter Project", NULL, NULL);
+    window = glfwCreateWindow(width, height, "GLFW Starter Project", glfwGetPrimaryMonitor(), NULL);
     // Check if the window could not be created.
     if (!window) {
         std::cerr << "Failed to open GLFW window." << std::endl;
@@ -38,6 +38,8 @@ GLContext::GLContext() {
     glfwSwapInterval(0);
 
     setupCallbacks();
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 GLContext::~GLContext() {

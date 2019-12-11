@@ -20,8 +20,8 @@ protected:
     NodePtr clone() override { return std::make_unique<FreeRotator>(*this); }
 
 private:
-    bool startedRotate = false;
-    glm::vec2 previous;
+    bool startedRotate = true;
+    glm::vec2 previous = glm::vec2(0.0f);
     float eulerX = 0.0f, eulerY = 0.0f;
 
     Camera *camera;

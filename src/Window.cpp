@@ -33,6 +33,7 @@ void Window::initializeObjects() {
     auto skybox = Skybox();
     skyboxMaterial = std::make_shared<SkyboxMaterial>(skybox.cubemap);
     skybox.material = skyboxMaterial;
+    skyboxMaterial->foggy = true;
     scene.addChild(std::move(skybox));
 
     terrain = scene.addChild(PerlinNoiseTerrain(4, 200));
@@ -47,20 +48,22 @@ void Window::initializeObjects() {
     terrainMaterial->tex = tex;
     terrainMaterial->maxHeight = terrain->boundingBox().max().y;
     terrainMaterial->minHeight = terrain->boundingBox().min().y;
-//    terrain->material = terrainMaterial;
+    terrainMaterial->foggy = true;
+    terrain->material = terrainMaterial;
 
     cartoon = std::make_shared<CartoonMaterial>();
     cartoon->tex = tex;
     cartoon->maxHeight = terrain->boundingBox().max().y;
     cartoon->minHeight = terrain->boundingBox().min().y;
-    terrain->material = cartoon;
+//    terrain->material = cartoon;
 
     auto now = std::chrono::system_clock::now();
     std::default_random_engine gen(now.time_since_epoch().count());
     std::uniform_real_distribution<float> dist(0.1f, terrain->size() - 1.1f);
 
-    treeMaterial = std::make_shared<FlatMaterial>(glm::vec3(0.0f, 1.0f, 0.0f));
-    for (int i = 0; i < 20; ++i) {
+    treeMaterial = std::make_shared<FlatMaterial>(glm::vec3(0.0f, 0.8f, 0.0f));
+    treeMaterial->foggy = true;
+    for (int i = 0; i < 50; ++i) {
         auto tree = LSystem(1.25f, 20.0f, "FFFFFFFFFFFFFFFF[[A]FA]A", 6);
         tree.transform.model = glm::translate(terrain->position(dist(gen), dist(gen))) * glm::scale(glm::vec3(0.2f));
         tree.material = treeMaterial;
@@ -70,18 +73,18 @@ void Window::initializeObjects() {
     auto cam = std::make_unique<Camera>(width, height);
     auto flyControl = scene.addChild(FreeFlying(cam.get(),
                                                 glm::translate(glm::vec3(0, 10, 20))));
-    cameras[0] = flyControl->addChild(std::move(cam));
-    cameraControls[0] = flyControl;
+    cameras[1] = flyControl->addChild(std::move(cam));
+    cameraControls[1] = flyControl;
+    cameraControls[1]->freeze = true;
 
     cam = std::make_unique<Camera>(width, height);
-    auto walker = scene.addChild(SurfaceWalker(terrain, cam.get(), glm::vec3(0.0f, 2.0f, 0.0f)));
+    walker = scene.addChild(SurfaceWalker(terrain, cam.get(), glm::vec3(0.0f, 2.0f, 0.0f)));
     auto mesh = Mesh::cube();
     mesh.material = NormalMaterial::singleton();
     mesh.transform.model = glm::translate(glm::vec3(0.0f, 0.2f, 0.0f)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f));
     walker->foot->addChild(mesh);
-    cameras[1] = walker->head->addChild(std::move(cam));
-    cameraControls[1] = walker;
-    cameraControls[1]->freeze = true;
+    cameras[0] = walker->head->addChild(std::move(cam));
+    cameraControls[0] = walker;
 }
 
 void Window::resizeCallback(int width, int height) {
@@ -101,6 +104,18 @@ void Window::resizeCallback(int width, int height) {
 
 void Window::update() {
     scene.update();
+
+
+    if (cameraControls[0] == walker) {
+        auto v = walker->head->transform.model[2][1];
+        if (v > 0.8f) {
+            terrainMaterial->foggy = false;
+            treeMaterial->foggy = false;
+            skyboxMaterial->foggy = false;
+            terrain->material = cartoon;
+        }
+    }
+
 }
 
 void Window::draw() {
