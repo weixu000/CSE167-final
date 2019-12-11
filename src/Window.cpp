@@ -17,6 +17,7 @@
 #include "materials/FlatMaterial.h"
 #include "materials/SkyboxMaterial.h"
 #include "materials/CartoonMaterial.h"
+#include "materials/CubeMaterial.h"
 
 Window::Window() {
     initializeObjects();
@@ -55,7 +56,6 @@ void Window::initializeObjects() {
     cartoon->tex = tex;
     cartoon->maxHeight = terrain->boundingBox().max().y;
     cartoon->minHeight = terrain->boundingBox().min().y;
-//    terrain->material = cartoon;
 
     auto now = std::chrono::system_clock::now();
     std::default_random_engine gen(now.time_since_epoch().count());
@@ -63,7 +63,7 @@ void Window::initializeObjects() {
 
     treeMaterial = std::make_shared<FlatMaterial>(glm::vec3(0.0f, 0.8f, 0.0f));
     treeMaterial->foggy = true;
-    for (int i = 0; i < 50; ++i) {
+    for (int i = 0; i < trees.size(); ++i) {
         auto tree = LSystem(1.25f, 20.0f, "FFFFFFFFFFFFFFFF[[A]FA]A", 6);
         tree.transform.model = glm::translate(terrain->position(dist(gen), dist(gen))) * glm::scale(glm::vec3(0.2f));
         tree.material = treeMaterial;
@@ -159,8 +159,8 @@ void Window::keyCallback(int key, int scancode, int action, int mods) {
                 std::default_random_engine gen(now.time_since_epoch().count());
                 std::uniform_real_distribution<float> dist(0.1f, terrain->size() - 1.1f);
 
-                for (int i = 0; i < 20; ++i) {
-                    *trees[i] = LSystem(1.25f, 20.0f, "FFFFFFFFFFFFFFFF[[A]FA]A", 6);
+                for (int i = 0; i < trees.size(); ++i) {
+                    *trees[i] = std::move(LSystem(1.25f, 20.0f, "FFFFFFFFFFFFFFFF[[A]FA]A", 6));
                     trees[i]->transform.model =
                             glm::translate(terrain->position(dist(gen), dist(gen))) * glm::scale(glm::vec3(0.2f));
                     trees[i]->material = treeMaterial;

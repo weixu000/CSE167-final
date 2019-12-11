@@ -60,7 +60,7 @@ private:
     std::shared_ptr<CartoonMaterial> cartoon;
     PerlinNoiseTerrain *terrain;
 
-    std::array<LSystem *, 20> trees;
+    std::array<LSystem *, 50> trees;
 };
 
 #endif

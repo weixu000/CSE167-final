@@ -37,5 +37,5 @@ add_executable(FinalProject
         materials/CartoonMaterial.h
         materials/ReflectionMapMaterial.h
         materials/SkyboxMaterial.h
-        materials/HeightMapMaterial.h)
+        materials/HeightMapMaterial.h materials/CubeMaterial.h)
 target_link_libraries(FinalProject glad glfw glm stb_image)
