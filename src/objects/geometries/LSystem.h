@@ -22,12 +22,12 @@ class Material;
 class LSystem : public Geometry {
 private:
     glm::vec3 position;
-    glm::vec3 heading;
+    glm::mat3 heading;
 
     float step_size;
     float angle_increment;
 
-    std::stack<std::tuple<glm::vec3, glm::vec3>> stack;
+    std::stack<std::tuple<glm::vec3, glm::mat3>> stack;
     std::vector<glm::vec3> points;
     std::vector<glm::vec3> leaf_pos;
     std::vector<glm::vec3> data;

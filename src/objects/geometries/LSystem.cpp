@@ -6,7 +6,7 @@
 //  Copyright © 2019 Wei Zeng. All rights reserved.
 //
 
-#include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <string>
 #include <random>
 #include <chrono>
@@ -23,7 +23,7 @@ std::uniform_int_distribution dist(0, 3);
 
 LSystem::LSystem(float step_size, float angle_increment, std::string rules, int iteration) {
     this->position = glm::vec3(0, 0, 0);
-    this->heading = glm::vec3(0, 1, 0);
+    this->heading = glm::mat3(1.0f);
     this->step_size = step_size;
     this->angle_increment = angle_increment;
     this->rules = rules;
@@ -38,12 +38,12 @@ LSystem::LSystem(float step_size, float angle_increment, std::string rules, int 
 }
 
 void LSystem::push() {
-    std::tuple<glm::vec3, glm::vec3> input(position, heading);
+    std::tuple<glm::vec3, glm::mat3> input(position, heading);
     stack.push(input);
 }
 
 void LSystem::pop() {
-    std::tuple<glm::vec3, glm::vec3> out = stack.top();
+    std::tuple<glm::vec3, glm::mat3> out = stack.top();
     position = std::get<0>(out);
     heading = std::get<1>(out);
     stack.pop();
@@ -67,19 +67,21 @@ void LSystem::draw(const glm::mat4 &world, const Camera &camera) {
 
 void LSystem::rotX() {
 //    std::cerr << "rotate x" << std::endl;
-    heading = glm::normalize(glm::rotateX(heading, angle_increment));
+    heading = glm::mat3(glm::rotate(glm::mat4(1.0f), angle_increment, glm::vec3(0.0, 0.0f, 1.0f))) * heading;
 //    std::cerr << "heading after rotX: " << glm::to_string(heading) << std::endl;
 }
 
 void LSystem::rotY() {
 //    std::cerr << "rotate y" << std::endl;
-    heading = glm::normalize(glm::rotateY(heading, angle_increment));
+    heading = glm::mat3(glm::rotate(glm::mat4(1.0f), angle_increment, glm::vec3(-1.0, 0.0f, 1.0f))) * heading;
 //    std::cerr << "heading after rotY: " << glm::to_string(heading) << std::endl;
 }
 
 void LSystem::rotZ() {
 //    std::cerr << "rotate z" << std::endl;
-    heading = glm::normalize(glm::rotateZ(heading, angle_increment));
+    heading = glm::mat3(glm::rotate(glm::mat4(1.0f), angle_increment, glm::vec3(1.0, 0.0f, 1.0f))) * heading;
+
+//    heading = glm::rotateZ(heading, angle_increment);
 //    std::cerr << "heading after rotZ: " << glm::to_string(heading) << std::endl;
 }
 
@@ -88,7 +90,7 @@ void LSystem::forward() {
 //    points.push_back(points.at(points.size() - 1) + heading * step_size);
 
     data.push_back(position);
-    position = position + heading * step_size;
+    position = position + heading * glm::vec3(0, step_size, 0);
     data.push_back(position);
 
 //    std::cerr << "values in data: " << glm::to_string(data.at(0)) << " + " << glm::to_string(data.at(1)) << std::endl;
@@ -98,7 +100,6 @@ void LSystem::readRules() {
     points.push_back(position);
 
     std::string cmpstr;
-//    std::cerr << "reading rules" << std::endl;
 
     for (int i = 0; i < generatedString.length(); i++) {
         cmpstr = generatedString.at(i);
@@ -115,9 +116,9 @@ void LSystem::readRules() {
         } else if (cmpstr.compare("Z") == 0) {
             rotZ();
         } else if (cmpstr.compare("-") == 0) {
-            angle_increment = -angle_increment;
+            angle_increment = -abs(angle_increment);
         } else if (cmpstr.compare("+") == 0) {
-            angle_increment = abs(angle_increment);
+            angle_increment = +abs(angle_increment);
         } else {
             leaf_pos.push_back(position);
         }
@@ -166,13 +167,13 @@ void LSystem::genRule(std::string sentence, int depth) {
         if (sentence[i] == 'A') {
             int choice = dist(rand_eng);
             if (choice == 0)
-                nextSentence += "F[[+ZFA]-ZFA][[+XFA]-XFA]";
+                nextSentence += "F[[+ZFA]-ZFFA]";
             else if (choice == 1)
-                nextSentence += "F[[-ZFA]+ZFA][[+YFA]-YFA]";
+                nextSentence += "F[[-ZFA]+ZFA][[+YFFA]-YFFA]";
             else if (choice == 2)
                 nextSentence += "F[[+XFA]-XFA][[+YFA]-YFA]";
             else if (choice == 3)
-                nextSentence += "F[[+ZFA]-ZFA][[+XFA]-XFA]";
+                nextSentence += "FFFFA";
             continue;
         }
         if (sentence[i] == 'F') {
