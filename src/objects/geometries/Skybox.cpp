@@ -10,12 +10,12 @@ Skybox::Skybox()
         cubemap = std::make_shared<TextureCubemap>();
         cubemap->bind();
         cubemap->upload({
-                                "textures/Skybox_Water222_right.jpg",
-                                "textures/Skybox_Water222_left.jpg",
-                                "textures/Skybox_Water222_top.jpg",
-                                "textures/Skybox_Water222_base.jpg",
-                                "textures/Skybox_Water222_front.jpg",
-                                "textures/Skybox_Water222_back.jpg"
+                                "textures/prof_schulze_square.jpg",
+                                "textures/prof_schulze_square.jpg",
+                                "textures/prof_schulze_square.jpg",
+                                "textures/prof_schulze_square.jpg",
+                                "textures/prof_schulze_square.jpg",
+                                "textures/prof_schulze_square.jpg"
                         });
         // Use bilinear interpolation:
         cubemap->setFilter(GL_LINEAR, GL_LINEAR);

@@ -7,7 +7,7 @@
 // Make sure OpenGL context is ready before anything else, since it is base class
 class GLContext {
 public:
-    int width = 1920, height = 1080;
+    int width = 800, height = 600;
 
     GLContext();
 

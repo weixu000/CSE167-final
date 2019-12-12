@@ -79,10 +79,30 @@ void Window::initializeObjects() {
 
     cam = std::make_unique<Camera>(width, height);
     walker = scene.addChild(SurfaceWalker(terrain, cam.get(), glm::vec3(0.0f, 2.0f, 0.0f)));
+
     auto mesh = Mesh::cube();
     mesh.material = NormalMaterial::singleton();
     mesh.transform.model = glm::translate(glm::vec3(0.0f, 0.2f, 0.0f)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f));
-    walker->foot->addChild(mesh);
+    auto cubemap = std::make_shared<TextureCubemap>();
+    cubemap->bind();
+    cubemap->upload({
+                            "textures/prof_schulze_square.jpg",
+                            "textures/prof_schulze_square.jpg",
+                            "textures/prof_schulze_square.jpg",
+                            "textures/prof_schulze_square.jpg",
+                            "textures/prof_schulze_square.jpg",
+                            "textures/prof_schulze_square.jpg"
+                    });
+    // Use bilinear interpolation:
+    cubemap->setFilter(GL_LINEAR, GL_LINEAR);
+
+    // Use clamp to edge to hide skybox edges:
+    cubemap->setWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+    cubemap->unbind();
+    auto cube_mat = std::make_shared<CubeMaterial>(cubemap);
+    mesh.material = cube_mat;
+    walker->addChild(mesh);
+
     cameras[0] = walker->head->addChild(std::move(cam));
     cameraControls[0] = walker;
 }
@@ -147,6 +167,7 @@ void Window::keyCallback(int key, int scancode, int action, int mods) {
                 break;
             case GLFW_KEY_F:
                 terrainMaterial->foggy = !terrainMaterial->foggy;
+                terrain->material = terrainMaterial;
                 treeMaterial->foggy = !treeMaterial->foggy;
                 skyboxMaterial->foggy = !skyboxMaterial->foggy;
                 break;
